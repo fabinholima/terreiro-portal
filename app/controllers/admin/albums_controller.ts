@@ -1,0 +1,98 @@
+import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
+import Album from '#models/album'
+import Photo from '#models/photo'
+import { albumValidator } from '#validators/album'
+import app from '@adonisjs/core/services/app'
+
+export default class AlbumsController {
+  async index({ view }: HttpContext) {
+    const albums = await Album.query().withCount('photos').orderBy('created_at', 'desc')
+    return view.render('admin/albums/index', { albums })
+  }
+
+  async create({ view }: HttpContext) {
+    return view.render('admin/albums/form', { album: null })
+  }
+
+  async store({ request, response }: HttpContext) {
+    const payload = await request.validateUsing(albumValidator)
+    await Album.create({
+      ...payload,
+      eventDate: payload.eventDate ? DateTime.fromISO(payload.eventDate) : null,
+    })
+    return response.redirect('/admin/albums')
+  }
+
+  async edit({ params, view }: HttpContext) {
+    const album = await Album.query().where('id', params.id).preload('photos', (query) => query.orderBy('position')).firstOrFail()
+    return view.render('admin/albums/form', { album })
+  }
+
+  async update({ params, request, response }: HttpContext) {
+    const album = await Album.findOrFail(params.id)
+    const payload = await request.validateUsing(albumValidator)
+    album.merge({
+      ...payload,
+      eventDate: payload.eventDate ? DateTime.fromISO(payload.eventDate) : null,
+    })
+    await album.save()
+    return response.redirect('/admin/albums')
+  }
+
+  async upload({ params, request, response }: HttpContext) {
+    const album = await Album.findOrFail(params.id)
+    const files = request.files('photos', {
+      size: '12mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    })
+
+    let position = await Photo.query().where('album_id', album.id).count('* as total').then((rows) => Number(rows[0].$extras.total))
+
+    for (const file of files) {
+      const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+      await file.move(app.makePath('public/uploads/gallery'), { name: safeName })
+      await Photo.create({
+        albumId: album.id,
+        path: `/uploads/gallery/${safeName}`,
+        caption: null,
+        altText: album.title,
+        credit: null,
+        publicationAuthorized: false,
+        position: position++,
+      })
+      if (!album.coverPath) {
+        album.coverPath = `/uploads/gallery/${safeName}`
+        await album.save()
+      }
+    }
+
+    return response.redirect(`/admin/albums/${album.id}/edit`)
+  }
+
+  async updatePhoto({ params, request, response }: HttpContext) {
+    const photo = await Photo.findOrFail(params.photoId)
+    photo.merge({
+      caption: request.input('caption') || null,
+      altText: request.input('altText') || null,
+      credit: request.input('credit') || null,
+      publicationAuthorized: request.input('publicationAuthorized') === 'true',
+      position: Number(request.input('position') || 0),
+    })
+    await photo.save()
+    return response.redirect(`/admin/albums/${photo.albumId}/edit`)
+  }
+
+  async deletePhoto({ params, response }: HttpContext) {
+    const photo = await Photo.findOrFail(params.photoId)
+    const albumId = photo.albumId
+    await photo.delete()
+    return response.redirect(`/admin/albums/${albumId}/edit`)
+  }
+
+  async destroy({ params, response }: HttpContext) {
+    const album = await Album.findOrFail(params.id)
+    await album.delete()
+    return response.redirect('/admin/albums')
+  }
+}
