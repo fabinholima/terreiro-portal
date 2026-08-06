@@ -13,6 +13,10 @@ tmp/*
 # Frontend assets compiled code
 public/assets
 
+# Uploaded media
+public/uploads/gallery/*
+!public/uploads/gallery/.gitkeep
+
 # Build tools specific
 npm-debug.log
 yarn-error.log
