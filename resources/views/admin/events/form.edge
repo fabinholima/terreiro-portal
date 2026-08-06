@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ event ? 'Editar evento' : 'Novo evento' }}</title>
+</head>
+<body>
+  <main>
+    <h1>{{ event ? 'Editar evento' : 'Novo evento' }}</h1>
+    <form method="POST" action="{{ event ? '/admin/events/' + event.id : '/admin/events' }}">
+      {{ csrfField() }}
+
+      <label>Título
+        <input name="title" value="{{ event?.title ?? '' }}" required>
+      </label>
+
+      <label>Slug
+        <input name="slug" value="{{ event?.slug ?? '' }}" required>
+      </label>
+
+      <label>Descrição
+        <textarea name="description">{{ event?.description ?? '' }}</textarea>
+      </label>
+
+      <label>Categoria
+        <input name="category" value="{{ event?.category ?? '' }}">
+      </label>
+
+      <label>Início
+        <input type="datetime-local" name="startsAt" value="{{ event ? event.startsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}" required>
+      </label>
+
+      <label>Fim
+        <input type="datetime-local" name="endsAt" value="{{ event?.endsAt ? event.endsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}">
+      </label>
+
+      <label>Local
+        <input name="location" value="{{ event?.location ?? '' }}">
+      </label>
+
+      <label>Status
+        <select name="status">
+          @each(status in ['scheduled', 'confirmed', 'postponed', 'cancelled', 'completed'])
+            <option value="{{ status }}" @if((event?.status ?? 'scheduled') === status) selected @endif>{{ status }}</option>
+          @end
+        </select>
+      </label>
+
+      <input type="hidden" name="isPublic" value="false">
+      <label>
+        <input type="checkbox" name="isPublic" value="true" @if(event?.isPublic ?? true) checked @endif>
+        Evento público
+      </label>
+
+      <button type="submit">Salvar</button>
+      <a href="/admin/events">Cancelar</a>
+    </form>
+  </main>
+</body>
+</html>
