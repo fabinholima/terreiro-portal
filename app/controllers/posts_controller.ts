@@ -2,6 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import env from '#start/env'
 import Post from '#models/post'
 
+type ImageSettings = Record<string, { width?: number | null; height?: number | null }>
+
 export default class PostsController {
   async index({ view }: HttpContext) {
     const posts = await Post.query()
@@ -19,7 +21,14 @@ export default class PostsController {
       .firstOrFail()
 
     const baseUrl = env.get('APP_URL').replace(/\/$/, '')
-    const description = post.summary || (post.body ?? '').replace(/\s+/g, ' ').slice(0, 160)
+    const plainBody = (post.body ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+    const description = post.summary || plainBody.slice(0, 160)
+    const settings = (post.imageSettings ?? {}) as ImageSettings
+    const imageEntries = (post.imagePaths ?? []).map((path) => ({
+      path,
+      width: settings[path]?.width ?? null,
+      height: settings[path]?.height ?? null,
+    }))
 
     view.share({
       seo: {
@@ -32,6 +41,6 @@ export default class PostsController {
       },
     })
 
-    return view.render('pages/posts/show', { post })
+    return view.render('pages/posts/show', { post, imageEntries })
   }
 }
