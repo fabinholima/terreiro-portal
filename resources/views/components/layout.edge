@@ -41,9 +41,9 @@
       {{{ await $slots.main() }}}
     </main>
 
-    <footer class="site-footer site-footer--compact">
-      <div class="site-container compact-footer__main">
-        <div class="compact-footer__brand">
+    <footer class="site-footer site-footer--slim">
+      <div class="site-container slim-footer__row">
+        <div class="slim-footer__brand">
           <img src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
           <div>
             <strong>{{ siteSettings.siteName }}</strong>
@@ -51,29 +51,36 @@
           </div>
         </div>
 
-        <nav class="compact-footer__nav" aria-label="Navegação do rodapé">
+        <nav class="slim-footer__nav" aria-label="Navegação do rodapé">
           <a href="/">Início</a>
+          <span>•</span>
           <a href="/o-terreiro">O Terreiro</a>
+          <span>•</span>
           <a href="/agenda">Agenda</a>
+          <span>•</span>
           <a href="/documentos">Documentos</a>
+          <span>•</span>
           <a href="/contato">Contato</a>
         </nav>
 
-        <div class="compact-footer__contact">
-          @if(siteSettings.phone)
-            <span>{{ siteSettings.phone }}</span>
-          @end
+        <div class="slim-footer__social">
           @if(siteSettings.whatsapp)
-            <span>WhatsApp: {{ siteSettings.whatsapp }}</span>
+            <a href="https://wa.me/{{ siteSettings.whatsapp }}" aria-label="WhatsApp">WA</a>
           @end
-          @if(siteSettings.email)
-            <a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a>
+          @if(siteSettings.instagramUrl)
+            <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          @end
+          @if(siteSettings.facebookUrl)
+            <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+          @end
+          @if(siteSettings.youtubeUrl)
+            <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
           @end
         </div>
       </div>
 
-      <div class="site-footer__bottom">
-        <div class="site-container">{{ siteSettings.siteName }} · Em atividade desde 1991</div>
+      <div class="site-footer__bottom slim-footer__bottom">
+        <div class="site-container">© 2026 {{ siteSettings.siteName }}. Todos os direitos reservados.</div>
       </div>
     </footer>
   </body>
