@@ -1,28 +1,37 @@
 @layout()
-  <article class="mx-auto max-w-3xl px-6 py-12">
-    <a href="/noticias" class="text-sm text-slate-600 underline">← Todas as notícias</a>
-    <p class="mt-8 text-sm text-slate-500">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy HH:mm') : '' }}</p>
-    <h1 class="mt-2 text-4xl font-bold leading-tight">{{ post.title }}</h1>
+  <article class="article">
+    <a href="/noticias" class="article__back">← Todas as notícias</a>
+    <p class="article__date">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy HH:mm') : '' }}</p>
+    <h1>{{ post.title }}</h1>
 
     @if(post.summary)
-      <p class="mt-5 text-xl text-slate-600">{{ post.summary }}</p>
+      <p class="article__summary">{{ post.summary }}</p>
     @end
 
     @if(post.featuredImagePath)
-      <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="mt-8 max-h-[520px] w-full rounded-xl object-cover">
+      <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="article__hero">
     @end
 
-    <div class="prose prose-slate mt-8 max-w-none whitespace-pre-line">{{ post.body ?? '' }}</div>
+    <div class="article__body">{{ post.body ?? '' }}</div>
 
     @if(post.imagePaths && post.imagePaths.length)
-      <section class="mt-10">
-        <h2 class="mb-4 text-2xl font-bold">Fotos e figuras</h2>
-        <div class="grid gap-4 sm:grid-cols-2">
+      <section class="article__gallery" x-data="lightbox">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Imagens</p>
+            <h2>Fotos e figuras</h2>
+          </div>
+        </div>
+        <div class="photo-grid">
           @each(image in post.imagePaths)
-            <a href="{{ image }}" target="_blank" rel="noopener">
-              <img src="{{ image }}" alt="Imagem relacionada à notícia {{ post.title }}" class="h-64 w-full rounded-xl object-cover">
-            </a>
+            <figure class="photo-item">
+              <img src="{{ image }}" alt="Imagem relacionada à notícia {{ post.title }}" @click="open('{{ image }}')">
+            </figure>
           @end
+        </div>
+        <div class="lightbox" x-cloak x-show="image" @keydown.escape.window="close()" @click.self="close()">
+          <button type="button" @click="close()" aria-label="Fechar imagem">×</button>
+          <img :src="image" alt="Visualização ampliada">
         </div>
       </section>
     @end
