@@ -1,54 +1,72 @@
 @layout()
-  <section class="hero-public">
-    <div class="site-container hero-public__inner">
-      <p class="eyebrow">Em atividade desde 1991</p>
-      <h1>{{ siteSettings.siteName }}</h1>
-      <p class="hero-public__lead">Uma casa de fé, caridade, ancestralidade, acolhimento e preservação da tradição umbandista.</p>
-      <div class="hero-actions">
-        <a href="/o-terreiro" class="btn btn--gold">Conheça o Terreiro</a>
-        <a href="/agenda" class="btn btn--ghost">Ver próxima programação</a>
+  <section class="institutional-hero home-intro">
+    <div class="site-container institutional-hero__inner">
+      <div class="institutional-hero__logo-wrap">
+        <img class="institutional-hero__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
       </div>
-      <div class="hero-badges" aria-label="Princípios da casa">
-        <span>Fé</span>
-        <span>Caridade</span>
-        <span>Ancestralidade</span>
-        <span>Acolhimento</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="site-section">
-    <div class="site-container intro-grid">
       <div>
-        <p class="eyebrow">Nossa Casa</p>
-        <h2>Uma história construída com fé e compromisso com a comunidade</h2>
-        <p class="intro-copy">O Terreiro reúne tradição religiosa, memória, cuidado espiritual e ações comunitárias. Este portal organiza nossa história, programação, notícias, documentos e registros públicos em um só lugar.</p>
-        <a href="/nossa-historia" class="text-link">Conhecer nossa história</a>
+        <p class="eyebrow">Em atividade desde 1991</p>
+        <h1 class="home-intro__title">{{ siteSettings.siteName }}</h1>
+        <div class="gold-rule" aria-hidden="true"><span></span></div>
+        <p class="institutional-hero__summary">Na fé, na lei e na caridade. Uma casa de acolhimento, ancestralidade, compromisso religioso e serviço à comunidade.</p>
+        <div class="home-intro__actions">
+          <a href="/o-terreiro" class="button">Conheça o Terreiro</a>
+          <a href="/agenda" class="button button--gold">Ver agenda</a>
+        </div>
       </div>
-      <aside class="intro-panel">
-        <strong>Informação e transparência</strong>
-        <p>Acompanhe os próximos trabalhos, ações sociais, documentos públicos e registros da trajetória da casa.</p>
-        <a href="/documentos" class="text-link">Acessar documentos públicos</a>
-      </aside>
     </div>
   </section>
 
-  <section class="site-section site-section--soft">
+  <section class="institutional-content home-principles">
+    <div class="site-container institutional-list">
+      <article class="institutional-item">
+        <div class="institutional-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
+        </div>
+        <div>
+          <h2>Nossa missão</h2>
+          <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade e o acolhimento espiritual.</p>
+        </div>
+      </article>
+
+      <article class="institutional-item">
+        <div class="institutional-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
+        </div>
+        <div>
+          <h2>Nossos valores</h2>
+          <p>Respeito, ancestralidade, responsabilidade religiosa, solidariedade, cuidado com as pessoas e compromisso com a comunidade.</p>
+        </div>
+      </article>
+
+      <article class="institutional-item">
+        <div class="institutional-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
+        </div>
+        <div>
+          <h2>Nossa trajetória</h2>
+          <p>Desde 1991, o Terreiro desenvolve atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="public-section public-section--soft">
     <div class="site-container">
-      <div class="section-heading">
+      <div class="public-section__head">
         <div>
           <p class="eyebrow">Programação</p>
-          <h2>Próximas atividades</h2>
-          <p>Consulte datas, horários e informações das próximas atividades públicas.</p>
+          <h2 class="section-title">Próximas atividades</h2>
+          <p class="section-lead">Consulte datas, horários e informações das próximas atividades públicas.</p>
         </div>
-        <a href="/agenda" class="text-link">Agenda completa</a>
+        <a href="/agenda" class="button">Agenda completa</a>
       </div>
 
-      <div class="card-grid">
+      <div class="public-grid">
         @each(event in events)
           <article class="card">
             <div class="card__body">
-              <p class="card__meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+              <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
               <h3>{{ event.title }}</h3>
               @if(event.location)
                 <p>{{ event.location }}</p>
@@ -59,117 +77,71 @@
             </div>
           </article>
         @else
-          <div class="empty-state">Nenhuma atividade pública agendada no momento.</div>
+          <div class="list-card">Nenhuma atividade pública agendada no momento.</div>
         @end
       </div>
     </div>
   </section>
 
-  <section class="site-section">
+  <section class="public-section">
     <div class="site-container">
-      <div class="section-heading">
+      <div class="public-section__head">
         <div>
           <p class="eyebrow">Comunicação</p>
-          <h2>Notícias recentes</h2>
-          <p>Atualizações, comunicados e registros das atividades do Terreiro.</p>
+          <h2 class="section-title">Notícias recentes</h2>
         </div>
-        <a href="/noticias" class="text-link">Todas as notícias</a>
+        <a href="/noticias" class="button">Todas as notícias</a>
       </div>
 
-      <div class="card-grid">
+      <div class="public-grid">
         @each(post in posts)
           <article class="card">
             @if(post.featuredImagePath)
-              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__image">
+              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__media">
             @end
             <div class="card__body">
-              <p class="card__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
               <h3>{{ post.title }}</h3>
               @if(post.summary)
                 <p>{{ post.summary }}</p>
               @end
-              <a href="/noticias/{{ post.slug }}" class="card__link">Ler notícia →</a>
+              <a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a>
             </div>
           </article>
         @else
-          <div class="empty-state">Nenhuma notícia publicada.</div>
+          <div class="list-card">Nenhuma notícia publicada.</div>
         @end
       </div>
     </div>
   </section>
 
-  <section class="site-section site-section--soft">
+  <section class="public-section public-section--soft">
     <div class="site-container">
-      <div class="section-heading">
+      <div class="public-section__head">
         <div>
           <p class="eyebrow">Caridade</p>
-          <h2>Ações sociais</h2>
-          <p>Campanhas e iniciativas desenvolvidas em benefício da comunidade.</p>
+          <h2 class="section-title">Ações sociais</h2>
         </div>
-        <a href="/acoes-sociais" class="text-link">Ver todas</a>
+        <a href="/acoes-sociais" class="button">Ver ações</a>
       </div>
 
-      <div class="card-grid">
+      <div class="public-grid">
         @each(action in actions)
           <article class="card">
             <div class="card__body">
-              <p class="card__meta">{{ action.status }}</p>
+              <p class="meta">{{ action.status }}</p>
               <h3>{{ action.title }}</h3>
               @if(action.description)
                 <p>{{ action.description }}</p>
               @end
               @if(action.progressPercent !== null)
                 <div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>
-                <div class="progress-label"><span>Progresso</span><strong>{{ action.progressPercent }}%</strong></div>
               @end
             </div>
           </article>
         @else
-          <div class="empty-state">Nenhuma ação social publicada no momento.</div>
+          <div class="list-card">Nenhuma ação social publicada no momento.</div>
         @end
-      </div>
-    </div>
-  </section>
-
-  <section class="site-section site-section--dark">
-    <div class="site-container">
-      <div class="section-heading section-heading--dark">
-        <div>
-          <p class="eyebrow">Nossa memória</p>
-          <h2>Galeria de fotografias</h2>
-          <p>Registros das atividades, celebrações e ações realizadas pela casa.</p>
-        </div>
-        <a href="/galeria" class="text-link">Ver todos os álbuns</a>
-      </div>
-
-      <div class="card-grid card-grid--4">
-        @each(album in albums)
-          <a href="/galeria/{{ album.slug }}" class="card card--dark">
-            @if(album.coverPath)
-              <img src="{{ album.coverPath }}" alt="{{ album.title }}" class="card__image">
-            @end
-            <div class="card__body">
-              <p class="card__meta">{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória' }}</p>
-              <h3>{{ album.title }}</h3>
-            </div>
-          </a>
-        @else
-          <div class="empty-state">Nenhum álbum público disponível.</div>
-        @end
-      </div>
-    </div>
-  </section>
-
-  <section class="site-section">
-    <div class="site-container intro-grid">
-      <div>
-        <p class="eyebrow">Visite e acompanhe</p>
-        <h2>Consulte os canais oficiais antes de participar</h2>
-        <p class="intro-copy">Veja a agenda atualizada e utilize os canais oficiais para dúvidas sobre atividades, horários e orientações de participação.</p>
-      </div>
-      <div class="hero-actions">
-        <a href="/contato" class="btn btn--green">Contato</a>
-        <a href="/agenda" class="btn btn--outline">Consultar agenda</a>
       </div>
     </div>
   </section>
