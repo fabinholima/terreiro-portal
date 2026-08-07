@@ -18,8 +18,11 @@ export default class AlbumsController {
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(albumValidator)
     const album = await Album.create({
-      ...payload,
+      title: payload.title,
+      slug: payload.slug,
+      description: payload.description ?? null,
       eventDate: payload.eventDate ? DateTime.fromISO(payload.eventDate) : null,
+      isPublic: request.input('isPublic') === 'true',
     })
 
     await this.savePhotos(album, request)
@@ -27,17 +30,26 @@ export default class AlbumsController {
   }
 
   async edit({ params, view }: HttpContext) {
-    const album = await Album.query().where('id', params.id).preload('photos', (query) => query.orderBy('position')).firstOrFail()
+    const album = await Album.query()
+      .where('id', params.id)
+      .preload('photos', (query) => query.orderBy('position'))
+      .firstOrFail()
+
     return view.render('admin/albums/form', { album })
   }
 
   async update({ params, request, response }: HttpContext) {
     const album = await Album.findOrFail(params.id)
     const payload = await request.validateUsing(albumValidator)
+
     album.merge({
-      ...payload,
+      title: payload.title,
+      slug: payload.slug,
+      description: payload.description ?? null,
       eventDate: payload.eventDate ? DateTime.fromISO(payload.eventDate) : null,
+      isPublic: request.input('isPublic') === 'true',
     })
+
     await album.save()
     return response.redirect('/admin/albums')
   }
@@ -86,6 +98,10 @@ export default class AlbumsController {
       .then((rows) => Number(rows[0].$extras.total))
 
     for (const file of files) {
+      if (!file.isValid) {
+        continue
+      }
+
       const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
       await file.move(app.makePath('public/uploads/gallery'), { name: safeName })
       const path = `/uploads/gallery/${safeName}`
