@@ -34,6 +34,7 @@ export default class PostsController {
       publishedAt,
       featuredImagePath,
       imagePaths,
+      imageDisplaySize: payload.imageDisplaySize ?? 'large',
     })
 
     return response.redirect('/admin/posts')
@@ -66,6 +67,7 @@ export default class PostsController {
       publishedAt,
       featuredImagePath: newFeaturedImagePath ?? post.featuredImagePath,
       imagePaths: [...currentImagePaths, ...newImagePaths],
+      imageDisplaySize: payload.imageDisplaySize ?? post.imageDisplaySize ?? 'large',
     })
 
     await post.save()
