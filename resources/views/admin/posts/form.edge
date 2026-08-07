@@ -5,12 +5,39 @@
       <h1 class="mt-3 text-3xl font-bold">{{ post ? 'Editar notícia' : 'Nova notícia' }}</h1>
     </div>
 
-    <form method="POST" action="{{ post ? '/admin/posts/' + post.id : '/admin/posts' }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6">
+    <form method="POST" enctype="multipart/form-data" action="{{ post ? '/admin/posts/' + post.id : '/admin/posts' }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6">
       {{ csrfField() }}
       <label class="block"><span class="mb-2 block font-semibold">Título</span><input name="title" required maxlength="180" value="{{ post?.title ?? '' }}" class="w-full rounded-lg border border-slate-300 px-3 py-2"></label>
       <label class="block"><span class="mb-2 block font-semibold">Slug</span><input name="slug" required maxlength="200" value="{{ post?.slug ?? '' }}" class="w-full rounded-lg border border-slate-300 px-3 py-2"></label>
       <label class="block"><span class="mb-2 block font-semibold">Resumo</span><textarea name="summary" rows="3" class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ post?.summary ?? '' }}</textarea></label>
       <label class="block"><span class="mb-2 block font-semibold">Texto completo</span><textarea name="body" rows="14" class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ post?.body ?? '' }}</textarea></label>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <label class="block">
+          <span class="mb-2 block font-semibold">Imagem de destaque</span>
+          <input type="file" name="featuredImage" accept="image/jpeg,image/png,image/webp" class="w-full rounded-lg border border-slate-300 px-3 py-2">
+          @if(post?.featuredImagePath)
+            <img src="{{ post.featuredImagePath }}" alt="Imagem de destaque atual" class="mt-3 h-36 w-full rounded-lg object-cover">
+          @end
+        </label>
+
+        <label class="block">
+          <span class="mb-2 block font-semibold">Fotos e figuras anexas</span>
+          <input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple class="w-full rounded-lg border border-slate-300 px-3 py-2">
+          <span class="mt-2 block text-sm text-slate-500">Selecione uma ou várias imagens para complementar a notícia.</span>
+        </label>
+      </div>
+
+      @if(post?.imagePaths && post.imagePaths.length)
+        <div>
+          <p class="mb-3 font-semibold">Imagens já anexadas</p>
+          <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+            @each(image in post.imagePaths)
+              <img src="{{ image }}" alt="Imagem anexa da notícia" class="h-28 w-full rounded-lg object-cover">
+            @end
+          </div>
+        </div>
+      @end
 
       <div class="grid gap-6 md:grid-cols-2">
         <label class="block">
