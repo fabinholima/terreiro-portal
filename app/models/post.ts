@@ -23,6 +23,12 @@ export default class Post extends BaseModel {
   @column.dateTime()
   declare publishedAt: DateTime | null
 
+  @column()
+  declare featuredImagePath: string | null
+
+  @column()
+  declare imagePaths: string[]
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
