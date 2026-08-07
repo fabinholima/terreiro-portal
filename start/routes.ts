@@ -23,6 +23,7 @@ const AdminDocumentsController = () => import('#controllers/admin/documents_cont
 const DocumentsController = () => import('#controllers/documents_controller')
 const InstitutionalPagesController = () => import('#controllers/admin/institutional_pages_controller')
 const SiteSettingsController = () => import('#controllers/admin/site_settings_controller')
+const UsersController = () => import('#controllers/admin/users_controller')
 
 // Public site
 router.get('/', [HomeController, 'index']).as('home')
@@ -37,11 +38,9 @@ router.get('/noticias', [PostsController, 'index']).as('posts.index')
 router.get('/noticias/:slug', [PostsController, 'show']).as('posts.show')
 router.get('/documentos', [DocumentsController, 'index']).as('documents.index')
 
-// Authentication
+// Authentication: public self-signup is intentionally disabled.
 router
   .group(() => {
-    router.get('signup', [controllers.NewAccount, 'create']).as('new_account.create')
-    router.post('signup', [controllers.NewAccount, 'store']).as('new_account.store')
     router.get('login', [controllers.Session, 'create']).as('session.create')
     router.post('login', [controllers.Session, 'store']).as('session.store')
   })
@@ -51,12 +50,26 @@ router
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
-
     router.get('/admin', [DashboardController, 'index']).as('admin.dashboard')
 
-    router.get('/admin/site-settings', [SiteSettingsController, 'edit']).as('admin.site_settings.edit')
-    router.post('/admin/site-settings', [SiteSettingsController, 'update']).as('admin.site_settings.update')
+    // Restricted to administrators
+    router
+      .get('/admin/site-settings', [SiteSettingsController, 'edit'])
+      .as('admin.site_settings.edit')
+      .use(middleware.adminOnly())
+    router
+      .post('/admin/site-settings', [SiteSettingsController, 'update'])
+      .as('admin.site_settings.update')
+      .use(middleware.adminOnly())
 
+    router.get('/admin/users', [UsersController, 'index']).as('admin.users.index').use(middleware.adminOnly())
+    router.get('/admin/users/create', [UsersController, 'create']).as('admin.users.create').use(middleware.adminOnly())
+    router.post('/admin/users', [UsersController, 'store']).as('admin.users.store').use(middleware.adminOnly())
+    router.get('/admin/users/:id/edit', [UsersController, 'edit']).as('admin.users.edit').use(middleware.adminOnly())
+    router.post('/admin/users/:id', [UsersController, 'update']).as('admin.users.update').use(middleware.adminOnly())
+    router.post('/admin/users/:id/delete', [UsersController, 'destroy']).as('admin.users.destroy').use(middleware.adminOnly())
+
+    // Content management: administrators and editors
     router.get('/admin/institutional-pages', [InstitutionalPagesController, 'index']).as('admin.institutional_pages.index')
     router.get('/admin/institutional-pages/:id/edit', [InstitutionalPagesController, 'edit']).as('admin.institutional_pages.edit')
     router.post('/admin/institutional-pages/:id', [InstitutionalPagesController, 'update']).as('admin.institutional_pages.update')
