@@ -1,39 +1,37 @@
-@layout('layouts/main')
-
-@section('body')
-<div class="mx-auto max-w-6xl px-6 py-10">
-  <div class="mb-8 flex items-center justify-between gap-4">
-    <div>
-      <h1 class="text-3xl font-bold">Notícias</h1>
-      <p class="mt-2 text-slate-600">Gerencie rascunhos, publicações e conteúdos arquivados.</p>
+@layout()
+  <div class="mx-auto max-w-6xl px-6 py-10">
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">Notícias</h1>
+        <p class="mt-2 text-slate-600">Gerencie rascunhos, publicações e conteúdos arquivados.</p>
+      </div>
+      <a href="/admin/posts/create" class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white">Nova notícia</a>
     </div>
-    <a href="/admin/posts/create" class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white">Nova notícia</a>
-  </div>
 
-  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-left">
-      <thead class="bg-slate-50 text-sm text-slate-600">
-        <tr><th class="px-4 py-3">Título</th><th class="px-4 py-3">Status</th><th class="px-4 py-3">Publicação</th><th class="px-4 py-3">Ações</th></tr>
-      </thead>
-      <tbody>
-        @each(post in posts)
-          <tr class="border-t border-slate-100">
-            <td class="px-4 py-3 font-medium">{{ post.title }}</td>
-            <td class="px-4 py-3">{{ post.status }}</td>
-            <td class="px-4 py-3">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy HH:mm') : '—' }}</td>
-            <td class="px-4 py-3">
-              <a href="/admin/posts/{{ post.id }}/edit" class="mr-3 underline">Editar</a>
-              <form method="POST" action="/admin/posts/{{ post.id }}/delete" class="inline">
-                {{ csrfField() }}
-                <button class="text-red-700 underline">Excluir</button>
-              </form>
-            </td>
-          </tr>
-        @else
-          <tr><td colspan="4" class="px-4 py-8 text-center text-slate-500">Nenhuma notícia cadastrada.</td></tr>
-        @end
-      </tbody>
-    </table>
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <table class="w-full text-left">
+        <thead class="bg-slate-50 text-sm text-slate-600">
+          <tr><th class="px-4 py-3">Título</th><th class="px-4 py-3">Status</th><th class="px-4 py-3">Publicação</th><th class="px-4 py-3">Ações</th></tr>
+        </thead>
+        <tbody>
+          @each(post in posts)
+            <tr class="border-t border-slate-100">
+              <td class="px-4 py-3 font-medium">{{ post.title }}</td>
+              <td class="px-4 py-3">{{ post.status }}</td>
+              <td class="px-4 py-3">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy HH:mm') : '—' }}</td>
+              <td class="px-4 py-3">
+                <a href="/admin/posts/{{ post.id }}/edit" class="mr-3 underline">Editar</a>
+                <form method="POST" action="/admin/posts/{{ post.id }}/delete" class="inline">
+                  {{ csrfField() }}
+                  <button class="text-red-700 underline">Excluir</button>
+                </form>
+              </td>
+            </tr>
+          @else
+            <tr><td colspan="4" class="px-4 py-8 text-center text-slate-500">Nenhuma notícia cadastrada.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-@endsection
+@end
