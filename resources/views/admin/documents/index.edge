@@ -1,0 +1,40 @@
+@layout()
+  <section class="mx-auto max-w-6xl px-6 py-12">
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Administração</p>
+        <h1 class="mt-2 text-4xl font-bold">Documentos</h1>
+      </div>
+      <a href="/admin/documents/create" class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white">Novo documento</a>
+    </div>
+
+    @if(flashMessages.has('error'))
+      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+    @endif
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr><th class="px-4 py-3 text-left">Título</th><th class="px-4 py-3 text-left">Categoria</th><th class="px-4 py-3 text-left">Data</th><th class="px-4 py-3 text-left">Visibilidade</th><th class="px-4 py-3 text-right">Ações</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @each(document in documents)
+            <tr>
+              <td class="px-4 py-3 font-semibold">{{ document.title }}</td>
+              <td class="px-4 py-3">{{ document.category ?? '—' }}</td>
+              <td class="px-4 py-3">{{ document.documentDate ? document.documentDate.toFormat('dd/LL/yyyy') : '—' }}</td>
+              <td class="px-4 py-3">{{ document.isPublic ? 'Público' : 'Privado' }}</td>
+              <td class="px-4 py-3 text-right">
+                <a href="{{ document.filePath }}" target="_blank" class="mr-3 underline">PDF</a>
+                <a href="/admin/documents/{{ document.id }}/edit" class="mr-3 underline">Editar</a>
+                <form method="POST" action="/admin/documents/{{ document.id }}/delete" class="inline">{{ csrfField() }}<button class="text-red-700 underline" type="submit">Excluir</button></form>
+              </td>
+            </tr>
+          @else
+            <tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">Nenhum documento cadastrado.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </section>
+@end
