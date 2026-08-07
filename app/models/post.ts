@@ -1,27 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-function consumeImagePaths(value: unknown): string[] {
-  if (Array.isArray(value)) {
-    return value.filter((item): item is string => typeof item === 'string')
-  }
-
-  if (typeof value === 'string') {
-    if (!value.trim()) return []
-
-    try {
-      const parsed = JSON.parse(value)
-      if (Array.isArray(parsed)) {
-        return parsed.filter((item): item is string => typeof item === 'string')
-      }
-    } catch {
-      return [value]
-    }
-  }
-
-  return []
-}
-
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -48,10 +27,32 @@ export default class Post extends BaseModel {
   declare featuredImagePath: string | null
 
   @column({
-    prepare: (value: string[] | null | undefined) => JSON.stringify(value ?? []),
-    consume: (value: unknown) => consumeImagePaths(value),
+    prepare: (value: string[] | string | null | undefined) => {
+      if (Array.isArray(value)) return JSON.stringify(value)
+      if (typeof value === 'string') return value
+      return JSON.stringify([])
+    },
+    consume: (value: unknown) => {
+      if (Array.isArray(value)) return value.filter((item): item is string => typeof item === 'string')
+      if (typeof value === 'string') {
+        try {
+          const parsed = JSON.parse(value)
+          return Array.isArray(parsed)
+            ? parsed.filter((item): item is string => typeof item === 'string')
+            : value
+              ? [value]
+              : []
+        } catch {
+          return value ? [value] : []
+        }
+      }
+      return []
+    },
   })
   declare imagePaths: string[]
+
+  @column()
+  declare imageDisplaySize: 'small' | 'medium' | 'large' | 'full'
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
