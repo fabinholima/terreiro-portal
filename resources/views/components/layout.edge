@@ -31,57 +31,132 @@
       <meta name="twitter:image" content="{{ seo.imageUrl }}" />
     @end
 
-    @vite(['resources/css/app.css', 'resources/css/site-adjustments.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/site-adjustments.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body>
-    @include('partials/header')
-    <main>
-      @include('partials/flash_alerts')
-      {{{ await $slots.main() }}}
-    </main>
 
-    <footer class="site-footer site-footer--slim">
-      <div class="site-container slim-footer__row">
-        <div class="slim-footer__brand">
-          <img src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
+  @if(request.url().startsWith('/admin'))
+    <body class="admin-body" x-data="{ adminMenuOpen: false }">
+      <div class="admin-shell">
+        <aside class="admin-sidebar" :class="adminMenuOpen ? 'is-open' : ''">
+          <a class="admin-brand" href="/admin">
+            <img src="/images/logo-terreiro.png" alt="">
+            <span>
+              <strong>Oxóssi e João Boiadeiro</strong>
+              <small>Painel administrativo</small>
+            </span>
+          </a>
+
           <div>
-            <strong>Terreiro de Umbanda<br>Oxóssi e João Boiadeiro</strong>
-            <small>Na fé, na lei e na caridade.</small>
+            <div class="admin-nav-label">Principal</div>
+            <nav class="admin-nav" aria-label="Administração">
+              <a data-admin-link href="/admin"><span class="admin-nav__icon">▦</span>Dashboard</a>
+            </nav>
+
+            <div class="admin-nav-label">Conteúdo</div>
+            <nav class="admin-nav">
+              <a data-admin-link href="/admin/events"><span class="admin-nav__icon">◷</span>Agenda</a>
+              <a data-admin-link href="/admin/posts"><span class="admin-nav__icon">▤</span>Notícias</a>
+              <a data-admin-link href="/admin/albums"><span class="admin-nav__icon">▧</span>Galeria</a>
+              <a data-admin-link href="/admin/social-actions"><span class="admin-nav__icon">♡</span>Ações sociais</a>
+              <a data-admin-link href="/admin/documents"><span class="admin-nav__icon">▥</span>Documentos</a>
+            </nav>
+
+            <div class="admin-nav-label">Institucional</div>
+            <nav class="admin-nav">
+              <a data-admin-link href="/admin/institutional-pages"><span class="admin-nav__icon">▣</span>Páginas institucionais</a>
+            </nav>
+
+            @if(auth.user?.role === 'admin')
+              <div class="admin-nav-label">Sistema</div>
+              <nav class="admin-nav">
+                <a data-admin-link href="/admin/site-settings"><span class="admin-nav__icon">⚙</span>Configurações</a>
+                <a data-admin-link href="/admin/users"><span class="admin-nav__icon">♙</span>Usuários</a>
+              </nav>
+            @end
+          </div>
+
+          <div class="admin-sidebar__bottom">
+            <a href="/" target="_blank" rel="noopener"><span>↗</span>Ver site público</a>
+            <form method="POST" action="/logout">
+              {{ csrfField() }}
+              <button type="submit"><span>⇥</span>Sair</button>
+            </form>
+          </div>
+        </aside>
+
+        <div class="admin-main">
+          <header class="admin-topbar">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="admin-mobile-toggle" type="button" @click="adminMenuOpen = !adminMenuOpen" aria-label="Abrir menu">☰</button>
+              <div class="admin-topbar__title">Painel administrativo</div>
+            </div>
+            <div class="admin-topbar__user">
+              <span>{{ auth.user?.fullName ?? auth.user?.email }}</span>
+              <span class="admin-avatar">{{ (auth.user?.fullName ?? auth.user?.email ?? 'A').charAt(0).toUpperCase() }}</span>
+            </div>
+          </header>
+
+          <main class="admin-content" @click="adminMenuOpen = false">
+            @include('partials/flash_alerts')
+            {{{ await $slots.main() }}}
+          </main>
+        </div>
+      </div>
+
+      <script>
+        (() => {
+          const path = window.location.pathname
+          document.querySelectorAll('[data-admin-link]').forEach((link) => {
+            const href = link.getAttribute('href')
+            const active = href === '/admin' ? path === '/admin' : path === href || path.startsWith(href + '/')
+            if (active) link.classList.add('is-active')
+          })
+        })()
+      </script>
+    </body>
+  @else
+    <body>
+      @include('partials/header')
+      <main>
+        @include('partials/flash_alerts')
+        {{{ await $slots.main() }}}
+      </main>
+
+      <footer class="site-footer site-footer--slim">
+        <div class="site-container slim-footer__row">
+          <div class="slim-footer__brand">
+            <img src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
+            <div>
+              <strong>Terreiro de Umbanda<br>Oxóssi e João Boiadeiro</strong>
+              <small>Na fé, na lei e na caridade.</small>
+            </div>
+          </div>
+
+          <nav class="slim-footer__nav" aria-label="Navegação do rodapé">
+            <a href="/">Início</a><span>•</span><a href="/o-terreiro">O Terreiro</a><span>•</span><a href="/agenda">Agenda</a><span>•</span><a href="/documentos">Documentos</a><span>•</span><a href="/contato">Contato</a>
+          </nav>
+
+          <div class="slim-footer__social">
+            @if(siteSettings.whatsapp)
+              <a href="https://wa.me/{{ siteSettings.whatsapp }}" aria-label="WhatsApp">WA</a>
+            @end
+            @if(siteSettings.instagramUrl)
+              <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+            @end
+            @if(siteSettings.facebookUrl)
+              <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+            @end
+            @if(siteSettings.youtubeUrl)
+              <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+            @end
           </div>
         </div>
 
-        <nav class="slim-footer__nav" aria-label="Navegação do rodapé">
-          <a href="/">Início</a>
-          <span>•</span>
-          <a href="/o-terreiro">O Terreiro</a>
-          <span>•</span>
-          <a href="/agenda">Agenda</a>
-          <span>•</span>
-          <a href="/documentos">Documentos</a>
-          <span>•</span>
-          <a href="/contato">Contato</a>
-        </nav>
-
-        <div class="slim-footer__social">
-          @if(siteSettings.whatsapp)
-            <a href="https://wa.me/{{ siteSettings.whatsapp }}" aria-label="WhatsApp">WA</a>
-          @end
-          @if(siteSettings.instagramUrl)
-            <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-          @end
-          @if(siteSettings.facebookUrl)
-            <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
-          @end
-          @if(siteSettings.youtubeUrl)
-            <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
-          @end
+        <div class="site-footer__bottom slim-footer__bottom">
+          <div class="site-container">© 2026 {{ siteSettings.siteName }}. Todos os direitos reservados.</div>
         </div>
-      </div>
-
-      <div class="site-footer__bottom slim-footer__bottom">
-        <div class="site-container">© 2026 {{ siteSettings.siteName }}. Todos os direitos reservados.</div>
-      </div>
-    </footer>
-  </body>
+      </footer>
+    </body>
+  @end
 </html>
