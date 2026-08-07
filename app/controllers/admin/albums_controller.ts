@@ -17,11 +17,13 @@ export default class AlbumsController {
 
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(albumValidator)
-    await Album.create({
+    const album = await Album.create({
       ...payload,
       eventDate: payload.eventDate ? DateTime.fromISO(payload.eventDate) : null,
     })
-    return response.redirect('/admin/albums')
+
+    await this.savePhotos(album, request)
+    return response.redirect(`/admin/albums/${album.id}/edit`)
   }
 
   async edit({ params, view }: HttpContext) {
@@ -42,31 +44,7 @@ export default class AlbumsController {
 
   async upload({ params, request, response }: HttpContext) {
     const album = await Album.findOrFail(params.id)
-    const files = request.files('photos', {
-      size: '12mb',
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],
-    })
-
-    let position = await Photo.query().where('album_id', album.id).count('* as total').then((rows) => Number(rows[0].$extras.total))
-
-    for (const file of files) {
-      const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
-      await file.move(app.makePath('public/uploads/gallery'), { name: safeName })
-      await Photo.create({
-        albumId: album.id,
-        path: `/uploads/gallery/${safeName}`,
-        caption: null,
-        altText: album.title,
-        credit: null,
-        publicationAuthorized: false,
-        position: position++,
-      })
-      if (!album.coverPath) {
-        album.coverPath = `/uploads/gallery/${safeName}`
-        await album.save()
-      }
-    }
-
+    await this.savePhotos(album, request)
     return response.redirect(`/admin/albums/${album.id}/edit`)
   }
 
@@ -94,5 +72,38 @@ export default class AlbumsController {
     const album = await Album.findOrFail(params.id)
     await album.delete()
     return response.redirect('/admin/albums')
+  }
+
+  private async savePhotos(album: Album, request: HttpContext['request']) {
+    const files = request.files('photos', {
+      size: '12mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    })
+
+    let position = await Photo.query()
+      .where('album_id', album.id)
+      .count('* as total')
+      .then((rows) => Number(rows[0].$extras.total))
+
+    for (const file of files) {
+      const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+      await file.move(app.makePath('public/uploads/gallery'), { name: safeName })
+      const path = `/uploads/gallery/${safeName}`
+
+      await Photo.create({
+        albumId: album.id,
+        path,
+        caption: null,
+        altText: album.title,
+        credit: null,
+        publicationAuthorized: false,
+        position: position++,
+      })
+
+      if (!album.coverPath) {
+        album.coverPath = path
+        await album.save()
+      }
+    }
   }
 }
