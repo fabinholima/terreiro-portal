@@ -16,7 +16,7 @@
               <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__image">
             @end
             <div class="card__body">
-              <p class="card__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <p class="card__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy · HH:mm') : 'Data não definida' }}</p>
               <h3>{{ post.title }}</h3>
               @if(post.summary)
                 <p>{{ post.summary }}</p>
