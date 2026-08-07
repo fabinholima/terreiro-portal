@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel administrativo | Terreiro</title>
+  <style>
+    :root { color-scheme: light; --green:#1e4620; --dark:#102e18; --gold:#b38b3d; --cream:#f5f1e8; --line:#dde5dd; --text:#263126; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; color:var(--text); background:#f6f8f5; }
+    a { color:inherit; text-decoration:none; }
+    .shell { min-height:100vh; display:grid; grid-template-columns:260px 1fr; }
+    aside { background:var(--dark); color:#fff; padding:28px 20px; display:flex; flex-direction:column; gap:20px; }
+    .brand { font-weight:800; line-height:1.2; font-size:1.05rem; }
+    nav { display:grid; gap:8px; }
+    nav a { padding:10px 12px; border-radius:8px; color:#e9f1e9; }
+    nav a:hover, nav a.active { background:rgba(255,255,255,.11); color:#fff; }
+    aside form { margin-top:auto; }
+    aside button { width:100%; padding:10px 12px; border:1px solid rgba(255,255,255,.25); border-radius:8px; background:transparent; color:#fff; cursor:pointer; }
+    main { padding:38px; overflow:auto; }
+    .head { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; margin-bottom:28px; }
+    .head h1 { margin:0; font-size:2rem; }
+    .head p { margin:.35rem 0 0; color:#647164; }
+    .site-link { padding:10px 14px; border-radius:8px; background:#fff; border:1px solid var(--line); font-weight:650; }
+    .metrics { display:grid; grid-template-columns:repeat(5,minmax(150px,1fr)); gap:14px; margin-bottom:30px; }
+    .metric { background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; }
+    .metric strong { display:block; color:var(--green); font-size:2rem; }
+    .metric span { color:#657165; }
+    .grid { display:grid; grid-template-columns:1.4fr .9fr; gap:20px; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px; }
+    .panel h2 { margin:0 0 18px; font-size:1.2rem; }
+    .event { display:flex; gap:16px; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #edf0ed; }
+    .event:last-child { border-bottom:0; }
+    .event strong { display:block; }
+    .event small { color:#6b776b; }
+    .actions { display:grid; gap:10px; }
+    .actions a { display:flex; justify-content:space-between; align-items:center; padding:13px 14px; border:1px solid var(--line); border-radius:10px; font-weight:650; }
+    .actions a:hover { border-color:#aebbae; background:#fafcf9; }
+    @media (max-width:1050px) { .metrics { grid-template-columns:repeat(2,1fr); } .grid{grid-template-columns:1fr;} }
+    @media (max-width:760px) { .shell{display:block;} aside{position:static;} main{padding:22px;} .head{flex-direction:column;} .metrics{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <a class="brand" href="/admin">Terreiro de Umbanda<br>Oxóssi e João Boiadeiro</a>
+      <nav aria-label="Administração">
+        <a class="active" href="/admin">Dashboard</a>
+        <a href="/admin/events">Agenda</a>
+        <a href="/admin/albums">Galeria</a>
+        <a href="/admin/social-actions">Ações sociais</a>
+        <a href="/admin/posts">Notícias</a>
+        <a href="/admin/documents">Documentos</a>
+      </nav>
+      <form method="POST" action="/logout">
+        {{ csrfField() }}
+        <button type="submit">Sair</button>
+      </form>
+    </aside>
+
+    <main>
+      <header class="head">
+        <div>
+          <h1>Painel administrativo</h1>
+          <p>Visão geral do conteúdo e das próximas atividades.</p>
+        </div>
+        <a class="site-link" href="/" target="_blank" rel="noopener">Abrir site público ↗</a>
+      </header>
+
+      <section class="metrics" aria-label="Indicadores">
+        <a class="metric" href="/admin/events"><strong>{{ counters.events }}</strong><span>Eventos</span></a>
+        <a class="metric" href="/admin/albums"><strong>{{ counters.albums }}</strong><span>Álbuns</span></a>
+        <a class="metric" href="/admin/social-actions"><strong>{{ counters.actions }}</strong><span>Ações sociais</span></a>
+        <a class="metric" href="/admin/posts"><strong>{{ counters.posts }}</strong><span>Notícias</span></a>
+        <a class="metric" href="/admin/documents"><strong>{{ counters.documents }}</strong><span>Documentos</span></a>
+      </section>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>Próximos eventos</h2>
+          @each(event in upcomingEvents)
+            <div class="event">
+              <div>
+                <strong>{{ event.title }}</strong>
+                <small>{{ event.startsAt.toFormat('dd/LL/yyyy HH:mm') }}{{ event.location ? ' · ' + event.location : '' }}</small>
+              </div>
+              <a href="/admin/events/{{ event.id }}/edit">Editar</a>
+            </div>
+          @else
+            <p>Nenhum evento futuro cadastrado.</p>
+          @end
+        </section>
+
+        <section class="panel">
+          <h2>Ações rápidas</h2>
+          <div class="actions">
+            <a href="/admin/events/create"><span>Novo evento</span><span>→</span></a>
+            <a href="/admin/albums/create"><span>Novo álbum</span><span>→</span></a>
+            <a href="/admin/social-actions/create"><span>Nova ação social</span><span>→</span></a>
+            <a href="/admin/posts/create"><span>Nova notícia</span><span>→</span></a>
+            <a href="/admin/documents/create"><span>Novo documento</span><span>→</span></a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
