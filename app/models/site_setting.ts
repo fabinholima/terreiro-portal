@@ -50,6 +50,48 @@ export default class SiteSetting extends BaseModel {
   @column()
   declare footerText: string | null
 
+  @column()
+  declare homeEyebrow: string | null
+
+  @column()
+  declare homeTitle: string | null
+
+  @column()
+  declare homeSummary: string | null
+
+  @column()
+  declare missionTitle: string | null
+
+  @column()
+  declare missionText: string | null
+
+  @column()
+  declare missionVisible: boolean
+
+  @column()
+  declare valuesTitle: string | null
+
+  @column()
+  declare valuesText: string | null
+
+  @column()
+  declare valuesVisible: boolean
+
+  @column()
+  declare trajectoryTitle: string | null
+
+  @column()
+  declare trajectoryText: string | null
+
+  @column()
+  declare trajectoryVisible: boolean
+
+  @column()
+  declare trajectoryButtonText: string | null
+
+  @column()
+  declare trajectoryButtonUrl: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
