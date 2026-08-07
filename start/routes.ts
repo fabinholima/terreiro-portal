@@ -22,6 +22,7 @@ const PostsController = () => import('#controllers/posts_controller')
 const AdminDocumentsController = () => import('#controllers/admin/documents_controller')
 const DocumentsController = () => import('#controllers/documents_controller')
 const InstitutionalPagesController = () => import('#controllers/admin/institutional_pages_controller')
+const SiteSettingsController = () => import('#controllers/admin/site_settings_controller')
 
 // Public site
 router.get('/', [HomeController, 'index']).as('home')
@@ -53,6 +54,9 @@ router
 
     router.get('/admin', [DashboardController, 'index']).as('admin.dashboard')
 
+    router.get('/admin/site-settings', [SiteSettingsController, 'edit']).as('admin.site_settings.edit')
+    router.post('/admin/site-settings', [SiteSettingsController, 'update']).as('admin.site_settings.update')
+
     router.get('/admin/institutional-pages', [InstitutionalPagesController, 'index']).as('admin.institutional_pages.index')
     router.get('/admin/institutional-pages/:id/edit', [InstitutionalPagesController, 'edit']).as('admin.institutional_pages.edit')
     router.post('/admin/institutional-pages/:id', [InstitutionalPagesController, 'update']).as('admin.institutional_pages.update')
@@ -70,32 +74,16 @@ router
     router.get('/admin/albums/:id/edit', [AlbumsController, 'edit']).as('admin.albums.edit')
     router.post('/admin/albums/:id', [AlbumsController, 'update']).as('admin.albums.update')
     router.post('/admin/albums/:id/photos', [AlbumsController, 'upload']).as('admin.albums.photos.upload')
-    router
-      .post('/admin/albums/:id/photos/:photoId', [AlbumsController, 'updatePhoto'])
-      .as('admin.albums.photos.update')
-    router
-      .post('/admin/albums/:id/photos/:photoId/delete', [AlbumsController, 'deletePhoto'])
-      .as('admin.albums.photos.destroy')
+    router.post('/admin/albums/:id/photos/:photoId', [AlbumsController, 'updatePhoto']).as('admin.albums.photos.update')
+    router.post('/admin/albums/:id/photos/:photoId/delete', [AlbumsController, 'deletePhoto']).as('admin.albums.photos.destroy')
     router.post('/admin/albums/:id/delete', [AlbumsController, 'destroy']).as('admin.albums.destroy')
 
-    router
-      .get('/admin/social-actions', [AdminSocialActionsController, 'index'])
-      .as('admin.social_actions.index')
-    router
-      .get('/admin/social-actions/create', [AdminSocialActionsController, 'create'])
-      .as('admin.social_actions.create')
-    router
-      .post('/admin/social-actions', [AdminSocialActionsController, 'store'])
-      .as('admin.social_actions.store')
-    router
-      .get('/admin/social-actions/:id/edit', [AdminSocialActionsController, 'edit'])
-      .as('admin.social_actions.edit')
-    router
-      .post('/admin/social-actions/:id', [AdminSocialActionsController, 'update'])
-      .as('admin.social_actions.update')
-    router
-      .post('/admin/social-actions/:id/delete', [AdminSocialActionsController, 'destroy'])
-      .as('admin.social_actions.destroy')
+    router.get('/admin/social-actions', [AdminSocialActionsController, 'index']).as('admin.social_actions.index')
+    router.get('/admin/social-actions/create', [AdminSocialActionsController, 'create']).as('admin.social_actions.create')
+    router.post('/admin/social-actions', [AdminSocialActionsController, 'store']).as('admin.social_actions.store')
+    router.get('/admin/social-actions/:id/edit', [AdminSocialActionsController, 'edit']).as('admin.social_actions.edit')
+    router.post('/admin/social-actions/:id', [AdminSocialActionsController, 'update']).as('admin.social_actions.update')
+    router.post('/admin/social-actions/:id/delete', [AdminSocialActionsController, 'destroy']).as('admin.social_actions.destroy')
 
     router.get('/admin/posts', [AdminPostsController, 'index']).as('admin.posts.index')
     router.get('/admin/posts/create', [AdminPostsController, 'create']).as('admin.posts.create')
@@ -105,16 +93,10 @@ router
     router.post('/admin/posts/:id/delete', [AdminPostsController, 'destroy']).as('admin.posts.destroy')
 
     router.get('/admin/documents', [AdminDocumentsController, 'index']).as('admin.documents.index')
-    router
-      .get('/admin/documents/create', [AdminDocumentsController, 'create'])
-      .as('admin.documents.create')
+    router.get('/admin/documents/create', [AdminDocumentsController, 'create']).as('admin.documents.create')
     router.post('/admin/documents', [AdminDocumentsController, 'store']).as('admin.documents.store')
-    router
-      .get('/admin/documents/:id/edit', [AdminDocumentsController, 'edit'])
-      .as('admin.documents.edit')
+    router.get('/admin/documents/:id/edit', [AdminDocumentsController, 'edit']).as('admin.documents.edit')
     router.post('/admin/documents/:id', [AdminDocumentsController, 'update']).as('admin.documents.update')
-    router
-      .post('/admin/documents/:id/delete', [AdminDocumentsController, 'destroy'])
-      .as('admin.documents.destroy')
+    router.post('/admin/documents/:id/delete', [AdminDocumentsController, 'destroy']).as('admin.documents.destroy')
   })
   .use(middleware.auth())
