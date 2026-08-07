@@ -1,69 +1,106 @@
 @layout()
-  <div class="mx-auto max-w-4xl px-6 py-10">
+  <div class="mx-auto max-w-5xl px-6 py-10">
     <div class="mb-8">
       <a href="/admin/posts" class="text-sm text-slate-600 underline">← Voltar</a>
       <h1 class="mt-3 text-3xl font-bold">{{ post ? 'Editar notícia' : 'Nova notícia' }}</h1>
-      <p class="mt-2 text-slate-600">Cadastre o texto, a imagem de destaque e as imagens complementares da publicação.</p>
+      <p class="mt-2 text-slate-600">Cadastre o conteúdo e controle individualmente as dimensões e imagens da publicação.</p>
     </div>
 
     <form method="POST" enctype="multipart/form-data" action="{{ post ? '/admin/posts/' + post.id : '/admin/posts' }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6">
       {{ csrfField() }}
+
       <label class="block"><span class="mb-2 block font-semibold">Título</span><input name="title" required maxlength="180" value="{{ post?.title ?? '' }}" class="w-full rounded-lg border border-slate-300 px-3 py-2"></label>
       <label class="block"><span class="mb-2 block font-semibold">Slug</span><input name="slug" required maxlength="200" value="{{ post?.slug ?? '' }}" class="w-full rounded-lg border border-slate-300 px-3 py-2"></label>
       <label class="block"><span class="mb-2 block font-semibold">Resumo</span><textarea name="summary" rows="3" class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ post?.summary ?? '' }}</textarea></label>
-      <label class="block"><span class="mb-2 block font-semibold">Texto completo</span><textarea name="body" rows="14" class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ post?.body ?? '' }}</textarea><span class="mt-2 block text-sm text-slate-500">Use parágrafos curtos. As imagens complementares serão exibidas abaixo do texto, com o tamanho definido nesta tela.</span></label>
+      <label class="block"><span class="mb-2 block font-semibold">Texto completo</span><textarea name="body" rows="14" class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ post?.body ?? '' }}</textarea></label>
 
-      <div class="grid gap-6 md:grid-cols-2">
-        <label class="block">
-          <span class="mb-2 block font-semibold">Imagem de destaque</span>
-          <input type="file" name="featuredImage" accept="image/jpeg,image/png,image/webp" class="w-full rounded-lg border border-slate-300 px-3 py-2">
-          <span class="mt-2 block text-sm text-slate-500">Recomendado: imagem horizontal, preferencialmente 1600 × 900 px.</span>
-          @if(post?.featuredImagePath)
-            <img src="{{ post.featuredImagePath }}" alt="Imagem de destaque atual" class="mt-3 h-36 w-full rounded-lg object-cover">
-          @end
-        </label>
+      <section class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <h2 class="text-lg font-bold">Imagem de destaque</h2>
+        <p class="mt-1 text-sm text-slate-600">Digite as dimensões desejadas. Deixe largura ou altura vazia para preservar a proporção automaticamente.</p>
 
-        <label class="block">
-          <span class="mb-2 block font-semibold">Fotos e figuras anexas</span>
-          <input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple class="w-full rounded-lg border border-slate-300 px-3 py-2">
-          <span class="mt-2 block text-sm text-slate-500">Selecione uma ou várias imagens para complementar a notícia.</span>
-        </label>
-      </div>
+        @if(!post?.featuredImagePath)
+          <label class="mt-4 block">
+            <span class="mb-2 block font-semibold">Selecionar imagem</span>
+            <input type="file" name="featuredImage" accept="image/jpeg,image/png,image/webp" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2">
+          </label>
+        @end
 
-      <label class="block">
-        <span class="mb-2 block font-semibold">Tamanho das imagens no conteúdo</span>
-        <select name="imageDisplaySize" class="w-full rounded-lg border border-slate-300 px-3 py-2">
-          <option value="small" @if((post?.imageDisplaySize ?? 'large') === 'small') selected @end>Pequena — até 420 px</option>
-          <option value="medium" @if((post?.imageDisplaySize ?? 'large') === 'medium') selected @end>Média — até 640 px</option>
-          <option value="large" @if((post?.imageDisplaySize ?? 'large') === 'large') selected @end>Grande — até 900 px</option>
-          <option value="full" @if((post?.imageDisplaySize ?? 'large') === 'full') selected @end>Largura total do artigo</option>
-        </select>
-        <span class="mt-2 block text-sm text-slate-500">No celular, as imagens sempre se ajustam automaticamente à largura disponível.</span>
-      </label>
-
-      @if(post?.imagePaths && post.imagePaths.length)
-        <div>
-          <p class="mb-3 font-semibold">Imagens já anexadas</p>
-          <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-            @each(image in post.imagePaths)
-              <img src="{{ image }}" alt="Imagem anexa da notícia" class="h-28 w-full rounded-lg object-cover">
-            @end
-          </div>
+        <div class="mt-4 grid gap-4 md:grid-cols-3">
+          <label class="block"><span class="mb-2 block font-semibold">Largura (px)</span><input type="number" min="100" max="3000" step="1" name="featuredImageWidth" placeholder="Ex.: 900" value="{{ post?.featuredImageWidth ?? '' }}" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+          <label class="block"><span class="mb-2 block font-semibold">Altura (px)</span><input type="number" min="100" max="3000" step="1" name="featuredImageHeight" placeholder="Ex.: 500" value="{{ post?.featuredImageHeight ?? '' }}" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+          <label class="block"><span class="mb-2 block font-semibold">Ajuste</span><select name="featuredImageFit" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"><option value="contain" @if((post?.featuredImageFit ?? 'contain') === 'contain') selected @end>Conter — sem cortar</option><option value="cover" @if(post?.featuredImageFit === 'cover') selected @end>Preencher — pode cortar</option></select></label>
         </div>
-      @end
+      </section>
 
-      <div class="grid gap-6 md:grid-cols-2">
-        <label class="block">
-          <span class="mb-2 block font-semibold">Status</span>
-          <select name="status" class="w-full rounded-lg border border-slate-300 px-3 py-2">
-            @each(status in ['draft', 'published', 'archived'])
-              <option value="{{ status }}" @if((post?.status ?? 'draft') === status) selected @end>{{ status }}</option>
-            @end
+      <section class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <h2 class="text-lg font-bold">Fotos e figuras no conteúdo</h2>
+        <label class="mt-4 block"><span class="mb-2 block font-semibold">Adicionar novas imagens</span><input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          <label class="block"><span class="mb-2 block font-semibold">Largura personalizada (px)</span><input type="number" min="100" max="3000" step="1" name="contentImageWidth" placeholder="Ex.: 640" value="{{ post?.contentImageWidth ?? '' }}" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+          <label class="block"><span class="mb-2 block font-semibold">Altura personalizada (px)</span><input type="number" min="100" max="3000" step="1" name="contentImageHeight" placeholder="Opcional" value="{{ post?.contentImageHeight ?? '' }}" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+        </div>
+
+        <label class="mt-4 block">
+          <span class="mb-2 block font-semibold">Tamanho padrão quando não houver dimensão personalizada</span>
+          <select name="imageDisplaySize" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2">
+            <option value="small" @if((post?.imageDisplaySize ?? 'large') === 'small') selected @end>Pequena — até 420 px</option>
+            <option value="medium" @if((post?.imageDisplaySize ?? 'large') === 'medium') selected @end>Média — até 640 px</option>
+            <option value="large" @if((post?.imageDisplaySize ?? 'large') === 'large') selected @end>Grande — até 900 px</option>
+            <option value="full" @if((post?.imageDisplaySize ?? 'large') === 'full') selected @end>Largura total do artigo</option>
           </select>
         </label>
+      </section>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <label class="block"><span class="mb-2 block font-semibold">Status</span><select name="status" class="w-full rounded-lg border border-slate-300 px-3 py-2">@each(status in ['draft', 'published', 'archived'])<option value="{{ status }}" @if((post?.status ?? 'draft') === status) selected @end>{{ status }}</option>@end</select></label>
         <label class="block"><span class="mb-2 block font-semibold">Data de publicação</span><input type="datetime-local" name="publishedAt" value="{{ post?.publishedAt ? post.publishedAt.toFormat(`yyyy-LL-dd'T'HH:mm`) : '' }}" class="w-full rounded-lg border border-slate-300 px-3 py-2"></label>
       </div>
-      <div class="flex justify-end"><button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white">Salvar</button></div>
+
+      <div class="flex justify-end"><button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white">Salvar notícia e dimensões</button></div>
     </form>
+
+    @if(post?.featuredImagePath)
+      <section class="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div><h2 class="text-xl font-bold">Imagem de destaque atual</h2><p class="text-sm text-slate-600">Substitua ou exclua sem alterar o restante da notícia.</p></div>
+        </div>
+        <img src="{{ post.featuredImagePath }}" alt="Imagem de destaque atual" style="max-width:520px;max-height:300px;object-fit:contain" class="rounded-lg border border-slate-200">
+        <div class="mt-4 flex flex-wrap gap-3">
+          <form method="POST" enctype="multipart/form-data" action="/admin/posts/{{ post.id }}/featured-image/replace" class="flex flex-wrap items-center gap-2">
+            {{ csrfField() }}
+            <input type="file" name="featuredImage" accept="image/jpeg,image/png,image/webp" required class="rounded-lg border border-slate-300 px-3 py-2">
+            <button type="submit" class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white">Editar / substituir</button>
+          </form>
+          <form method="POST" action="/admin/posts/{{ post.id }}/featured-image/delete" onsubmit="return confirm('Excluir a imagem de destaque?')">
+            {{ csrfField() }}
+            <button type="submit" class="rounded-lg bg-red-700 px-4 py-2 font-semibold text-white">Excluir</button>
+          </form>
+        </div>
+      </section>
+    @end
+
+    @if(post?.imagePaths && post.imagePaths.length)
+      <section class="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+        <h2 class="text-xl font-bold">Imagens anexadas</h2>
+        <p class="mt-1 text-sm text-slate-600">Cada imagem pode ser substituída ou excluída individualmente.</p>
+        <div class="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          @each((image, index) in post.imagePaths)
+            <article class="rounded-xl border border-slate-200 p-4">
+              <img src="{{ image }}" alt="Imagem anexa da notícia" style="width:100%;height:180px;object-fit:contain" class="rounded-lg bg-slate-50">
+              <form method="POST" enctype="multipart/form-data" action="/admin/posts/{{ post.id }}/images/{{ index }}/replace" class="mt-3 space-y-2">
+                {{ csrfField() }}
+                <input type="file" name="image" accept="image/jpeg,image/png,image/webp" required class="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm">
+                <button type="submit" class="w-full rounded-lg bg-emerald-800 px-3 py-2 font-semibold text-white">Editar / substituir</button>
+              </form>
+              <form method="POST" action="/admin/posts/{{ post.id }}/images/{{ index }}/delete" class="mt-2" onsubmit="return confirm('Excluir esta imagem?')">
+                {{ csrfField() }}
+                <button type="submit" class="w-full rounded-lg bg-red-700 px-3 py-2 font-semibold text-white">Excluir</button>
+              </form>
+            </article>
+          @end
+        </div>
+      </section>
+    @end
   </div>
 @end
