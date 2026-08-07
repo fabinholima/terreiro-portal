@@ -3,15 +3,13 @@
     <a href="/" class="site-brand" aria-label="{{ siteSettings.siteName }} — página inicial">
       <img class="site-brand__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
       <span class="site-brand__text">
-        <span class="site-brand__eyebrow">{{ siteSettings.siteSubtitle ?? 'Na fé, na lei e na caridade' }}</span>
         <span class="site-brand__name">{{ siteSettings.siteName }}</span>
+        <span class="site-brand__eyebrow">Na fé, na lei e na caridade</span>
       </span>
     </a>
 
     <nav class="site-nav" aria-label="Navegação principal">
       <a data-nav-link href="/o-terreiro">O Terreiro</a>
-      <a data-nav-link href="/nossa-historia">História</a>
-      <a data-nav-link href="/umbanda">Umbanda</a>
       <a data-nav-link href="/agenda">Agenda</a>
       <a data-nav-link href="/galeria">Galeria</a>
       <a data-nav-link href="/noticias">Notícias</a>
@@ -30,8 +28,6 @@
 
   <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
     <a data-nav-link href="/o-terreiro">O Terreiro</a>
-    <a data-nav-link href="/nossa-historia">História</a>
-    <a data-nav-link href="/umbanda">Umbanda</a>
     <a data-nav-link href="/agenda">Agenda</a>
     <a data-nav-link href="/galeria">Galeria</a>
     <a data-nav-link href="/noticias">Notícias</a>
