@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
+type ImageSetting = { width?: number | null; height?: number | null }
+type ImageSettings = Record<string, ImageSetting>
+
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -68,6 +71,26 @@ export default class Post extends BaseModel {
 
   @column()
   declare contentImageHeight: number | null
+
+  @column({
+    prepare: (value: ImageSettings | string | null | undefined) => {
+      if (typeof value === 'string') return value
+      return JSON.stringify(value ?? {})
+    },
+    consume: (value: unknown): ImageSettings => {
+      if (value && typeof value === 'object' && !Array.isArray(value)) return value as ImageSettings
+      if (typeof value === 'string') {
+        try {
+          const parsed = JSON.parse(value)
+          return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
+        } catch {
+          return {}
+        }
+      }
+      return {}
+    },
+  })
+  declare imageSettings: ImageSettings
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
