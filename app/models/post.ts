@@ -26,6 +26,15 @@ export default class Post extends BaseModel {
   @column()
   declare featuredImagePath: string | null
 
+  @column()
+  declare featuredImageWidth: number | null
+
+  @column()
+  declare featuredImageHeight: number | null
+
+  @column()
+  declare featuredImageFit: 'contain' | 'cover'
+
   @column({
     prepare: (value: string[] | string | null | undefined) => {
       if (Array.isArray(value)) return JSON.stringify(value)
@@ -53,6 +62,12 @@ export default class Post extends BaseModel {
 
   @column()
   declare imageDisplaySize: 'small' | 'medium' | 'large' | 'full'
+
+  @column()
+  declare contentImageWidth: number | null
+
+  @column()
+  declare contentImageHeight: number | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
