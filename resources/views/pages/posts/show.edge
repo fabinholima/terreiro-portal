@@ -14,8 +14,12 @@
 
     <div class="site-container news-article__content">
       @if(post.featuredImagePath)
-        <figure class="news-article__featured">
-          <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}">
+        <figure class="news-article__featured" style="{{ post.featuredImageWidth ? 'max-width:' + post.featuredImageWidth + 'px;' : '' }}">
+          <img
+            src="{{ post.featuredImagePath }}"
+            alt="{{ post.title }}"
+            style="{{ post.featuredImageHeight ? 'height:' + post.featuredImageHeight + 'px;' : 'height:auto;' }}max-height:none;object-fit:{{ post.featuredImageFit ?? 'contain' }};"
+          >
         </figure>
       @end
 
@@ -30,8 +34,13 @@
 
           <div class="news-article__image-list news-article__image-list--{{ post.imageDisplaySize ?? 'large' }}">
             @each(image in post.imagePaths)
-              <figure class="news-article__image">
-                <img src="{{ image }}" alt="Imagem relacionada à notícia {{ post.title }}" @click="open('{{ image }}')">
+              <figure class="news-article__image" style="{{ post.contentImageWidth ? 'max-width:' + post.contentImageWidth + 'px;' : '' }}">
+                <img
+                  src="{{ image }}"
+                  alt="Imagem relacionada à notícia {{ post.title }}"
+                  style="{{ post.contentImageHeight ? 'height:' + post.contentImageHeight + 'px;' : 'height:auto;' }}max-height:none;object-fit:contain;"
+                  @click="open('{{ image }}')"
+                >
               </figure>
             @end
           </div>
