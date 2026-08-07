@@ -5,49 +5,57 @@
         <img class="home-showcase__logo" src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
       </div>
       <div class="home-showcase__copy">
-        <p class="eyebrow">Institucional</p>
-        <h1>O Terreiro</h1>
+        <p class="eyebrow">{{ siteSettings.homeEyebrow ?? 'Institucional' }}</p>
+        <h1>{{ siteSettings.homeTitle ?? 'O Terreiro' }}</h1>
         <div class="gold-rule" aria-hidden="true"><span></span></div>
-        <p>Casa de fé, caridade, ancestralidade e acolhimento.</p>
+        <p>{{ siteSettings.homeSummary ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</p>
       </div>
     </div>
   </section>
 
   <section class="home-values">
     <div class="site-container home-values__grid">
-      <article class="home-value-card">
-        <div class="institutional-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
-        </div>
-        <div>
-          <h2>Nossa missão</h2>
-          <span class="mini-gold-line"></span>
-          <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.</p>
-        </div>
-      </article>
+      @if(siteSettings.missionVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.missionTitle ?? 'Nossa missão' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.missionText }}</p>
+          </div>
+        </article>
+      @end
 
-      <article class="home-value-card">
-        <div class="institutional-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
-        </div>
-        <div>
-          <h2>Nossos valores</h2>
-          <span class="mini-gold-line"></span>
-          <p>Respeito às diferenças, valorização da ancestralidade, compromisso com a comunidade, responsabilidade religiosa, solidariedade e cuidado com as pessoas.</p>
-        </div>
-      </article>
+      @if(siteSettings.valuesVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.valuesTitle ?? 'Nossos valores' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.valuesText }}</p>
+          </div>
+        </article>
+      @end
 
-      <article class="home-value-card">
-        <div class="institutional-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
-        </div>
-        <div>
-          <h2>Nossa trajetória</h2>
-          <span class="mini-gold-line"></span>
-          <p>A casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
-          <a href="/o-terreiro" class="button home-value-card__button">Conheça nossa história</a>
-        </div>
-      </article>
+      @if(siteSettings.trajectoryVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.trajectoryTitle ?? 'Nossa trajetória' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.trajectoryText }}</p>
+            @if(siteSettings.trajectoryButtonText && siteSettings.trajectoryButtonUrl)
+              <a href="{{ siteSettings.trajectoryButtonUrl }}" class="button home-value-card__button">{{ siteSettings.trajectoryButtonText }}</a>
+            @end
+          </div>
+        </article>
+      @end
     </div>
   </section>
 
