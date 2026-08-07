@@ -11,9 +11,12 @@ import router from '@adonisjs/core/services/router'
 const EventsController = () => import('#controllers/admin/events_controller')
 const AlbumsController = () => import('#controllers/admin/albums_controller')
 const GalleryController = () => import('#controllers/gallery_controller')
+const AdminSocialActionsController = () => import('#controllers/admin/social_actions_controller')
+const SocialActionsController = () => import('#controllers/social_actions_controller')
 
 router.on('/').render('pages/home').as('home')
 router.get('/galeria', [GalleryController, 'index']).as('gallery')
+router.get('/acoes-sociais', [SocialActionsController, 'index']).as('social_actions')
 
 router
   .group(() => {
@@ -45,5 +48,12 @@ router
     router.post('/admin/albums/:id/photos/:photoId', [AlbumsController, 'updatePhoto'])
     router.post('/admin/albums/:id/photos/:photoId/delete', [AlbumsController, 'deletePhoto'])
     router.post('/admin/albums/:id/delete', [AlbumsController, 'destroy'])
+
+    router.get('/admin/social-actions', [AdminSocialActionsController, 'index'])
+    router.get('/admin/social-actions/create', [AdminSocialActionsController, 'create'])
+    router.post('/admin/social-actions', [AdminSocialActionsController, 'store'])
+    router.get('/admin/social-actions/:id/edit', [AdminSocialActionsController, 'edit'])
+    router.post('/admin/social-actions/:id', [AdminSocialActionsController, 'update'])
+    router.post('/admin/social-actions/:id/delete', [AdminSocialActionsController, 'destroy'])
   })
   .use(middleware.auth())
