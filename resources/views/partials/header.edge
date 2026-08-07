@@ -19,6 +19,8 @@
       <a data-nav-link href="/contato">Contato</a>
       @if(auth.user)
         <a href="/admin" class="site-nav__admin">Admin</a>
+      @else
+        <a href="/login" class="site-nav__admin">Entrar</a>
       @end
     </nav>
 
@@ -37,6 +39,8 @@
     <a data-nav-link href="/contato">Contato</a>
     @if(auth.user)
       <a href="/admin">Painel administrativo</a>
+    @else
+      <a href="/login">Entrar no portal</a>
     @end
   </nav>
 </header>
