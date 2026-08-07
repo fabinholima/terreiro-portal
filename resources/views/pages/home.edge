@@ -1,51 +1,51 @@
 @layout()
-  <section class="institutional-hero home-intro">
-    <div class="site-container institutional-hero__inner">
-      <div class="institutional-hero__logo-wrap">
-        <img class="institutional-hero__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
+  <section class="home-showcase">
+    <div class="site-container home-showcase__inner">
+      <div class="home-showcase__logo-wrap">
+        <img class="home-showcase__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
       </div>
-      <div>
-        <p class="eyebrow">Em atividade desde 1991</p>
-        <h1 class="home-intro__title">{{ siteSettings.siteName }}</h1>
+      <div class="home-showcase__copy">
+        <p class="eyebrow">Institucional</p>
+        <h1>O Terreiro</h1>
         <div class="gold-rule" aria-hidden="true"><span></span></div>
-        <p class="institutional-hero__summary">Na fé, na lei e na caridade. Uma casa de acolhimento, ancestralidade, compromisso religioso e serviço à comunidade.</p>
-        <div class="home-intro__actions">
-          <a href="/o-terreiro" class="button">Conheça o Terreiro</a>
-          <a href="/agenda" class="button button--gold">Ver agenda</a>
-        </div>
+        <p>Casa de fé, caridade, ancestralidade e acolhimento.</p>
       </div>
     </div>
   </section>
 
-  <section class="institutional-content home-principles">
-    <div class="site-container institutional-list">
-      <article class="institutional-item">
+  <section class="home-values">
+    <div class="site-container home-values__grid">
+      <article class="home-value-card">
         <div class="institutional-icon" aria-hidden="true">
           <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
         </div>
         <div>
           <h2>Nossa missão</h2>
-          <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade e o acolhimento espiritual.</p>
+          <span class="mini-gold-line"></span>
+          <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.</p>
         </div>
       </article>
 
-      <article class="institutional-item">
+      <article class="home-value-card">
         <div class="institutional-icon" aria-hidden="true">
           <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
         </div>
         <div>
           <h2>Nossos valores</h2>
-          <p>Respeito, ancestralidade, responsabilidade religiosa, solidariedade, cuidado com as pessoas e compromisso com a comunidade.</p>
+          <span class="mini-gold-line"></span>
+          <p>Respeito às diferenças, valorização da ancestralidade, compromisso com a comunidade, responsabilidade religiosa, solidariedade e cuidado com as pessoas.</p>
         </div>
       </article>
 
-      <article class="institutional-item">
+      <article class="home-value-card">
         <div class="institutional-icon" aria-hidden="true">
           <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
         </div>
         <div>
           <h2>Nossa trajetória</h2>
-          <p>Desde 1991, o Terreiro desenvolve atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
+          <span class="mini-gold-line"></span>
+          <p>A casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
+          <a href="/o-terreiro" class="button home-value-card__button">Conheça nossa história</a>
         </div>
       </article>
     </div>
@@ -61,21 +61,9 @@
         </div>
         <a href="/agenda" class="button">Agenda completa</a>
       </div>
-
       <div class="public-grid">
         @each(event in events)
-          <article class="card">
-            <div class="card__body">
-              <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
-              <h3>{{ event.title }}</h3>
-              @if(event.location)
-                <p>{{ event.location }}</p>
-              @end
-              @if(event.description)
-                <p>{{ event.description }}</p>
-              @end
-            </div>
-          </article>
+          <article class="card"><div class="card__body"><p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p><h3>{{ event.title }}</h3>@if(event.location)<p>{{ event.location }}</p>@end@if(event.description)<p>{{ event.description }}</p>@end</div></article>
         @else
           <div class="list-card">Nenhuma atividade pública agendada no momento.</div>
         @end
@@ -86,27 +74,16 @@
   <section class="public-section">
     <div class="site-container">
       <div class="public-section__head">
-        <div>
-          <p class="eyebrow">Comunicação</p>
-          <h2 class="section-title">Notícias recentes</h2>
-        </div>
+        <div><p class="eyebrow">Comunicação</p><h2 class="section-title">Notícias recentes</h2></div>
         <a href="/noticias" class="button">Todas as notícias</a>
       </div>
-
       <div class="public-grid">
         @each(post in posts)
           <article class="card">
             @if(post.featuredImagePath)
               <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__media">
             @end
-            <div class="card__body">
-              <p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
-              <h3>{{ post.title }}</h3>
-              @if(post.summary)
-                <p>{{ post.summary }}</p>
-              @end
-              <a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a>
-            </div>
+            <div class="card__body"><p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p><h3>{{ post.title }}</h3>@if(post.summary)<p>{{ post.summary }}</p>@end<a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a></div>
           </article>
         @else
           <div class="list-card">Nenhuma notícia publicada.</div>
@@ -118,27 +95,12 @@
   <section class="public-section public-section--soft">
     <div class="site-container">
       <div class="public-section__head">
-        <div>
-          <p class="eyebrow">Caridade</p>
-          <h2 class="section-title">Ações sociais</h2>
-        </div>
+        <div><p class="eyebrow">Caridade</p><h2 class="section-title">Ações sociais</h2></div>
         <a href="/acoes-sociais" class="button">Ver ações</a>
       </div>
-
       <div class="public-grid">
         @each(action in actions)
-          <article class="card">
-            <div class="card__body">
-              <p class="meta">{{ action.status }}</p>
-              <h3>{{ action.title }}</h3>
-              @if(action.description)
-                <p>{{ action.description }}</p>
-              @end
-              @if(action.progressPercent !== null)
-                <div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>
-              @end
-            </div>
-          </article>
+          <article class="card"><div class="card__body"><p class="meta">{{ action.status }}</p><h3>{{ action.title }}</h3>@if(action.description)<p>{{ action.description }}</p>@end@if(action.progressPercent !== null)<div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>@end</div></article>
         @else
           <div class="list-card">Nenhuma ação social publicada no momento.</div>
         @end
