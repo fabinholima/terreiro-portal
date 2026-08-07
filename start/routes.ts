@@ -11,6 +11,7 @@ import router from '@adonisjs/core/services/router'
 const HomeController = () => import('#controllers/home_controller')
 const PublicEventsController = () => import('#controllers/events_controller')
 const PagesController = () => import('#controllers/pages_controller')
+const SeoController = () => import('#controllers/seo_controller')
 const DashboardController = () => import('#controllers/admin/dashboard_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const AlbumsController = () => import('#controllers/admin/albums_controller')
@@ -27,6 +28,8 @@ const UsersController = () => import('#controllers/admin/users_controller')
 
 // Public site
 router.get('/', [HomeController, 'index']).as('home')
+router.get('/robots.txt', [SeoController, 'robots']).as('seo.robots')
+router.get('/sitemap.xml', [SeoController, 'sitemap']).as('seo.sitemap')
 router.get('/o-terreiro', [PagesController, 'about']).as('pages.about')
 router.get('/nossa-historia', [PagesController, 'history']).as('pages.history')
 router.get('/umbanda', [PagesController, 'umbanda']).as('pages.umbanda')
@@ -52,7 +55,6 @@ router
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
     router.get('/admin', [DashboardController, 'index']).as('admin.dashboard')
 
-    // Restricted to administrators
     router
       .get('/admin/site-settings', [SiteSettingsController, 'edit'])
       .as('admin.site_settings.edit')
@@ -69,7 +71,6 @@ router
     router.post('/admin/users/:id', [UsersController, 'update']).as('admin.users.update').use(middleware.adminOnly())
     router.post('/admin/users/:id/delete', [UsersController, 'destroy']).as('admin.users.destroy').use(middleware.adminOnly())
 
-    // Content management: administrators and editors
     router.get('/admin/institutional-pages', [InstitutionalPagesController, 'index']).as('admin.institutional_pages.index')
     router.get('/admin/institutional-pages/:id/edit', [InstitutionalPagesController, 'edit']).as('admin.institutional_pages.edit')
     router.post('/admin/institutional-pages/:id', [InstitutionalPagesController, 'update']).as('admin.institutional_pages.update')
