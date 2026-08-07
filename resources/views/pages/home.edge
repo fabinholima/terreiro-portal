@@ -63,7 +63,18 @@
       </div>
       <div class="public-grid">
         @each(event in events)
-          <article class="card"><div class="card__body"><p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p><h3>{{ event.title }}</h3>@if(event.location)<p>{{ event.location }}</p>@end@if(event.description)<p>{{ event.description }}</p>@end</div></article>
+          <article class="card">
+            <div class="card__body">
+              <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+              <h3>{{ event.title }}</h3>
+              @if(event.location)
+                <p>{{ event.location }}</p>
+              @end
+              @if(event.description)
+                <p>{{ event.description }}</p>
+              @end
+            </div>
+          </article>
         @else
           <div class="list-card">Nenhuma atividade pública agendada no momento.</div>
         @end
@@ -74,7 +85,10 @@
   <section class="public-section">
     <div class="site-container">
       <div class="public-section__head">
-        <div><p class="eyebrow">Comunicação</p><h2 class="section-title">Notícias recentes</h2></div>
+        <div>
+          <p class="eyebrow">Comunicação</p>
+          <h2 class="section-title">Notícias recentes</h2>
+        </div>
         <a href="/noticias" class="button">Todas as notícias</a>
       </div>
       <div class="public-grid">
@@ -83,7 +97,14 @@
             @if(post.featuredImagePath)
               <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__media">
             @end
-            <div class="card__body"><p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p><h3>{{ post.title }}</h3>@if(post.summary)<p>{{ post.summary }}</p>@end<a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a></div>
+            <div class="card__body">
+              <p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <h3>{{ post.title }}</h3>
+              @if(post.summary)
+                <p>{{ post.summary }}</p>
+              @end
+              <a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a>
+            </div>
           </article>
         @else
           <div class="list-card">Nenhuma notícia publicada.</div>
@@ -95,12 +116,26 @@
   <section class="public-section public-section--soft">
     <div class="site-container">
       <div class="public-section__head">
-        <div><p class="eyebrow">Caridade</p><h2 class="section-title">Ações sociais</h2></div>
+        <div>
+          <p class="eyebrow">Caridade</p>
+          <h2 class="section-title">Ações sociais</h2>
+        </div>
         <a href="/acoes-sociais" class="button">Ver ações</a>
       </div>
       <div class="public-grid">
         @each(action in actions)
-          <article class="card"><div class="card__body"><p class="meta">{{ action.status }}</p><h3>{{ action.title }}</h3>@if(action.description)<p>{{ action.description }}</p>@end@if(action.progressPercent !== null)<div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>@end</div></article>
+          <article class="card">
+            <div class="card__body">
+              <p class="meta">{{ action.status }}</p>
+              <h3>{{ action.title }}</h3>
+              @if(action.description)
+                <p>{{ action.description }}</p>
+              @end
+              @if(action.progressPercent !== null)
+                <div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>
+              @end
+            </div>
+          </article>
         @else
           <div class="list-card">Nenhuma ação social publicada no momento.</div>
         @end
