@@ -103,6 +103,8 @@ router
     router.post('/admin/posts', [AdminPostsController, 'store']).as('admin.posts.store')
     router.get('/admin/posts/:id/edit', [AdminPostsController, 'edit']).as('admin.posts.edit')
     router.post('/admin/posts/:id', [AdminPostsController, 'update']).as('admin.posts.update')
+    router.post('/admin/posts/:id/featured-image/delete', [AdminPostsController, 'deleteFeaturedImage']).as('admin.posts.featured_image.destroy')
+    router.post('/admin/posts/:id/images/:index/delete', [AdminPostsController, 'deleteImage']).as('admin.posts.images.destroy')
     router.post('/admin/posts/:id/delete', [AdminPostsController, 'destroy']).as('admin.posts.destroy')
 
     router.get('/admin/documents', [AdminDocumentsController, 'index']).as('admin.documents.index')
