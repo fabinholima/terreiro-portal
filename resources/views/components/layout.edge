@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Portal institucional do Terreiro de Umbanda Oxóssi e João Boiadeiro." />
-    <title>Terreiro de Umbanda Oxóssi e João Boiadeiro</title>
+    <meta name="description" content="Portal institucional de {{ siteSettings.siteName }}." />
+    <title>{{ siteSettings.siteName }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
@@ -15,17 +15,33 @@
       {{{ await $slots.main() }}}
     </main>
     <footer class="bg-slate-950 text-slate-200">
-      <div class="mx-auto grid max-w-6xl gap-8 px-6 py-10 md:grid-cols-2">
+      <div class="mx-auto grid max-w-6xl gap-8 px-6 py-10 md:grid-cols-3">
         <div>
-          <strong class="text-white">Terreiro de Umbanda Oxóssi e João Boiadeiro</strong>
-          <p class="mt-2 text-sm text-slate-400">Fé, caridade, ancestralidade e acolhimento.</p>
+          <strong class="text-white">{{ siteSettings.siteName }}</strong>
+          @if(siteSettings.footerText)
+            <p class="mt-2 text-sm text-slate-400">{{ siteSettings.footerText }}</p>
+          @end
         </div>
+
+        <div class="text-sm text-slate-400">
+          @if(siteSettings.address)
+            <p>{{ siteSettings.address }}</p>
+          @end
+          @if(siteSettings.city || siteSettings.state)
+            <p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}</p>
+          @end
+          @if(siteSettings.email)
+            <p><a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a></p>
+          @end
+        </div>
+
         <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm md:justify-end" aria-label="Navegação do rodapé">
           <a href="/agenda">Agenda</a>
           <a href="/galeria">Galeria</a>
           <a href="/acoes-sociais">Ações sociais</a>
           <a href="/noticias">Notícias</a>
           <a href="/documentos">Documentos</a>
+          <a href="/contato">Contato</a>
         </nav>
       </div>
     </footer>
