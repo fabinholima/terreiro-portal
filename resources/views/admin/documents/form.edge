@@ -1,0 +1,27 @@
+@layout()
+  <section class="mx-auto max-w-3xl px-6 py-12">
+    <div class="mb-8">
+      <a href="/admin/documents" class="text-sm text-slate-600 underline">← Voltar</a>
+      <h1 class="mt-4 text-4xl font-bold">{{ document ? 'Editar documento' : 'Novo documento' }}</h1>
+    </div>
+
+    @if(flashMessages.has('error'))
+      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+    @endif
+
+    <form method="POST" enctype="multipart/form-data" action="{{ document ? '/admin/documents/' + document.id : '/admin/documents' }}" class="space-y-6">
+      {{ csrfField() }}
+      <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="title" required value="{{ document?.title ?? '' }}"></label>
+      <div class="grid gap-6 md:grid-cols-2">
+        <label class="block"><span class="mb-2 block font-semibold">Categoria</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="category" placeholder="Estatuto, Ata, Edital..." value="{{ document?.category ?? '' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Versão</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="version" value="{{ document?.version ?? '' }}"></label>
+      </div>
+      <label class="block"><span class="mb-2 block font-semibold">Data do documento</span><input class="rounded-lg border border-slate-300 px-3 py-2" type="date" name="documentDate" value="{{ document?.documentDate ? document.documentDate.toISODate() : '' }}"></label>
+      <label class="block"><span class="mb-2 block font-semibold">Descrição</span><textarea class="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2" name="description">{{ document?.description ?? '' }}</textarea></label>
+      <label class="block"><span class="mb-2 block font-semibold">Arquivo PDF {{ document ? '(opcional para manter o atual)' : '' }}</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" type="file" name="file" accept="application/pdf" {{ document ? '' : 'required' }}></label>
+      @if(document?.filePath)<p class="text-sm"><a href="{{ document.filePath }}" target="_blank" class="text-emerald-800 underline">Abrir PDF atual</a></p>@endif
+      <label class="flex items-center gap-3"><input type="hidden" name="isPublic" value="false"><input type="checkbox" name="isPublic" value="true" {{ document ? (document.isPublic ? 'checked' : '') : 'checked' }}><span>Disponível publicamente</span></label>
+      <button class="rounded-lg bg-emerald-800 px-5 py-3 font-semibold text-white" type="submit">Salvar documento</button>
+    </form>
+  </section>
+@end
