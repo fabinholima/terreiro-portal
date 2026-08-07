@@ -17,4 +17,24 @@ Alpine.data('alert', function () {
   }
 })
 
+Alpine.data('mobileMenu', () => ({
+  open: false,
+  toggle() {
+    this.open = !this.open
+  },
+  close() {
+    this.open = false
+  },
+}))
+
+Alpine.data('lightbox', () => ({
+  image: null,
+  open(image) {
+    this.image = image
+  },
+  close() {
+    this.image = null
+  },
+}))
+
 Alpine.start()
