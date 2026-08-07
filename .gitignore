@@ -16,6 +16,8 @@ public/assets
 # Uploaded media
 public/uploads/gallery/*
 !public/uploads/gallery/.gitkeep
+public/uploads/documents/*
+!public/uploads/documents/.gitkeep
 
 # Build tools specific
 npm-debug.log
