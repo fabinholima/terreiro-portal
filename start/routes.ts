@@ -15,12 +15,15 @@ const AdminSocialActionsController = () => import('#controllers/admin/social_act
 const SocialActionsController = () => import('#controllers/social_actions_controller')
 const AdminPostsController = () => import('#controllers/admin/posts_controller')
 const PostsController = () => import('#controllers/posts_controller')
+const AdminDocumentsController = () => import('#controllers/admin/documents_controller')
+const DocumentsController = () => import('#controllers/documents_controller')
 
 router.on('/').render('pages/home').as('home')
 router.get('/galeria', [GalleryController, 'index']).as('gallery')
 router.get('/acoes-sociais', [SocialActionsController, 'index']).as('social_actions')
 router.get('/noticias', [PostsController, 'index']).as('posts.index')
 router.get('/noticias/:slug', [PostsController, 'show']).as('posts.show')
+router.get('/documentos', [DocumentsController, 'index']).as('documents.index')
 
 router
   .group(() => {
@@ -66,5 +69,12 @@ router
     router.get('/admin/posts/:id/edit', [AdminPostsController, 'edit'])
     router.post('/admin/posts/:id', [AdminPostsController, 'update'])
     router.post('/admin/posts/:id/delete', [AdminPostsController, 'destroy'])
+
+    router.get('/admin/documents', [AdminDocumentsController, 'index'])
+    router.get('/admin/documents/create', [AdminDocumentsController, 'create'])
+    router.post('/admin/documents', [AdminDocumentsController, 'store'])
+    router.get('/admin/documents/:id/edit', [AdminDocumentsController, 'edit'])
+    router.post('/admin/documents/:id', [AdminDocumentsController, 'update'])
+    router.post('/admin/documents/:id/delete', [AdminDocumentsController, 'destroy'])
   })
   .use(middleware.auth())
