@@ -8,6 +8,8 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
+const HomeController = () => import('#controllers/home_controller')
+const PublicEventsController = () => import('#controllers/events_controller')
 const DashboardController = () => import('#controllers/admin/dashboard_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const AlbumsController = () => import('#controllers/admin/albums_controller')
@@ -19,7 +21,8 @@ const PostsController = () => import('#controllers/posts_controller')
 const AdminDocumentsController = () => import('#controllers/admin/documents_controller')
 const DocumentsController = () => import('#controllers/documents_controller')
 
-router.on('/').render('pages/home').as('home')
+router.get('/', [HomeController, 'index']).as('home')
+router.get('/agenda', [PublicEventsController, 'index']).as('events.index')
 router.get('/galeria', [GalleryController, 'index']).as('gallery')
 router.get('/acoes-sociais', [SocialActionsController, 'index']).as('social_actions')
 router.get('/noticias', [PostsController, 'index']).as('posts.index')
