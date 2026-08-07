@@ -98,6 +98,7 @@ router
     router.get('/admin/posts', [AdminPostsController, 'index']).as('admin.posts.index')
     router.get('/admin/posts/create', [AdminPostsController, 'create']).as('admin.posts.create')
     router.post('/admin/posts', [AdminPostsController, 'store']).as('admin.posts.store')
+    router.post('/admin/posts/editor-image-upload', [AdminPostsController, 'uploadEditorImage']).as('admin.posts.editor_image.upload')
     router.get('/admin/posts/:id/edit', [AdminPostsController, 'edit']).as('admin.posts.edit')
     router.post('/admin/posts/:id', [AdminPostsController, 'update']).as('admin.posts.update')
     router.post('/admin/posts/:id/featured-image/replace', [AdminPostsController, 'replaceFeaturedImage']).as('admin.posts.featured_image.replace')
