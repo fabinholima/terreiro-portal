@@ -10,6 +10,7 @@ import router from '@adonisjs/core/services/router'
 
 const HomeController = () => import('#controllers/home_controller')
 const PublicEventsController = () => import('#controllers/events_controller')
+const PagesController = () => import('#controllers/pages_controller')
 const DashboardController = () => import('#controllers/admin/dashboard_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const AlbumsController = () => import('#controllers/admin/albums_controller')
@@ -23,6 +24,10 @@ const DocumentsController = () => import('#controllers/documents_controller')
 
 // Public site
 router.get('/', [HomeController, 'index']).as('home')
+router.get('/o-terreiro', [PagesController, 'about']).as('pages.about')
+router.get('/nossa-historia', [PagesController, 'history']).as('pages.history')
+router.get('/umbanda', [PagesController, 'umbanda']).as('pages.umbanda')
+router.get('/contato', [PagesController, 'contact']).as('pages.contact')
 router.get('/agenda', [PublicEventsController, 'index']).as('events.index')
 router.get('/galeria', [GalleryController, 'index']).as('gallery.index')
 router.get('/acoes-sociais', [SocialActionsController, 'index']).as('social_actions.index')
