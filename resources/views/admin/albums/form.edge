@@ -2,12 +2,21 @@
   <div class="container mx-auto px-4 py-8 max-w-5xl">
     <h1 class="text-2xl font-bold mb-6">{{ album ? 'Editar álbum' : 'Novo álbum' }}</h1>
 
-    <form method="POST" action="{{ album ? '/admin/albums/' + album.id : '/admin/albums' }}" class="grid gap-4 mb-10">
+    <form method="POST" enctype="multipart/form-data" action="{{ album ? '/admin/albums/' + album.id : '/admin/albums' }}" class="grid gap-4 mb-10">
       {{ csrfField() }}
       <label class="grid gap-1">Título<input class="border rounded px-3 py-2" name="title" value="{{ album?.title ?? '' }}" required></label>
       <label class="grid gap-1">Slug<input class="border rounded px-3 py-2" name="slug" value="{{ album?.slug ?? '' }}" required></label>
       <label class="grid gap-1">Descrição<textarea class="border rounded px-3 py-2" name="description" rows="4">{{ album?.description ?? '' }}</textarea></label>
       <label class="grid gap-1">Data do evento<input class="border rounded px-3 py-2" type="date" name="eventDate" value="{{ album?.eventDate?.toISODate() ?? '' }}"></label>
+
+      @if(!album)
+        <label class="grid gap-1">
+          Fotografias iniciais
+          <input class="border rounded px-3 py-2" type="file" name="photos" accept="image/jpeg,image/png,image/webp" multiple>
+          <span class="text-sm text-gray-600">Você pode selecionar várias imagens. A primeira será usada como capa do álbum.</span>
+        </label>
+      @end
+
       <label class="flex gap-2 items-center"><input type="hidden" name="isPublic" value="false"><input type="checkbox" name="isPublic" value="true" @if(album?.isPublic ?? true) checked @end> Álbum público</label>
       <div><button class="btn btn-primary" type="submit">Salvar</button></div>
     </form>
