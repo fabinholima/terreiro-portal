@@ -1,51 +1,45 @@
-<header class="site-header" x-data="mobileMenu">
-  <div class="site-container">
-    <div class="site-header__inner">
-      <a href="/" class="brand" aria-label="Página inicial">
-        <span class="brand__mark" aria-hidden="true">OJ</span>
-        <span>
-          @if(siteSettings.siteSubtitle)
-            <span class="brand__small">{{ siteSettings.siteSubtitle }}</span>
-          @else
-            <span class="brand__small">Terreiro de Umbanda</span>
-          @end
-          <span class="brand__name">{{ siteSettings.siteName }}</span>
-        </span>
-      </a>
+<header class="site-header" x-data="{ open: false }">
+  <div class="site-container site-header__inner">
+    <a href="/" class="site-brand" aria-label="{{ siteSettings.siteName }} — página inicial">
+      <img class="site-brand__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
+      <span class="site-brand__text">
+        <span class="site-brand__eyebrow">{{ siteSettings.siteSubtitle ?? 'Na fé, na lei e na caridade' }}</span>
+        <span class="site-brand__name">{{ siteSettings.siteName }}</span>
+      </span>
+    </a>
 
-      <nav class="main-nav" aria-label="Navegação principal">
-        <a href="/o-terreiro">O Terreiro</a>
-        <a href="/nossa-historia">História</a>
-        <a href="/umbanda">Umbanda</a>
-        <a href="/agenda">Agenda</a>
-        <a href="/galeria">Galeria</a>
-        <a href="/noticias">Notícias</a>
-        <a href="/acoes-sociais">Ações sociais</a>
-        <a href="/documentos">Documentos</a>
-        <a href="/contato">Contato</a>
-        @if(auth.user)
-          <a href="/admin" class="nav-admin">Admin</a>
-        @end
-      </nav>
-
-      <button class="menu-button" type="button" @click="toggle()" :aria-expanded="open" aria-label="Abrir menu">
-        <span x-text="open ? '×' : '☰'"></span>
-      </button>
-    </div>
-
-    <nav class="mobile-nav" x-cloak x-show="open" @click.outside="close()" aria-label="Navegação móvel">
-      <a href="/o-terreiro" @click="close()">O Terreiro</a>
-      <a href="/nossa-historia" @click="close()">Nossa História</a>
-      <a href="/umbanda" @click="close()">Umbanda</a>
-      <a href="/agenda" @click="close()">Agenda</a>
-      <a href="/galeria" @click="close()">Galeria</a>
-      <a href="/noticias" @click="close()">Notícias</a>
-      <a href="/acoes-sociais" @click="close()">Ações sociais</a>
-      <a href="/documentos" @click="close()">Documentos</a>
-      <a href="/contato" @click="close()">Contato</a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a data-nav-link href="/o-terreiro">O Terreiro</a>
+      <a data-nav-link href="/nossa-historia">História</a>
+      <a data-nav-link href="/umbanda">Umbanda</a>
+      <a data-nav-link href="/agenda">Agenda</a>
+      <a data-nav-link href="/galeria">Galeria</a>
+      <a data-nav-link href="/noticias">Notícias</a>
+      <a data-nav-link href="/acoes-sociais">Ações sociais</a>
+      <a data-nav-link href="/documentos">Documentos</a>
+      <a data-nav-link href="/contato">Contato</a>
       @if(auth.user)
-        <a href="/admin" @click="close()">Painel administrativo</a>
+        <a href="/admin" class="site-nav__admin">Admin</a>
       @end
     </nav>
+
+    <button class="mobile-menu-button" type="button" aria-label="Abrir menu" :aria-expanded="open" @click="open = !open">
+      <span></span>
+    </button>
   </div>
+
+  <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
+    <a data-nav-link href="/o-terreiro">O Terreiro</a>
+    <a data-nav-link href="/nossa-historia">História</a>
+    <a data-nav-link href="/umbanda">Umbanda</a>
+    <a data-nav-link href="/agenda">Agenda</a>
+    <a data-nav-link href="/galeria">Galeria</a>
+    <a data-nav-link href="/noticias">Notícias</a>
+    <a data-nav-link href="/acoes-sociais">Ações sociais</a>
+    <a data-nav-link href="/documentos">Documentos</a>
+    <a data-nav-link href="/contato">Contato</a>
+    @if(auth.user)
+      <a href="/admin">Painel administrativo</a>
+    @end
+  </nav>
 </header>
