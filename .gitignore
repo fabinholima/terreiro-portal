@@ -18,6 +18,8 @@ public/uploads/gallery/*
 !public/uploads/gallery/.gitkeep
 public/uploads/documents/*
 !public/uploads/documents/.gitkeep
+public/uploads/news/*
+!public/uploads/news/.gitkeep
 
 # Build tools specific
 npm-debug.log
