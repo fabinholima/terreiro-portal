@@ -96,6 +96,20 @@ export default class PostsController {
     return response.redirect('/admin/posts')
   }
 
+  async uploadEditorImage({ request, response }: HttpContext) {
+    const file = request.file('image', {
+      size: '12mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    })
+
+    if (!file) {
+      return response.badRequest({ message: 'Selecione uma imagem válida.' })
+    }
+
+    const path = await this.moveImage(file.clientName, file)
+    return response.ok({ path })
+  }
+
   async updateImageDimensions({ params, request, response, session }: HttpContext) {
     const post = await Post.findOrFail(params.id)
     const images = this.normalizeImagePaths(post.imagePaths)
