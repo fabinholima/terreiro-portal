@@ -1,13 +1,13 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ event ? 'Editar evento' : 'Novo evento' }}</title>
-</head>
-<body>
-  <main>
-    <h1>{{ event ? 'Editar evento' : 'Novo evento' }}</h1>
+@layout()
+  <header class="admin-page-head">
+    <div>
+      <h1>{{ event ? 'Editar evento' : 'Novo evento' }}</h1>
+      <p>{{ event ? 'Atualize os dados desta atividade.' : 'Cadastre uma nova atividade para a agenda.' }}</p>
+    </div>
+    <a class="admin-btn" href="/admin/events">← Voltar</a>
+  </header>
+
+  <section class="admin-panel" style="max-width:900px">
     <form method="POST" action="{{ event ? '/admin/events/' + event.id : '/admin/events' }}">
       {{ csrfField() }}
 
@@ -20,20 +20,22 @@
       </label>
 
       <label>Descrição
-        <textarea name="description">{{ event?.description ?? '' }}</textarea>
+        <textarea name="description" rows="5">{{ event?.description ?? '' }}</textarea>
       </label>
 
       <label>Categoria
         <input name="category" value="{{ event?.category ?? '' }}">
       </label>
 
-      <label>Início
-        <input type="datetime-local" name="startsAt" value="{{ event ? event.startsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}" required>
-      </label>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+        <label>Início
+          <input type="datetime-local" name="startsAt" value="{{ event ? event.startsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}" required>
+        </label>
 
-      <label>Fim
-        <input type="datetime-local" name="endsAt" value="{{ event?.endsAt ? event.endsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}">
-      </label>
+        <label>Fim
+          <input type="datetime-local" name="endsAt" value="{{ event?.endsAt ? event.endsAt.toFormat("yyyy-LL-dd'T'HH:mm") : '' }}">
+        </label>
+      </div>
 
       <label>Local
         <input name="location" value="{{ event?.location ?? '' }}">
@@ -42,20 +44,21 @@
       <label>Status
         <select name="status">
           @each(status in ['scheduled', 'confirmed', 'postponed', 'cancelled', 'completed'])
-            <option value="{{ status }}" @if((event?.status ?? 'scheduled') === status) selected @endif>{{ status }}</option>
+            <option value="{{ status }}" @if((event?.status ?? 'scheduled') === status) selected @end>{{ status }}</option>
           @end
         </select>
       </label>
 
       <input type="hidden" name="isPublic" value="false">
-      <label>
-        <input type="checkbox" name="isPublic" value="true" @if(event?.isPublic ?? true) checked @endif>
+      <label style="display:flex;align-items:center;gap:10px">
+        <input style="width:auto" type="checkbox" name="isPublic" value="true" @if(event?.isPublic ?? true) checked @end>
         Evento público
       </label>
 
-      <button type="submit">Salvar</button>
-      <a href="/admin/events">Cancelar</a>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
+        <a class="admin-btn" href="/admin/events">Cancelar</a>
+        <button class="admin-btn admin-btn--primary" type="submit">Salvar evento</button>
+      </div>
     </form>
-  </main>
-</body>
-</html>
+  </section>
+@end
