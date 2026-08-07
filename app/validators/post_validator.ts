@@ -9,5 +9,10 @@ export const postValidator = vine.compile(
     status: vine.enum(['draft', 'published', 'archived'] as const),
     publishedAt: vine.string().optional(),
     imageDisplaySize: vine.enum(['small', 'medium', 'large', 'full'] as const).optional(),
+    featuredImageWidth: vine.number().min(100).max(3000).optional(),
+    featuredImageHeight: vine.number().min(100).max(3000).optional(),
+    featuredImageFit: vine.enum(['contain', 'cover'] as const).optional(),
+    contentImageWidth: vine.number().min(100).max(3000).optional(),
+    contentImageHeight: vine.number().min(100).max(3000).optional(),
   })
 )
