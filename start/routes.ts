@@ -21,6 +21,7 @@ const AdminPostsController = () => import('#controllers/admin/posts_controller')
 const PostsController = () => import('#controllers/posts_controller')
 const AdminDocumentsController = () => import('#controllers/admin/documents_controller')
 const DocumentsController = () => import('#controllers/documents_controller')
+const InstitutionalPagesController = () => import('#controllers/admin/institutional_pages_controller')
 
 // Public site
 router.get('/', [HomeController, 'index']).as('home')
@@ -51,6 +52,10 @@ router
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
 
     router.get('/admin', [DashboardController, 'index']).as('admin.dashboard')
+
+    router.get('/admin/institutional-pages', [InstitutionalPagesController, 'index']).as('admin.institutional_pages.index')
+    router.get('/admin/institutional-pages/:id/edit', [InstitutionalPagesController, 'edit']).as('admin.institutional_pages.edit')
+    router.post('/admin/institutional-pages/:id', [InstitutionalPagesController, 'update']).as('admin.institutional_pages.update')
 
     router.get('/admin/events', [EventsController, 'index']).as('admin.events.index')
     router.get('/admin/events/create', [EventsController, 'create']).as('admin.events.create')
