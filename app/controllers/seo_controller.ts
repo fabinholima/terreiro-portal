@@ -22,6 +22,10 @@ export default class SeoController {
 
   async sitemap({ response }: HttpContext) {
     const baseUrl = env.get('APP_URL').replace(/\/$/, '')
+    const institutionalPages = await InstitutionalPage.all()
+    const hiddenSlugs = new Set(
+      institutionalPages.filter((page) => !page.isPublic).map((page) => page.slug)
+    )
 
     const staticPaths = [
       '/',
@@ -34,16 +38,9 @@ export default class SeoController {
       '/noticias',
       '/documentos',
       '/contato',
-    ]
-
-    const institutionalPages = await InstitutionalPage.query().where('is_public', true)
-    const hiddenInstitutionalSlugs = new Set(
-      institutionalPages.filter((page) => !page.isPublic).map((page) => page.slug)
-    )
-
-    const paths = staticPaths.filter((path) => {
+    ].filter((path) => {
       const slug = path.replace(/^\//, '')
-      return !slug || !hiddenInstitutionalSlugs.has(slug)
+      return !slug || !hiddenSlugs.has(slug)
     })
 
     const posts = await Post.query()
@@ -53,7 +50,7 @@ export default class SeoController {
 
     const entries: string[] = []
 
-    for (const path of paths) {
+    for (const path of staticPaths) {
       entries.push(`  <url>\n    <loc>${escapeXml(`${baseUrl}${path}`)}</loc>\n  </url>`)
     }
 
