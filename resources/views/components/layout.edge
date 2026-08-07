@@ -31,7 +31,7 @@
       <meta name="twitter:image" content="{{ seo.imageUrl }}" />
     @end
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/site-adjustments.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
   <body>
@@ -41,68 +41,39 @@
       {{{ await $slots.main() }}}
     </main>
 
-    <footer class="site-footer">
-      <div class="site-container site-footer__inner">
-        <div>
-          <div class="footer-brand">
-            <img src="/images/logo-terreiro.svg" alt="">
-            <div>
-              <small>{{ siteSettings.siteSubtitle ?? 'Na fé, na lei e na caridade' }}</small>
-              <strong>{{ siteSettings.siteName }}</strong>
-            </div>
-          </div>
-          <p>{{ siteSettings.footerText ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</p>
-          <div class="footer-social">
-            @if(siteSettings.instagramUrl)
-              <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener">Instagram</a>
-            @end
-            @if(siteSettings.facebookUrl)
-              <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener">Facebook</a>
-            @end
-            @if(siteSettings.youtubeUrl)
-              <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener">YouTube</a>
-            @end
+    <footer class="site-footer site-footer--compact">
+      <div class="site-container compact-footer__main">
+        <div class="compact-footer__brand">
+          <img src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
+          <div>
+            <strong>{{ siteSettings.siteName }}</strong>
+            <small>Na fé, na lei e na caridade</small>
           </div>
         </div>
 
-        @if(siteSettings.address || siteSettings.email || siteSettings.phone || siteSettings.whatsapp)
-          <div>
-            <h3>Contato</h3>
-            @if(siteSettings.address)
-              <p>{{ siteSettings.address }}</p>
-            @end
-            @if(siteSettings.city || siteSettings.state)
-              <p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}</p>
-            @end
-            @if(siteSettings.phone)
-              <p>{{ siteSettings.phone }}</p>
-            @end
-            @if(siteSettings.whatsapp)
-              <p>WhatsApp: {{ siteSettings.whatsapp }}</p>
-            @end
-            @if(siteSettings.email)
-              <p><a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a></p>
-            @end
-          </div>
-        @end
+        <nav class="compact-footer__nav" aria-label="Navegação do rodapé">
+          <a href="/">Início</a>
+          <a href="/o-terreiro">O Terreiro</a>
+          <a href="/agenda">Agenda</a>
+          <a href="/documentos">Documentos</a>
+          <a href="/contato">Contato</a>
+        </nav>
 
-        <div>
-          <h3>Navegação</h3>
-          <nav class="footer-links" aria-label="Navegação do rodapé">
-            <a href="/o-terreiro">O Terreiro</a>
-            <a href="/nossa-historia">História</a>
-            <a href="/umbanda">Umbanda</a>
-            <a href="/agenda">Agenda</a>
-            <a href="/galeria">Galeria</a>
-            <a href="/noticias">Notícias</a>
-            <a href="/acoes-sociais">Ações sociais</a>
-            <a href="/documentos">Documentos</a>
-            <a href="/contato">Contato</a>
-          </nav>
+        <div class="compact-footer__contact">
+          @if(siteSettings.phone)
+            <span>{{ siteSettings.phone }}</span>
+          @end
+          @if(siteSettings.whatsapp)
+            <span>WhatsApp: {{ siteSettings.whatsapp }}</span>
+          @end
+          @if(siteSettings.email)
+            <a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a>
+          @end
         </div>
       </div>
+
       <div class="site-footer__bottom">
-        <div class="site-container">{{ siteSettings.siteName }} · Portal institucional</div>
+        <div class="site-container">{{ siteSettings.siteName }} · Em atividade desde 1991</div>
       </div>
     </footer>
   </body>
