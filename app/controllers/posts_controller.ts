@@ -19,7 +19,7 @@ export default class PostsController {
       .firstOrFail()
 
     const baseUrl = env.get('APP_URL').replace(/\/$/, '')
-    const description = post.summary || post.body.replace(/\s+/g, ' ').slice(0, 160)
+    const description = post.summary || (post.body ?? '').replace(/\s+/g, ' ').slice(0, 160)
 
     view.share({
       seo: {
