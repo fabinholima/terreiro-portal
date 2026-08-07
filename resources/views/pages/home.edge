@@ -2,7 +2,7 @@
   <section class="home-showcase">
     <div class="site-container home-showcase__inner">
       <div class="home-showcase__logo-wrap">
-        <img class="home-showcase__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
+        <img class="home-showcase__logo" src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
       </div>
       <div class="home-showcase__copy">
         <p class="eyebrow">Institucional</p>
@@ -51,95 +51,63 @@
     </div>
   </section>
 
-  <section class="public-section public-section--soft">
-    <div class="site-container">
-      <div class="public-section__head">
-        <div>
-          <p class="eyebrow">Programação</p>
-          <h2 class="section-title">Próximas atividades</h2>
-          <p class="section-lead">Consulte datas, horários e informações das próximas atividades públicas.</p>
+  <section class="home-teasers">
+    <div class="site-container home-teasers__grid">
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Próximas atividades</h2>
+          <a href="/agenda">Ver agenda →</a>
         </div>
-        <a href="/agenda" class="button">Agenda completa</a>
-      </div>
-      <div class="public-grid">
         @each(event in events)
-          <article class="card">
-            <div class="card__body">
-              <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
-              <h3>{{ event.title }}</h3>
-              @if(event.location)
-                <p>{{ event.location }}</p>
-              @end
-              @if(event.description)
-                <p>{{ event.description }}</p>
-              @end
-            </div>
-          </article>
-        @else
-          <div class="list-card">Nenhuma atividade pública agendada no momento.</div>
-        @end
-      </div>
-    </div>
-  </section>
-
-  <section class="public-section">
-    <div class="site-container">
-      <div class="public-section__head">
-        <div>
-          <p class="eyebrow">Comunicação</p>
-          <h2 class="section-title">Notícias recentes</h2>
-        </div>
-        <a href="/noticias" class="button">Todas as notícias</a>
-      </div>
-      <div class="public-grid">
-        @each(post in posts)
-          <article class="card">
-            @if(post.featuredImagePath)
-              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__media">
+          <div class="home-teaser__card">
+            <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+            <h3>{{ event.title }}</h3>
+            @if(event.location)
+              <p>{{ event.location }}</p>
             @end
-            <div class="card__body">
+          </div>
+        @else
+          <p class="home-teaser__empty">Nenhuma atividade pública agendada.</p>
+        @end
+      </article>
+
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Notícias recentes</h2>
+          <a href="/noticias">Ver todas →</a>
+        </div>
+        @each(post in posts)
+          <a href="/noticias/{{ post.slug }}" class="home-teaser__card home-teaser__card--media">
+            @if(post.featuredImagePath)
+              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}">
+            @end
+            <div>
               <p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
               <h3>{{ post.title }}</h3>
-              @if(post.summary)
-                <p>{{ post.summary }}</p>
-              @end
-              <a href="/noticias/{{ post.slug }}" class="button">Ler notícia</a>
             </div>
-          </article>
+          </a>
         @else
-          <div class="list-card">Nenhuma notícia publicada.</div>
+          <p class="home-teaser__empty">Nenhuma notícia publicada.</p>
         @end
-      </div>
-    </div>
-  </section>
+      </article>
 
-  <section class="public-section public-section--soft">
-    <div class="site-container">
-      <div class="public-section__head">
-        <div>
-          <p class="eyebrow">Caridade</p>
-          <h2 class="section-title">Ações sociais</h2>
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Ações sociais</h2>
+          <a href="/acoes-sociais">Ver todas →</a>
         </div>
-        <a href="/acoes-sociais" class="button">Ver ações</a>
-      </div>
-      <div class="public-grid">
         @each(action in actions)
-          <article class="card">
-            <div class="card__body">
-              <p class="meta">{{ action.status }}</p>
-              <h3>{{ action.title }}</h3>
-              @if(action.description)
-                <p>{{ action.description }}</p>
-              @end
-              @if(action.progressPercent !== null)
-                <div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>
-              @end
-            </div>
-          </article>
+          <div class="home-teaser__card">
+            <p class="meta">{{ action.status }}</p>
+            <h3>{{ action.title }}</h3>
+            @if(action.description)
+              <p>{{ action.description }}</p>
+            @end
+          </div>
         @else
-          <div class="list-card">Nenhuma ação social publicada no momento.</div>
+          <p class="home-teaser__empty">Nenhuma ação social publicada.</p>
         @end
-      </div>
+      </article>
     </div>
   </section>
 @end
