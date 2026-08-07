@@ -1,0 +1,48 @@
+@layout()
+  <section class="page-hero">
+    <div class="site-container">
+      <p class="eyebrow">Galeria</p>
+      <h1>{{ album.title }}</h1>
+      @if(album.description)
+        <p>{{ album.description }}</p>
+      @end
+    </div>
+  </section>
+
+  <section class="site-section" x-data="lightbox">
+    <div class="site-container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória da casa' }}</p>
+          <h2>{{ album.photos.length }} foto(s) publicadas</h2>
+        </div>
+        <a href="/galeria" class="text-link">← Voltar aos álbuns</a>
+      </div>
+
+      <div class="photo-grid">
+        @each(photo in album.photos)
+          <figure class="photo-item">
+            <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" @click="open('{{ photo.path }}')">
+            @if(photo.caption || photo.credit)
+              <figcaption class="photo-caption">
+                @if(photo.caption)
+                  <div>{{ photo.caption }}</div>
+                @end
+                @if(photo.credit)
+                  <div>Foto: {{ photo.credit }}</div>
+                @end
+              </figcaption>
+            @end
+          </figure>
+        @else
+          <div class="empty-state">Nenhuma foto autorizada para publicação neste álbum.</div>
+        @end
+      </div>
+    </div>
+
+    <div class="lightbox" x-cloak x-show="image" @keydown.escape.window="close()" @click.self="close()">
+      <button type="button" @click="close()" aria-label="Fechar imagem">×</button>
+      <img :src="image" alt="Visualização ampliada">
+    </div>
+  </section>
+@end
