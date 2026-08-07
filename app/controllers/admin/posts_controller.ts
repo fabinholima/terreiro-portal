@@ -89,6 +89,27 @@ export default class PostsController {
     return response.redirect('/admin/posts')
   }
 
+  async replaceFeaturedImage({ params, request, response, session }: HttpContext) {
+    const post = await Post.findOrFail(params.id)
+    const file = request.file('featuredImage', {
+      size: '12mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    })
+
+    if (!file) {
+      session.flash('error', 'Selecione uma imagem para substituir a atual.')
+      return response.redirect(`/admin/posts/${post.id}/edit`)
+    }
+
+    const newPath = await this.moveImage(file.clientName, file)
+    if (post.featuredImagePath) await this.deletePublicFile(post.featuredImagePath)
+    post.featuredImagePath = newPath
+    await post.save()
+
+    session.flash('success', 'Imagem de destaque substituída.')
+    return response.redirect(`/admin/posts/${post.id}/edit`)
+  }
+
   async deleteFeaturedImage({ params, response, session }: HttpContext) {
     const post = await Post.findOrFail(params.id)
     if (post.featuredImagePath) {
@@ -97,6 +118,31 @@ export default class PostsController {
       await post.save()
     }
     session.flash('success', 'Imagem de destaque excluída.')
+    return response.redirect(`/admin/posts/${post.id}/edit`)
+  }
+
+  async replaceImage({ params, request, response, session }: HttpContext) {
+    const post = await Post.findOrFail(params.id)
+    const images = this.normalizeImagePaths(post.imagePaths)
+    const index = Number(params.index)
+    const file = request.file('image', {
+      size: '12mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    })
+
+    if (!Number.isInteger(index) || index < 0 || index >= images.length || !file) {
+      session.flash('error', 'Não foi possível substituir a imagem selecionada.')
+      return response.redirect(`/admin/posts/${post.id}/edit`)
+    }
+
+    const oldPath = images[index]
+    const newPath = await this.moveImage(file.clientName, file)
+    images[index] = newPath
+    post.imagePaths = images
+    await post.save()
+    if (oldPath) await this.deletePublicFile(oldPath)
+
+    session.flash('success', 'Imagem anexa substituída.')
     return response.redirect(`/admin/posts/${post.id}/edit`)
   }
 
@@ -155,10 +201,7 @@ export default class PostsController {
     })
 
     if (!file) return null
-
-    const safeName = this.fileName(file.clientName)
-    await file.move(app.makePath('public/uploads/news'), { name: safeName })
-    return `/uploads/news/${safeName}`
+    return this.moveImage(file.clientName, file)
   }
 
   private async saveImages(request: HttpContext['request']) {
@@ -169,11 +212,15 @@ export default class PostsController {
 
     const paths: string[] = []
     for (const file of files) {
-      const safeName = this.fileName(file.clientName)
-      await file.move(app.makePath('public/uploads/news'), { name: safeName })
-      paths.push(`/uploads/news/${safeName}`)
+      paths.push(await this.moveImage(file.clientName, file))
     }
     return paths
+  }
+
+  private async moveImage(clientName: string, file: any) {
+    const safeName = this.fileName(clientName)
+    await file.move(app.makePath('public/uploads/news'), { name: safeName })
+    return `/uploads/news/${safeName}`
   }
 
   private async deletePublicFile(publicPath: string) {
