@@ -8,6 +8,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
+const DashboardController = () => import('#controllers/admin/dashboard_controller')
 const EventsController = () => import('#controllers/admin/events_controller')
 const AlbumsController = () => import('#controllers/admin/albums_controller')
 const GalleryController = () => import('#controllers/gallery_controller')
@@ -38,6 +39,8 @@ router
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
+
+    router.get('/admin', [DashboardController, 'index'])
 
     router.get('/admin/events', [EventsController, 'index'])
     router.get('/admin/events/create', [EventsController, 'create'])
