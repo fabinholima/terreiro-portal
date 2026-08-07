@@ -3,8 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Portal institucional de {{ siteSettings.siteName }}." />
-    <title>{{ siteSettings.siteName }}</title>
+    <title>{{ seo.title }}</title>
+    <meta name="description" content="{{ seo.description }}" />
+    <link rel="canonical" href="{{ seo.canonicalUrl }}" />
+
+    @if(seo.noindex)
+      <meta name="robots" content="noindex,nofollow" />
+    @else
+      <meta name="robots" content="index,follow" />
+    @end
+
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="{{ seo.type }}" />
+    <meta property="og:title" content="{{ seo.title }}" />
+    <meta property="og:description" content="{{ seo.description }}" />
+    <meta property="og:url" content="{{ seo.canonicalUrl }}" />
+    <meta property="og:site_name" content="{{ siteSettings.siteName }}" />
+    @if(seo.imageUrl)
+      <meta property="og:image" content="{{ seo.imageUrl }}" />
+    @end
+
+    <meta name="twitter:card" content="{{ seo.imageUrl ? 'summary_large_image' : 'summary' }}" />
+    <meta name="twitter:title" content="{{ seo.title }}" />
+    <meta name="twitter:description" content="{{ seo.description }}" />
+    @if(seo.imageUrl)
+      <meta name="twitter:image" content="{{ seo.imageUrl }}" />
+    @end
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
