@@ -1,0 +1,37 @@
+@layout()
+  <section class="mx-auto max-w-6xl px-6 py-10">
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Administração</p>
+        <h1 class="mt-2 text-3xl font-bold">Páginas institucionais</h1>
+        <p class="mt-2 text-slate-600">Edite os textos públicos sem alterar as URLs do site.</p>
+      </div>
+      <a href="/admin" class="text-sm font-semibold text-emerald-800 underline">Voltar ao painel</a>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <table class="w-full text-left">
+        <thead class="bg-slate-50 text-sm text-slate-600">
+          <tr>
+            <th class="px-4 py-3">Página</th>
+            <th class="px-4 py-3">URL</th>
+            <th class="px-4 py-3">Visibilidade</th>
+            <th class="px-4 py-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(page in pages)
+            <tr class="border-t border-slate-100">
+              <td class="px-4 py-3 font-medium">{{ page.title }}</td>
+              <td class="px-4 py-3 text-slate-600">/{{ page.slug }}</td>
+              <td class="px-4 py-3">{{ page.isPublic ? 'Pública' : 'Oculta' }}</td>
+              <td class="px-4 py-3"><a class="font-semibold text-emerald-800 underline" href="/admin/institutional-pages/{{ page.id }}/edit">Editar</a></td>
+            </tr>
+          @else
+            <tr><td colspan="4" class="px-4 py-8 text-center text-slate-500">As páginas serão criadas automaticamente ao serem acessadas no site.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </section>
+@end
