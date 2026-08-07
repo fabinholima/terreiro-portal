@@ -38,6 +38,7 @@ router.get('/umbanda', [PagesController, 'umbanda']).as('pages.umbanda')
 router.get('/contato', [PagesController, 'contact']).as('pages.contact')
 router.get('/agenda', [PublicEventsController, 'index']).as('events.index')
 router.get('/galeria', [GalleryController, 'index']).as('gallery.index')
+router.get('/galeria/:slug', [GalleryController, 'show']).as('gallery.show')
 router.get('/acoes-sociais', [SocialActionsController, 'index']).as('social_actions.index')
 router.get('/noticias', [PostsController, 'index']).as('posts.index')
 router.get('/noticias/:slug', [PostsController, 'show']).as('posts.show')
@@ -57,14 +58,8 @@ router
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
     router.get('/admin', [DashboardController, 'index']).as('admin.dashboard')
 
-    router
-      .get('/admin/site-settings', [SiteSettingsController, 'edit'])
-      .as('admin.site_settings.edit')
-      .use(middleware.adminOnly())
-    router
-      .post('/admin/site-settings', [SiteSettingsController, 'update'])
-      .as('admin.site_settings.update')
-      .use(middleware.adminOnly())
+    router.get('/admin/site-settings', [SiteSettingsController, 'edit']).as('admin.site_settings.edit').use(middleware.adminOnly())
+    router.post('/admin/site-settings', [SiteSettingsController, 'update']).as('admin.site_settings.update').use(middleware.adminOnly())
 
     router.get('/admin/users', [UsersController, 'index']).as('admin.users.index').use(middleware.adminOnly())
     router.get('/admin/users/create', [UsersController, 'create']).as('admin.users.create').use(middleware.adminOnly())
