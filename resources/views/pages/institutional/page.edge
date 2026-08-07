@@ -13,5 +13,51 @@
 
   <section class="mx-auto max-w-4xl px-6 py-14">
     <div class="whitespace-pre-line text-lg leading-8 text-slate-700">{{ page.body }}</div>
+
+    @if(page.slug === 'contato')
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <article class="rounded-2xl border border-slate-200 bg-white p-6">
+          <h2 class="text-2xl font-bold">Canais oficiais</h2>
+          <div class="mt-5 space-y-3 text-slate-700">
+            @if(siteSettings.phone)
+              <p><strong>Telefone:</strong> {{ siteSettings.phone }}</p>
+            @end
+            @if(siteSettings.whatsapp)
+              <p><strong>WhatsApp:</strong> {{ siteSettings.whatsapp }}</p>
+            @end
+            @if(siteSettings.email)
+              <p><strong>E-mail:</strong> <a class="text-emerald-800 underline" href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a></p>
+            @end
+            @if(siteSettings.instagramUrl)
+              <p><a class="text-emerald-800 underline" href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener">Instagram</a></p>
+            @end
+            @if(siteSettings.facebookUrl)
+              <p><a class="text-emerald-800 underline" href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener">Facebook</a></p>
+            @end
+            @if(siteSettings.youtubeUrl)
+              <p><a class="text-emerald-800 underline" href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener">YouTube</a></p>
+            @end
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <h2 class="text-2xl font-bold">Endereço e atendimento</h2>
+          <div class="mt-5 space-y-3 text-slate-700">
+            @if(siteSettings.address)
+              <p>{{ siteSettings.address }}</p>
+            @end
+            @if(siteSettings.city || siteSettings.state)
+              <p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}{{ siteSettings.postalCode ? ' · CEP ' + siteSettings.postalCode : '' }}</p>
+            @end
+            @if(siteSettings.openingHours)
+              <p class="whitespace-pre-line">{{ siteSettings.openingHours }}</p>
+            @end
+            @if(siteSettings.mapsUrl)
+              <p><a class="inline-block rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white" href="{{ siteSettings.mapsUrl }}" target="_blank" rel="noopener">Abrir localização no mapa</a></p>
+            @end
+          </div>
+        </article>
+      </div>
+    @end
   </section>
 @end
