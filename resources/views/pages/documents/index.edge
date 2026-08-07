@@ -1,0 +1,28 @@
+@layout()
+  <section class="mx-auto max-w-6xl px-6 py-12">
+    <div class="mb-10">
+      <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Transparência</p>
+      <h1 class="mt-2 text-4xl font-bold">Documentos públicos</h1>
+      <p class="mt-3 max-w-3xl text-slate-600">Estatuto, regimento, atas, editais, relatórios e outros documentos disponibilizados pelo Terreiro.</p>
+    </div>
+
+    <div class="space-y-4">
+      @each(document in documents)
+        <article class="rounded-xl border border-slate-200 bg-white p-6 md:flex md:items-center md:justify-between md:gap-8">
+          <div>
+            <div class="mb-2 flex flex-wrap gap-2 text-sm text-slate-500">
+              @if(document.category)<span>{{ document.category }}</span>@endif
+              @if(document.version)<span>• Versão {{ document.version }}</span>@endif
+              @if(document.documentDate)<span>• {{ document.documentDate.toFormat('dd/LL/yyyy') }}</span>@endif
+            </div>
+            <h2 class="text-2xl font-bold">{{ document.title }}</h2>
+            @if(document.description)<p class="mt-2 text-slate-600">{{ document.description }}</p>@endif
+          </div>
+          <a href="{{ document.filePath }}" target="_blank" rel="noopener" class="mt-5 inline-block shrink-0 rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white md:mt-0">Abrir PDF</a>
+        </article>
+      @else
+        <p class="text-slate-600">Nenhum documento público disponível no momento.</p>
+      @end
+    </div>
+  </section>
+@end
