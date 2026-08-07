@@ -6,6 +6,5 @@ export const albumValidator = vine.compile(
     slug: vine.string().trim().minLength(3).maxLength(200),
     description: vine.string().optional(),
     eventDate: vine.string().optional(),
-    isPublic: vine.boolean(),
   })
 )
