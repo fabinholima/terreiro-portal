@@ -1,49 +1,84 @@
-/* Public-site refinements: approved cream + forest + gold composition */
-.site-header__inner{min-height:84px}
-.site-brand{min-width:275px}
-.site-brand__logo{width:62px;height:62px;border-radius:50%;background:#fffdf7}
+/* Public-site refinements based on approved cream + forest + gold composition */
+.site-header__inner{min-height:92px}
+.site-brand{min-width:300px}
+.site-brand__logo{width:74px;height:74px;object-fit:contain;flex:none;filter:drop-shadow(0 5px 12px rgba(0,0,0,.16))}
 .site-brand__text{display:flex;flex-direction:column}
-.site-brand__name{order:1;font-size:1.08rem;line-height:1.08}
-.site-brand__eyebrow{order:2;margin:5px 0 0;font-size:.61rem}
-.site-nav{gap:5px}
-.site-nav a{padding-inline:11px}
+.site-brand__name{order:1;font-family:var(--serif);font-size:1.08rem;line-height:1.08;max-width:250px}
+.site-brand__eyebrow{order:2;margin:6px 0 0;font-size:.61rem;color:var(--gold-soft)}
+.site-nav{gap:7px}
+.site-nav a{padding-inline:12px}
 
-.home-intro{background:linear-gradient(110deg,#fbf8ef 0%,#f5efdf 100%)}
-.home-intro__title{margin:0;font-family:var(--serif);font-size:clamp(2.55rem,5.7vw,4.95rem);font-weight:600;line-height:1.02;color:var(--forest-900);letter-spacing:-.035em;max-width:760px}
-.home-intro__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.home-principles{padding-top:34px}
+/* Approved homepage hero */
+.home-showcase{position:relative;overflow:hidden;background:linear-gradient(105deg,#fbf7ed 0%,#f3ecd9 100%);border-bottom:1px solid var(--line)}
+.home-showcase::before,.home-showcase::after{content:'';position:absolute;width:260px;height:420px;opacity:.08;background:radial-gradient(ellipse at center,#1e5b36 0 8%,transparent 9%),linear-gradient(75deg,transparent 48%,#1e5b36 49% 51%,transparent 52%);transform:rotate(-12deg)}
+.home-showcase::before{left:-90px;bottom:-120px}
+.home-showcase::after{right:-90px;top:-120px;transform:rotate(165deg)}
+.home-showcase__inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(300px,430px) 1fr;align-items:center;gap:72px;padding:36px 0 44px}
+.home-showcase__logo-wrap{display:flex;justify-content:center}
+.home-showcase__logo{width:min(390px,100%);aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(24,55,32,.10))}
+.home-showcase__copy h1{margin:0;color:var(--forest-900);font-family:var(--serif);font-size:clamp(3.7rem,7vw,6.4rem);font-weight:600;line-height:.95;letter-spacing:-.04em}
+.home-showcase__copy>p:last-child{margin:0;color:#4e5851;font-family:var(--serif);font-size:clamp(1.16rem,2vw,1.48rem);line-height:1.55}
 
+/* Three-column institutional strip */
+.home-values{background:#fff;padding:26px 0 24px;border-bottom:1px solid var(--line)}
+.home-values__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.home-value-card{display:grid;grid-template-columns:92px 1fr;gap:22px;padding:14px 32px 14px 20px;align-items:start;border-right:1px solid var(--line)}
+.home-value-card:last-child{border-right:0}
+.home-value-card .institutional-icon{width:76px;height:76px}
+.home-value-card .institutional-icon svg{width:36px;height:36px}
+.home-value-card h2{margin:7px 0 5px;color:var(--forest-900);font-family:var(--serif);font-size:1.55rem}
+.home-value-card p{margin:10px 0 0;color:#4f5a53;font-size:.96rem;line-height:1.72}
+.mini-gold-line{display:block;width:42px;height:2px;background:var(--gold);margin-top:8px}
+.home-value-card__button{margin-top:16px;font-size:.82rem;padding:9px 14px}
+
+/* Shared content */
 .page-content__body{white-space:pre-line;color:#566159;font-size:1.07rem;line-height:1.9}
 
-.site-footer--compact{background:var(--forest-950)}
-.compact-footer__main{min-height:150px;display:grid;grid-template-columns:minmax(280px,1.25fr) minmax(310px,1fr) minmax(220px,.8fr);gap:34px;align-items:center;padding:26px 0}
-.compact-footer__brand{display:flex;align-items:center;gap:15px}
-.compact-footer__brand img{width:70px;height:70px;object-fit:contain;border-radius:50%;background:#fffdf7}
-.compact-footer__brand strong{display:block;color:#fff;font-family:var(--serif);font-size:1.02rem;line-height:1.2}
-.compact-footer__brand small{display:block;margin-top:5px;color:var(--gold-soft);font-size:.64rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase}
-.compact-footer__nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px}
-.compact-footer__nav a{color:#dce5dd;font-size:.86rem}
-.compact-footer__nav a:hover{color:var(--gold-soft)}
-.compact-footer__contact{display:flex;flex-direction:column;align-items:flex-end;gap:3px;color:#b8c4bb;font-size:.8rem;text-align:right}
-.compact-footer__contact a{color:#dce5dd}
-.site-footer--compact .site-footer__bottom{padding:10px 0;text-align:center;font-size:.73rem}
+/* Slim approved footer */
+.site-footer--slim{background:linear-gradient(90deg,#0a2d1b,#0e3a22);border-top:1px solid rgba(178,138,58,.7)}
+.slim-footer__row{min-height:102px;display:grid;grid-template-columns:minmax(270px,1.15fr) minmax(420px,1.5fr) auto;align-items:center;gap:32px;padding:15px 0}
+.slim-footer__brand{display:flex;align-items:center;gap:14px}
+.slim-footer__brand img{width:66px;height:66px;object-fit:contain;flex:none}
+.slim-footer__brand strong{display:block;color:#fff;font-family:var(--serif);font-size:1rem;line-height:1.18;max-width:250px}
+.slim-footer__brand small{display:block;margin-top:4px;color:var(--gold-soft);font-size:.62rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
+.slim-footer__nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 13px;color:#eef2ec}
+.slim-footer__nav a{font-size:.88rem;color:#eef2ec}
+.slim-footer__nav a:hover{color:var(--gold-soft)}
+.slim-footer__nav span{color:var(--gold);font-size:.7rem}
+.slim-footer__social{display:flex;gap:9px;justify-content:flex-end}
+.slim-footer__social a{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--gold);color:var(--gold-soft);font-size:.68rem;font-weight:800}
+.slim-footer__social a:hover{background:var(--gold);color:var(--forest-950)}
+.site-footer--slim .site-footer__bottom{border-top:1px solid rgba(178,138,58,.35)}
+.slim-footer__bottom{padding:8px 0;text-align:center;color:#c5d0c7;font-size:.72rem}
 
 @media(max-width:1050px){
   .site-brand{min-width:0}
-  .compact-footer__main{grid-template-columns:1fr 1fr}
-  .compact-footer__contact{grid-column:1/-1;align-items:flex-start;text-align:left;border-top:1px solid rgba(255,255,255,.08);padding-top:14px}
+  .home-showcase__inner{grid-template-columns:300px 1fr;gap:42px}
+  .home-values__grid{grid-template-columns:1fr}
+  .home-value-card{border-right:0;border-bottom:1px solid var(--line);padding:22px 12px}
+  .home-value-card:last-child{border-bottom:0}
+  .slim-footer__row{grid-template-columns:1fr 1fr}
+  .slim-footer__nav{justify-content:flex-end}
+  .slim-footer__social{grid-column:1/-1;justify-content:center}
 }
 
 @media(max-width:720px){
-  .site-header__inner{min-height:72px}
-  .site-brand__logo{width:50px;height:50px}
-  .site-brand__name{font-size:.86rem;max-width:190px}
-  .site-brand__eyebrow{font-size:.52rem}
-  .home-intro__title{font-size:2.55rem}
-  .home-intro__actions{justify-content:center}
-  .compact-footer__main{grid-template-columns:1fr;gap:20px;padding:24px 0}
-  .compact-footer__brand{justify-content:center;text-align:center;flex-direction:column}
-  .compact-footer__brand img{width:64px;height:64px}
-  .compact-footer__nav{justify-content:center}
-  .compact-footer__contact{grid-column:auto;align-items:center;text-align:center}
+  .site-header__inner{min-height:76px}
+  .site-brand__logo{width:56px;height:56px}
+  .site-brand__name{font-size:.88rem;max-width:190px}
+  .site-brand__eyebrow{font-size:.51rem}
+  .home-showcase__inner{grid-template-columns:1fr;gap:12px;text-align:center;padding:26px 0 32px}
+  .home-showcase__logo{width:230px}
+  .home-showcase__copy h1{font-size:3.25rem}
+  .home-showcase__copy .gold-rule{margin-inline:auto}
+  .home-showcase__copy>p:last-child{font-size:1.05rem}
+  .home-values{padding:8px 0}
+  .home-value-card{grid-template-columns:68px 1fr;gap:16px}
+  .home-value-card .institutional-icon{width:60px;height:60px}
+  .home-value-card h2{font-size:1.32rem}
+  .slim-footer__row{grid-template-columns:1fr;gap:16px;padding:18px 0}
+  .slim-footer__brand{justify-content:center;text-align:center}
+  .slim-footer__brand img{width:58px;height:58px}
+  .slim-footer__nav{justify-content:center}
+  .slim-footer__social{grid-column:auto}
 }
