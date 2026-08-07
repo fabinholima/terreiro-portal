@@ -9,6 +9,9 @@ export default class Document extends BaseModel {
   declare title: string
 
   @column()
+  declare slug: string
+
+  @column()
   declare category: string | null
 
   @column()
@@ -21,7 +24,7 @@ export default class Document extends BaseModel {
   declare description: string | null
 
   @column()
-  declare filePath: string
+  declare filePath: string | null
 
   @column()
   declare isPublic: boolean
