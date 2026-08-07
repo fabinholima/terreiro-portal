@@ -28,7 +28,6 @@ const InstitutionalPagesController = () => import('#controllers/admin/institutio
 const SiteSettingsController = () => import('#controllers/admin/site_settings_controller')
 const UsersController = () => import('#controllers/admin/users_controller')
 
-// Public site
 router.get('/', [HomeController, 'index']).as('home')
 router.get('/health', [HealthController, 'show']).as('health')
 router.get('/images/logo-terreiro.png', [LogoController, 'show']).as('assets.logo')
@@ -46,7 +45,6 @@ router.get('/noticias', [PostsController, 'index']).as('posts.index')
 router.get('/noticias/:slug', [PostsController, 'show']).as('posts.show')
 router.get('/documentos', [DocumentsController, 'index']).as('documents.index')
 
-// Authentication: public self-signup is intentionally disabled.
 router
   .group(() => {
     router.get('login', [controllers.Session, 'create']).as('session.create')
@@ -54,7 +52,6 @@ router
   })
   .use(middleware.guest())
 
-// Administration
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
@@ -103,7 +100,9 @@ router
     router.post('/admin/posts', [AdminPostsController, 'store']).as('admin.posts.store')
     router.get('/admin/posts/:id/edit', [AdminPostsController, 'edit']).as('admin.posts.edit')
     router.post('/admin/posts/:id', [AdminPostsController, 'update']).as('admin.posts.update')
+    router.post('/admin/posts/:id/featured-image/replace', [AdminPostsController, 'replaceFeaturedImage']).as('admin.posts.featured_image.replace')
     router.post('/admin/posts/:id/featured-image/delete', [AdminPostsController, 'deleteFeaturedImage']).as('admin.posts.featured_image.destroy')
+    router.post('/admin/posts/:id/images/:index/replace', [AdminPostsController, 'replaceImage']).as('admin.posts.images.replace')
     router.post('/admin/posts/:id/images/:index/delete', [AdminPostsController, 'deleteImage']).as('admin.posts.images.destroy')
     router.post('/admin/posts/:id/delete', [AdminPostsController, 'destroy']).as('admin.posts.destroy')
 
