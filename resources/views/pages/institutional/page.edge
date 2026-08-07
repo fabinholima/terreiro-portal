@@ -6,10 +6,10 @@
           <img class="institutional-hero__logo" src="/images/logo-terreiro.svg" alt="Logotipo do {{ siteSettings.siteName }}">
         </div>
         <div>
-          <p class="eyebrow">{{ page.eyebrow ?? 'Institucional' }}</p>
-          <h1 class="institutional-hero__title">{{ page.title }}</h1>
+          <p class="eyebrow">Institucional</p>
+          <h1 class="institutional-hero__title">O Terreiro</h1>
           <div class="gold-rule" aria-hidden="true"><span></span></div>
-          <p class="institutional-hero__summary">{{ page.summary ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</p>
+          <p class="institutional-hero__summary">Casa de fé, caridade, ancestralidade e acolhimento.</p>
         </div>
       </div>
     </section>
@@ -22,7 +22,7 @@
           </div>
           <div>
             <h2>Nossa missão</h2>
-            <p>{{ page.body.split('\n\n')[0] ?? '' }}</p>
+            <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.</p>
           </div>
         </article>
 
@@ -32,7 +32,7 @@
           </div>
           <div>
             <h2>Nossos valores</h2>
-            <p>{{ page.body.split('\n\n')[1] ?? '' }}</p>
+            <p>Respeito às diferenças, valorização da ancestralidade, compromisso com a comunidade, responsabilidade religiosa, solidariedade e cuidado com as pessoas.</p>
           </div>
         </article>
 
@@ -42,19 +42,17 @@
           </div>
           <div>
             <h2>Nossa trajetória</h2>
-            <p>{{ page.body.split('\n\n')[2] ?? '' }}</p>
+            <p>A casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
           </div>
         </article>
-
-        <div class="institutional-cta">
-          <a class="button" href="/nossa-historia">Conheça nossa história →</a>
-        </div>
       </div>
     </section>
   @else
     <section class="page-hero">
       <div class="site-container">
-        <p class="eyebrow">{{ page.eyebrow ?? 'Institucional' }}</p>
+        @if(page.eyebrow)
+          <p class="eyebrow">{{ page.eyebrow }}</p>
+        @end
         <h1>{{ page.title }}</h1>
         @if(page.summary)
           <p class="section-lead">{{ page.summary }}</p>
@@ -63,33 +61,38 @@
     </section>
 
     <section class="article-shell">
-      @each(paragraph in page.body.split('\n\n'))
-        <p>{{ paragraph }}</p>
-      @end
+      <div class="page-content__body">{{ page.body }}</div>
 
       @if(page.slug === 'contato')
         <div class="contact-grid">
-          @if(siteSettings.phone || siteSettings.whatsapp || siteSettings.email || siteSettings.instagramUrl || siteSettings.facebookUrl || siteSettings.youtubeUrl)
-            <article class="contact-card">
-              <h2>Canais oficiais</h2>
-              @if(siteSettings.phone)<p><strong>Telefone:</strong> {{ siteSettings.phone }}</p>@end
-              @if(siteSettings.whatsapp)<p><strong>WhatsApp:</strong> {{ siteSettings.whatsapp }}</p>@end
-              @if(siteSettings.email)<p><strong>E-mail:</strong> <a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a></p>@end
-              @if(siteSettings.instagramUrl)<p><a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener">Instagram</a></p>@end
-              @if(siteSettings.facebookUrl)<p><a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener">Facebook</a></p>@end
-              @if(siteSettings.youtubeUrl)<p><a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener">YouTube</a></p>@end
-            </article>
-          @end
+          <article class="contact-card">
+            <h2>Canais oficiais</h2>
+            @if(siteSettings.phone)
+              <p><strong>Telefone:</strong> {{ siteSettings.phone }}</p>
+            @end
+            @if(siteSettings.whatsapp)
+              <p><strong>WhatsApp:</strong> {{ siteSettings.whatsapp }}</p>
+            @end
+            @if(siteSettings.email)
+              <p><strong>E-mail:</strong> <a href="mailto:{{ siteSettings.email }}">{{ siteSettings.email }}</a></p>
+            @end
+          </article>
 
-          @if(siteSettings.address || siteSettings.city || siteSettings.openingHours || siteSettings.mapsUrl)
-            <article class="contact-card contact-card--soft">
-              <h2>Endereço e atendimento</h2>
-              @if(siteSettings.address)<p>{{ siteSettings.address }}</p>@end
-              @if(siteSettings.city || siteSettings.state)<p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}{{ siteSettings.postalCode ? ' · CEP ' + siteSettings.postalCode : '' }}</p>@end
-              @if(siteSettings.openingHours)<p>{{ siteSettings.openingHours }}</p>@end
-              @if(siteSettings.mapsUrl)<p><a class="button" href="{{ siteSettings.mapsUrl }}" target="_blank" rel="noopener">Abrir localização no mapa</a></p>@end
-            </article>
-          @end
+          <article class="contact-card contact-card--soft">
+            <h2>Endereço e atendimento</h2>
+            @if(siteSettings.address)
+              <p>{{ siteSettings.address }}</p>
+            @end
+            @if(siteSettings.city || siteSettings.state)
+              <p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}</p>
+            @end
+            @if(siteSettings.openingHours)
+              <p>{{ siteSettings.openingHours }}</p>
+            @end
+            @if(siteSettings.mapsUrl)
+              <p><a class="button" href="{{ siteSettings.mapsUrl }}" target="_blank" rel="noopener">Abrir localização no mapa</a></p>
+            @end
+          </article>
         </div>
       @end
     </section>
