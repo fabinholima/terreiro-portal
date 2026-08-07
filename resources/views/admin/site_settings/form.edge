@@ -3,7 +3,7 @@
     <div class="mb-8">
       <p class="text-sm font-medium text-emerald-700">Administração</p>
       <h1 class="mt-2 text-3xl font-bold">Configurações do site</h1>
-      <p class="mt-2 text-slate-600">Dados institucionais usados no cabeçalho, rodapé e página de contato.</p>
+      <p class="mt-2 text-slate-600">Edite a página inicial, identidade, contato, rodapé e redes sociais.</p>
     </div>
 
     @if(flashMessages.has('success'))
@@ -14,7 +14,42 @@
       {{ csrfField() }}
 
       <section class="space-y-5">
-        <h2 class="text-xl font-bold">Identidade</h2>
+        <div>
+          <p class="text-sm font-medium text-emerald-700">Página inicial</p>
+          <h2 class="text-xl font-bold">Hero</h2>
+        </div>
+        <label class="block"><span class="mb-2 block font-semibold">Chamada superior</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="homeEyebrow" value="{{ settings.homeEyebrow ?? 'Institucional' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Título principal</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="homeTitle" value="{{ settings.homeTitle ?? 'O Terreiro' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Texto de apresentação</span><textarea class="min-h-24 w-full rounded-lg border border-slate-300 px-3 py-2" name="homeSummary">{{ settings.homeSummary ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</textarea></label>
+      </section>
+
+      <section class="space-y-5 border-t border-slate-200 pt-7">
+        <h2 class="text-xl font-bold">Nossa missão</h2>
+        <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="missionTitle" value="{{ settings.missionTitle ?? 'Nossa missão' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Texto</span><textarea class="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2" name="missionText">{{ settings.missionText ?? '' }}</textarea></label>
+        <label class="flex items-center gap-3"><input type="checkbox" name="missionVisible" value="true" {{ settings.missionVisible !== false ? 'checked' : '' }}><span class="font-semibold">Exibir este bloco na página inicial</span></label>
+      </section>
+
+      <section class="space-y-5 border-t border-slate-200 pt-7">
+        <h2 class="text-xl font-bold">Nossos valores</h2>
+        <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="valuesTitle" value="{{ settings.valuesTitle ?? 'Nossos valores' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Texto</span><textarea class="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2" name="valuesText">{{ settings.valuesText ?? '' }}</textarea></label>
+        <label class="flex items-center gap-3"><input type="checkbox" name="valuesVisible" value="true" {{ settings.valuesVisible !== false ? 'checked' : '' }}><span class="font-semibold">Exibir este bloco na página inicial</span></label>
+      </section>
+
+      <section class="space-y-5 border-t border-slate-200 pt-7">
+        <h2 class="text-xl font-bold">Nossa trajetória</h2>
+        <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="trajectoryTitle" value="{{ settings.trajectoryTitle ?? 'Nossa trajetória' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Texto</span><textarea class="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2" name="trajectoryText">{{ settings.trajectoryText ?? '' }}</textarea></label>
+        <div class="grid gap-5 md:grid-cols-2">
+          <label class="block"><span class="mb-2 block font-semibold">Texto do botão</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="trajectoryButtonText" value="{{ settings.trajectoryButtonText ?? 'Conheça nossa história' }}"></label>
+          <label class="block"><span class="mb-2 block font-semibold">Destino do botão</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="trajectoryButtonUrl" placeholder="/o-terreiro" value="{{ settings.trajectoryButtonUrl ?? '/o-terreiro' }}"></label>
+        </div>
+        <label class="flex items-center gap-3"><input type="checkbox" name="trajectoryVisible" value="true" {{ settings.trajectoryVisible !== false ? 'checked' : '' }}><span class="font-semibold">Exibir este bloco na página inicial</span></label>
+      </section>
+
+      <section class="space-y-5 border-t border-slate-200 pt-7">
+        <h2 class="text-xl font-bold">Identidade geral</h2>
         <label class="block"><span class="mb-2 block font-semibold">Nome institucional</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="siteName" required value="{{ settings.siteName }}"></label>
         <label class="block"><span class="mb-2 block font-semibold">Subtítulo</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="siteSubtitle" value="{{ settings.siteSubtitle ?? '' }}"></label>
         <label class="block"><span class="mb-2 block font-semibold">Texto do rodapé</span><textarea class="min-h-24 w-full rounded-lg border border-slate-300 px-3 py-2" name="footerText">{{ settings.footerText ?? '' }}</textarea></label>
