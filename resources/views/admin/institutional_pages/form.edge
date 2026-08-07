@@ -1,0 +1,44 @@
+@layout()
+  <section class="mx-auto max-w-4xl px-6 py-10">
+    <div class="mb-8">
+      <a href="/admin/institutional-pages" class="text-sm font-semibold text-emerald-800 underline">← Páginas institucionais</a>
+      <h1 class="mt-4 text-3xl font-bold">Editar {{ page.title }}</h1>
+      <p class="mt-2 text-slate-600">URL fixa: /{{ page.slug }}</p>
+    </div>
+
+    <form method="POST" action="/admin/institutional-pages/{{ page.id }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6">
+      {{ csrfField() }}
+
+      <label class="block">
+        <span class="mb-2 block font-semibold">Título</span>
+        <input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="title" required maxlength="180" value="{{ page.title }}">
+      </label>
+
+      <label class="block">
+        <span class="mb-2 block font-semibold">Chamada superior</span>
+        <input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="eyebrow" maxlength="120" value="{{ page.eyebrow ?? '' }}">
+      </label>
+
+      <label class="block">
+        <span class="mb-2 block font-semibold">Resumo</span>
+        <textarea class="min-h-28 w-full rounded-lg border border-slate-300 px-3 py-2" name="summary">{{ page.summary ?? '' }}</textarea>
+      </label>
+
+      <label class="block">
+        <span class="mb-2 block font-semibold">Texto completo</span>
+        <textarea class="min-h-80 w-full rounded-lg border border-slate-300 px-3 py-2" name="body" required>{{ page.body }}</textarea>
+        <span class="mt-2 block text-sm text-slate-500">Use linhas em branco para separar parágrafos.</span>
+      </label>
+
+      <label class="flex items-center gap-3">
+        <input type="checkbox" name="isPublic" value="true" @if(page.isPublic) checked @end>
+        <span>Disponível publicamente</span>
+      </label>
+
+      <div class="flex flex-wrap gap-3">
+        <button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white" type="submit">Salvar alterações</button>
+        <a class="rounded-lg border border-slate-300 px-5 py-2.5" href="/{{ page.slug }}" target="_blank">Visualizar página</a>
+      </div>
+    </form>
+  </section>
+@end
