@@ -1,0 +1,21 @@
+import vine from '@vinejs/vine'
+
+export const siteSettingValidator = vine.compile(
+  vine.object({
+    siteName: vine.string().trim().minLength(3).maxLength(180),
+    siteSubtitle: vine.string().trim().maxLength(180).optional(),
+    address: vine.string().trim().maxLength(255).optional(),
+    city: vine.string().trim().maxLength(120).optional(),
+    state: vine.string().trim().maxLength(2).optional(),
+    postalCode: vine.string().trim().maxLength(12).optional(),
+    phone: vine.string().trim().maxLength(40).optional(),
+    whatsapp: vine.string().trim().maxLength(40).optional(),
+    email: vine.string().trim().email().maxLength(180).optional(),
+    instagramUrl: vine.string().trim().url().maxLength(500).optional(),
+    facebookUrl: vine.string().trim().url().maxLength(500).optional(),
+    youtubeUrl: vine.string().trim().url().maxLength(500).optional(),
+    mapsUrl: vine.string().trim().url().maxLength(1000).optional(),
+    openingHours: vine.string().optional(),
+    footerText: vine.string().optional(),
+  })
+)
