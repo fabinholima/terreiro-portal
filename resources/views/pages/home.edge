@@ -1,115 +1,175 @@
 @layout()
-  <section class="bg-emerald-950 text-white">
-    <div class="mx-auto max-w-6xl px-6 py-20 md:py-28">
-      <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-300">Em atividade desde 1991</p>
-      <h1 class="mt-4 max-w-5xl text-4xl font-bold leading-tight md:text-6xl">Terreiro de Umbanda Oxóssi e João Boiadeiro</h1>
-      <p class="mt-6 max-w-3xl text-lg leading-8 text-emerald-50">Casa de fé, caridade, ancestralidade, acolhimento e preservação da tradição umbandista.</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/agenda" class="rounded-lg bg-amber-400 px-5 py-3 font-semibold text-emerald-950">Ver agenda</a>
-        <a href="/galeria" class="rounded-lg border border-white/40 px-5 py-3 font-semibold text-white">Conhecer a galeria</a>
+  <section class="hero-public">
+    <div class="site-container hero-public__inner">
+      <p class="eyebrow">Em atividade desde 1991</p>
+      <h1>{{ siteSettings.siteName }}</h1>
+      <p class="hero-public__lead">Uma casa de fé, caridade, ancestralidade, acolhimento e preservação da tradição umbandista.</p>
+      <div class="hero-actions">
+        <a href="/o-terreiro" class="btn btn--gold">Conheça o Terreiro</a>
+        <a href="/agenda" class="btn btn--ghost">Ver próxima programação</a>
+      </div>
+      <div class="hero-badges" aria-label="Princípios da casa">
+        <span>Fé</span>
+        <span>Caridade</span>
+        <span>Ancestralidade</span>
+        <span>Acolhimento</span>
       </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-6xl px-6 py-16">
-    <div class="mb-8 flex items-end justify-between gap-4">
+  <section class="site-section">
+    <div class="site-container intro-grid">
       <div>
-        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Programação</p>
-        <h2 class="mt-2 text-3xl font-bold">Próximas atividades</h2>
+        <p class="eyebrow">Nossa Casa</p>
+        <h2>Uma história construída com fé e compromisso com a comunidade</h2>
+        <p class="intro-copy">O Terreiro reúne tradição religiosa, memória, cuidado espiritual e ações comunitárias. Este portal organiza nossa história, programação, notícias, documentos e registros públicos em um só lugar.</p>
+        <a href="/nossa-historia" class="text-link">Conhecer nossa história</a>
       </div>
-      <a href="/agenda" class="font-semibold text-emerald-800 underline">Agenda completa</a>
-    </div>
-    <div class="grid gap-6 md:grid-cols-3">
-      @each(event in events)
-        <article class="rounded-xl border border-slate-200 bg-white p-6">
-          <p class="text-sm font-semibold text-emerald-800">{{ event.startsAt.toFormat('dd/LL/yyyy HH:mm') }}</p>
-          <h3 class="mt-2 text-xl font-bold">{{ event.title }}</h3>
-          @if(event.location)
-            <p class="mt-2 text-sm text-slate-500">{{ event.location }}</p>
-          @end
-          @if(event.description)
-            <p class="mt-3 text-slate-600">{{ event.description }}</p>
-          @end
-        </article>
-      @else
-        <p class="text-slate-600">Nenhuma atividade pública agendada no momento.</p>
-      @end
+      <aside class="intro-panel">
+        <strong>Informação e transparência</strong>
+        <p>Acompanhe os próximos trabalhos, ações sociais, documentos públicos e registros da trajetória da casa.</p>
+        <a href="/documentos" class="text-link">Acessar documentos públicos</a>
+      </aside>
     </div>
   </section>
 
-  <section class="bg-slate-50">
-    <div class="mx-auto max-w-6xl px-6 py-16">
-      <div class="mb-8 flex items-end justify-between gap-4">
+  <section class="site-section site-section--soft">
+    <div class="site-container">
+      <div class="section-heading">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Comunicação</p>
-          <h2 class="mt-2 text-3xl font-bold">Notícias recentes</h2>
+          <p class="eyebrow">Programação</p>
+          <h2>Próximas atividades</h2>
+          <p>Consulte datas, horários e informações das próximas atividades públicas.</p>
         </div>
-        <a href="/noticias" class="font-semibold text-emerald-800 underline">Todas as notícias</a>
+        <a href="/agenda" class="text-link">Agenda completa</a>
       </div>
-      <div class="grid gap-6 md:grid-cols-3">
-        @each(post in posts)
-          <article class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-            @if(post.featuredImagePath)
-              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="h-48 w-full object-cover">
-            @end
-            <div class="p-6">
-              <p class="text-sm text-slate-500">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
-              <h3 class="mt-2 text-xl font-bold">{{ post.title }}</h3>
-              <p class="mt-3 text-slate-600">{{ post.summary ?? '' }}</p>
-              <a href="/noticias/{{ post.slug }}" class="mt-4 inline-block font-semibold text-emerald-800 underline">Ler notícia</a>
+
+      <div class="card-grid">
+        @each(event in events)
+          <article class="card">
+            <div class="card__body">
+              <p class="card__meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+              <h3>{{ event.title }}</h3>
+              @if(event.location)
+                <p>{{ event.location }}</p>
+              @end
+              @if(event.description)
+                <p>{{ event.description }}</p>
+              @end
             </div>
           </article>
         @else
-          <p class="text-slate-600">Nenhuma notícia publicada.</p>
+          <div class="empty-state">Nenhuma atividade pública agendada no momento.</div>
         @end
       </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-6xl px-6 py-16">
-    <div class="mb-8 flex items-end justify-between gap-4">
-      <div>
-        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Caridade</p>
-        <h2 class="mt-2 text-3xl font-bold">Ações sociais</h2>
+  <section class="site-section">
+    <div class="site-container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Comunicação</p>
+          <h2>Notícias recentes</h2>
+          <p>Atualizações, comunicados e registros das atividades do Terreiro.</p>
+        </div>
+        <a href="/noticias" class="text-link">Todas as notícias</a>
       </div>
-      <a href="/acoes-sociais" class="font-semibold text-emerald-800 underline">Ver todas</a>
-    </div>
-    <div class="grid gap-6 md:grid-cols-3">
-      @each(action in actions)
-        <article class="rounded-xl border border-slate-200 bg-white p-6">
-          <h3 class="text-xl font-bold">{{ action.title }}</h3>
-          <p class="mt-3 text-slate-600">{{ action.description ?? '' }}</p>
-          @if(action.progressPercent !== null)
-            <div class="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
-              <div class="h-full bg-emerald-700" style="width: {{ action.progressPercent }}%"></div>
+
+      <div class="card-grid">
+        @each(post in posts)
+          <article class="card">
+            @if(post.featuredImagePath)
+              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__image">
+            @end
+            <div class="card__body">
+              <p class="card__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <h3>{{ post.title }}</h3>
+              @if(post.summary)
+                <p>{{ post.summary }}</p>
+              @end
+              <a href="/noticias/{{ post.slug }}" class="card__link">Ler notícia →</a>
             </div>
-            <p class="mt-2 text-sm text-slate-500">{{ action.progressPercent }}% da meta</p>
-          @end
-        </article>
-      @else
-        <p class="text-slate-600">Nenhuma ação social publicada no momento.</p>
-      @end
+          </article>
+        @else
+          <div class="empty-state">Nenhuma notícia publicada.</div>
+        @end
+      </div>
     </div>
   </section>
 
-  <section class="bg-emerald-950 text-white">
-    <div class="mx-auto max-w-6xl px-6 py-16">
-      <div class="mb-8 flex items-end justify-between gap-4">
+  <section class="site-section site-section--soft">
+    <div class="site-container">
+      <div class="section-heading">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-widest text-amber-300">Memória</p>
-          <h2 class="mt-2 text-3xl font-bold">Galeria</h2>
+          <p class="eyebrow">Caridade</p>
+          <h2>Ações sociais</h2>
+          <p>Campanhas e iniciativas desenvolvidas em benefício da comunidade.</p>
         </div>
-        <a href="/galeria" class="font-semibold text-white underline">Ver galeria</a>
+        <a href="/acoes-sociais" class="text-link">Ver todas</a>
       </div>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+      <div class="card-grid">
+        @each(action in actions)
+          <article class="card">
+            <div class="card__body">
+              <p class="card__meta">{{ action.status }}</p>
+              <h3>{{ action.title }}</h3>
+              @if(action.description)
+                <p>{{ action.description }}</p>
+              @end
+              @if(action.progressPercent !== null)
+                <div class="progress"><span style="width: {{ action.progressPercent }}%"></span></div>
+                <div class="progress-label"><span>Progresso</span><strong>{{ action.progressPercent }}%</strong></div>
+              @end
+            </div>
+          </article>
+        @else
+          <div class="empty-state">Nenhuma ação social publicada no momento.</div>
+        @end
+      </div>
+    </div>
+  </section>
+
+  <section class="site-section site-section--dark">
+    <div class="site-container">
+      <div class="section-heading section-heading--dark">
+        <div>
+          <p class="eyebrow">Nossa memória</p>
+          <h2>Galeria de fotografias</h2>
+          <p>Registros das atividades, celebrações e ações realizadas pela casa.</p>
+        </div>
+        <a href="/galeria" class="text-link">Ver todos os álbuns</a>
+      </div>
+
+      <div class="card-grid card-grid--4">
         @each(album in albums)
-          <a href="/galeria" class="group overflow-hidden rounded-xl bg-white/10">
-            <img src="{{ album.coverPath }}" alt="{{ album.title }}" class="h-56 w-full object-cover transition group-hover:scale-105">
-            <div class="p-4 font-semibold">{{ album.title }}</div>
+          <a href="/galeria/{{ album.slug }}" class="card card--dark">
+            @if(album.coverPath)
+              <img src="{{ album.coverPath }}" alt="{{ album.title }}" class="card__image">
+            @end
+            <div class="card__body">
+              <p class="card__meta">{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória' }}</p>
+              <h3>{{ album.title }}</h3>
+            </div>
           </a>
         @else
-          <p class="text-emerald-100">Nenhum álbum público com capa disponível.</p>
+          <div class="empty-state">Nenhum álbum público disponível.</div>
         @end
+      </div>
+    </div>
+  </section>
+
+  <section class="site-section">
+    <div class="site-container intro-grid">
+      <div>
+        <p class="eyebrow">Visite e acompanhe</p>
+        <h2>Consulte os canais oficiais antes de participar</h2>
+        <p class="intro-copy">Veja a agenda atualizada e utilize os canais oficiais para dúvidas sobre atividades, horários e orientações de participação.</p>
+      </div>
+      <div class="hero-actions">
+        <a href="/contato" class="btn btn--green">Contato</a>
+        <a href="/agenda" class="btn btn--outline">Consultar agenda</a>
       </div>
     </div>
   </section>
