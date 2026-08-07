@@ -55,6 +55,7 @@ export default class PostsController {
 
     const newFeaturedImagePath = await this.saveFeaturedImage(request)
     const newImagePaths = await this.saveImages(request)
+    const currentImagePaths = this.normalizeImagePaths(post.imagePaths)
 
     post.merge({
       title: payload.title,
@@ -64,7 +65,7 @@ export default class PostsController {
       status: payload.status,
       publishedAt,
       featuredImagePath: newFeaturedImagePath ?? post.featuredImagePath,
-      imagePaths: [...(post.imagePaths ?? []), ...newImagePaths],
+      imagePaths: [...currentImagePaths, ...newImagePaths],
     })
 
     await post.save()
@@ -75,6 +76,30 @@ export default class PostsController {
     const post = await Post.findOrFail(params.id)
     await post.delete()
     return response.redirect('/admin/posts')
+  }
+
+  private normalizeImagePaths(value: unknown): string[] {
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === 'string' && item.length > 0)
+    }
+
+    if (typeof value === 'string') {
+      const trimmed = value.trim()
+      if (!trimmed) return []
+
+      try {
+        const parsed = JSON.parse(trimmed)
+        if (Array.isArray(parsed)) {
+          return parsed.filter((item): item is string => typeof item === 'string' && item.length > 0)
+        }
+      } catch {
+        // Legacy rows may contain a single image path instead of JSON.
+      }
+
+      return [trimmed]
+    }
+
+    return []
   }
 
   private async saveFeaturedImage(request: HttpContext['request']) {
