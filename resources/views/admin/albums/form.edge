@@ -17,7 +17,10 @@
         </label>
       @end
 
-      <label class="flex gap-2 items-center"><input type="hidden" name="isPublic" value="false"><input type="checkbox" name="isPublic" value="true" @if(album?.isPublic ?? true) checked @end> Álbum público</label>
+      <label class="flex gap-2 items-center">
+        <input type="checkbox" name="isPublic" value="true" @if(album?.isPublic ?? true) checked @end>
+        Álbum público
+      </label>
       <div><button class="btn btn-primary" type="submit">Salvar</button></div>
     </form>
 
