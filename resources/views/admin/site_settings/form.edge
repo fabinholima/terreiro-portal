@@ -3,21 +3,21 @@
     <div class="mb-8">
       <p class="text-sm font-medium text-emerald-700">Administração</p>
       <h1 class="mt-2 text-3xl font-bold">Configurações do site</h1>
-      <p class="mt-2 text-slate-600">Edite a página inicial, identidade, contato, rodapé e redes sociais.</p>
+      <p class="mt-2 text-slate-600">Edite a página inicial, identidade, contato, contribuição voluntária, rodapé e redes sociais.</p>
     </div>
 
     @if(flashMessages.has('success'))
       <div class="mb-6 rounded-lg bg-emerald-50 p-4 text-emerald-800">{{ flashMessages.get('success') }}</div>
     @end
+    @if(flashMessages.has('error'))
+      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+    @end
 
-    <form method="POST" action="/admin/site-settings" class="space-y-8 rounded-2xl border border-slate-200 bg-white p-6">
+    <form method="POST" enctype="multipart/form-data" action="/admin/site-settings" class="space-y-8 rounded-2xl border border-slate-200 bg-white p-6">
       {{ csrfField() }}
 
       <section class="space-y-5">
-        <div>
-          <p class="text-sm font-medium text-emerald-700">Página inicial</p>
-          <h2 class="text-xl font-bold">Hero</h2>
-        </div>
+        <div><p class="text-sm font-medium text-emerald-700">Página inicial</p><h2 class="text-xl font-bold">Hero</h2></div>
         <label class="block"><span class="mb-2 block font-semibold">Chamada superior</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="homeEyebrow" value="{{ settings.homeEyebrow ?? 'Institucional' }}"></label>
         <label class="block"><span class="mb-2 block font-semibold">Título principal</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="homeTitle" value="{{ settings.homeTitle ?? 'O Terreiro' }}"></label>
         <label class="block"><span class="mb-2 block font-semibold">Texto de apresentação</span><textarea class="min-h-24 w-full rounded-lg border border-slate-300 px-3 py-2" name="homeSummary">{{ settings.homeSummary ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</textarea></label>
@@ -74,6 +74,34 @@
           <label class="block"><span class="mb-2 block font-semibold">WhatsApp</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="whatsapp" value="{{ settings.whatsapp ?? '' }}"></label>
         </div>
         <label class="block"><span class="mb-2 block font-semibold">E-mail público</span><input type="email" class="w-full rounded-lg border border-slate-300 px-3 py-2" name="email" value="{{ settings.email ?? '' }}"></label>
+      </section>
+
+      <section class="space-y-5 border-t border-slate-200 pt-7">
+        <div>
+          <p class="text-sm font-medium text-amber-700">Página de Contato</p>
+          <h2 class="text-xl font-bold">Contribuição voluntária via PIX</h2>
+          <p class="mt-1 text-sm text-slate-600">O card só aparece no portal quando esta opção estiver ativada. A contribuição é apresentada como espontânea e facultativa.</p>
+        </div>
+        <label class="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <input type="checkbox" name="contributionVisible" value="true" {{ settings.contributionVisible ? 'checked' : '' }}>
+          <span class="font-semibold">Exibir card “Contribua com a casa” na página Contato</span>
+        </label>
+        <div class="grid gap-5 md:grid-cols-2">
+          <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="contributionTitle" value="{{ settings.contributionTitle ?? 'Contribua com a casa' }}"></label>
+          <label class="block"><span class="mb-2 block font-semibold">Favorecido</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="pixBeneficiary" placeholder="Nome do favorecido" value="{{ settings.pixBeneficiary ?? '' }}"></label>
+        </div>
+        <label class="block"><span class="mb-2 block font-semibold">Texto explicativo</span><textarea class="min-h-24 w-full rounded-lg border border-slate-300 px-3 py-2" name="contributionText">{{ settings.contributionText ?? 'Sua contribuição voluntária auxilia na manutenção das atividades religiosas, sociais e comunitárias do Terreiro.' }}</textarea></label>
+        <label class="block"><span class="mb-2 block font-semibold">Chave PIX</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="pixKey" placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória" value="{{ settings.pixKey ?? '' }}"></label>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <label class="block"><span class="mb-2 block font-semibold">Imagem do QR Code PIX</span><input type="file" name="pixQrCode" accept="image/png,image/jpeg,image/webp" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2"></label>
+          <p class="mt-2 text-sm text-slate-500">PNG, JPG ou WebP, até 5 MB. Recomenda-se uma imagem quadrada e nítida.</p>
+          @if(settings.pixQrCodePath)
+            <div class="mt-4 flex flex-wrap items-center gap-5">
+              <img src="{{ settings.pixQrCodePath }}" alt="QR Code PIX atual" class="h-36 w-36 rounded-xl border border-slate-200 bg-white object-contain p-2">
+              <label class="flex items-center gap-2 text-sm font-semibold text-red-700"><input type="checkbox" name="removePixQrCode" value="true"> Remover QR Code atual ao salvar</label>
+            </div>
+          @end
+        </div>
       </section>
 
       <section class="space-y-5 border-t border-slate-200 pt-7">
