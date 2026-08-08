@@ -1,0 +1,34 @@
+.agenda-hero{background:linear-gradient(115deg,#fbf8f1,#f3ecdc)}
+.agenda-section{padding:54px 0 76px;background:#f8f7f2}
+.agenda-list{display:grid;gap:22px}
+.agenda-card{display:grid;grid-template-columns:170px 118px minmax(0,1fr);overflow:hidden;border:1px solid #e2ddd1;border-radius:18px;background:#fff;box-shadow:0 14px 36px rgba(13,51,31,.07)}
+.agenda-card:not(:has(.agenda-card__media)){grid-template-columns:118px minmax(0,1fr)}
+.agenda-card__media{min-height:220px;background:#eee8db}
+.agenda-card__media img{width:100%;height:100%;min-height:220px;object-fit:cover}
+.agenda-card__date{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 12px;background:#f5efe1;color:#123f29;border-right:1px solid #e5dfd2;text-align:center}
+.agenda-calendar-icon{width:36px;height:36px;display:grid;place-items:center;margin-bottom:8px;color:#b28a3a}
+.agenda-calendar-icon svg,.agenda-fact__icon svg,.agenda-empty__icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.agenda-card__date strong{font-family:Georgia,'Times New Roman',serif;font-size:3rem;line-height:.92;letter-spacing:-.04em}
+.agenda-card__date span{margin-top:7px;font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9a7630}
+.agenda-card__date small{margin-top:3px;font-size:.78rem;color:#758078}
+.agenda-card__content{padding:24px 28px 26px;min-width:0}
+.agenda-card__topline{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+.agenda-card__category{margin:0;color:#9a7630;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.agenda-card h2{margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:1.65rem;line-height:1.18;color:#0c351f}
+.agenda-status{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:800;white-space:nowrap}
+.agenda-status--scheduled{background:#fff3cd;color:#7a5b00}
+.agenda-status--confirmed{background:#e4f3e8;color:#17633a}
+.agenda-status--postponed{background:#fff0df;color:#96510b}
+.agenda-status--cancelled{background:#fde7e5;color:#a12c24}
+.agenda-status--completed{background:#edf0ee;color:#566159}
+.agenda-card__facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:4px}
+.agenda-fact{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid #ebe6dc;border-radius:11px;background:#fcfbf8;min-width:0}
+.agenda-fact__icon{width:28px;height:28px;flex:none;display:grid;place-items:center;color:#1e5b36}
+.agenda-fact small{display:block;color:#859087;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.agenda-fact strong{display:block;color:#354039;font-size:.84rem;line-height:1.35;overflow-wrap:anywhere}
+.agenda-card__description{margin:17px 0 0;padding-top:15px;border-top:1px solid #eee9df;color:#606a63;line-height:1.75}
+.agenda-empty{padding:58px 24px;text-align:center;border:1px dashed #d6cdbd;border-radius:18px;background:#fff}
+.agenda-empty__icon{width:54px;height:54px;margin:0 auto 12px;color:#b28a3a}
+.agenda-empty h2{margin:0;font-family:Georgia,'Times New Roman',serif;color:#0c351f}.agenda-empty p{margin:8px 0 0;color:#6c756f}
+@media(max-width:980px){.agenda-card{grid-template-columns:150px 105px minmax(0,1fr)}.agenda-card__facts{grid-template-columns:1fr 1fr}.agenda-card:not(:has(.agenda-card__media)){grid-template-columns:105px minmax(0,1fr)}}
+@media(max-width:720px){.agenda-section{padding:34px 0 56px}.agenda-card,.agenda-card:not(:has(.agenda-card__media)){grid-template-columns:88px minmax(0,1fr)}.agenda-card__media{grid-column:1/-1;min-height:190px}.agenda-card__media img{height:190px;min-height:190px}.agenda-card__date{padding:18px 8px}.agenda-card__date strong{font-size:2.25rem}.agenda-calendar-icon{width:30px;height:30px}.agenda-card__content{padding:19px 16px 21px}.agenda-card__topline{align-items:flex-start;flex-direction:column;gap:7px}.agenda-card h2{font-size:1.4rem}.agenda-card__facts{grid-template-columns:1fr}.agenda-fact{padding:10px}.agenda-card__description{font-size:.94rem}}
