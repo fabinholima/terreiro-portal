@@ -31,5 +31,10 @@ export const siteSettingValidator = vine.compile(
     trajectoryVisible: vine.boolean().optional(),
     trajectoryButtonText: vine.string().trim().maxLength(120).optional(),
     trajectoryButtonUrl: vine.string().trim().maxLength(500).optional(),
+    contributionVisible: vine.boolean().optional(),
+    contributionTitle: vine.string().trim().maxLength(120).optional(),
+    contributionText: vine.string().trim().maxLength(800).optional(),
+    pixKey: vine.string().trim().maxLength(255).optional(),
+    pixBeneficiary: vine.string().trim().maxLength(180).optional(),
   })
 )
