@@ -46,6 +46,12 @@ const fallbackSettings = {
   trajectoryVisible: true,
   trajectoryButtonText: 'Conheça nossa história',
   trajectoryButtonUrl: '/o-terreiro',
+  contributionVisible: false,
+  contributionTitle: 'Contribua com a casa',
+  contributionText: 'Sua contribuição voluntária auxilia na manutenção das atividades religiosas, sociais e comunitárias do Terreiro.',
+  pixKey: null,
+  pixBeneficiary: null,
+  pixQrCodePath: null,
 }
 
 export default class SiteSettingsMiddleware {
