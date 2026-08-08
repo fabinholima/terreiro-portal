@@ -144,6 +144,41 @@
             A Agenda do portal é a referência para confirmar as próximas atividades e seus horários.
             <a href="/agenda">Consultar Agenda →</a>
           </aside>
+
+          @if(siteSettings.contributionVisible && (siteSettings.pixQrCodePath || siteSettings.pixKey))
+            <aside class="contribution-card">
+              <div class="contribution-card__heading">
+                <span class="contribution-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.1-7-9.5A4.5 4.5 0 0 1 12 6.8a4.5 4.5 0 0 1 7 3.7C19 15.9 12 20 12 20Z"/></svg>
+                </span>
+                <div>
+                  <p class="eyebrow">Contribuição voluntária</p>
+                  <h2>{{ siteSettings.contributionTitle ?? 'Contribua com a casa' }}</h2>
+                </div>
+              </div>
+
+              @if(siteSettings.contributionText)
+                <p class="contribution-card__text">{{ siteSettings.contributionText }}</p>
+              @end
+
+              <div class="contribution-card__pix">
+                @if(siteSettings.pixQrCodePath)
+                  <img src="{{ siteSettings.pixQrCodePath }}" alt="QR Code PIX para contribuição voluntária ao Terreiro">
+                @end
+                <div class="contribution-card__details">
+                  <strong>Contribuição via PIX</strong>
+                  @if(siteSettings.pixBeneficiary)
+                    <span>Favorecido: {{ siteSettings.pixBeneficiary }}</span>
+                  @end
+                  @if(siteSettings.pixKey)
+                    <span class="contribution-card__key">Chave PIX: {{ siteSettings.pixKey }}</span>
+                  @end
+                </div>
+              </div>
+
+              <small class="contribution-card__notice">Toda contribuição é espontânea e facultativa.</small>
+            </aside>
+          @end
         </div>
       </div>
     </section>
