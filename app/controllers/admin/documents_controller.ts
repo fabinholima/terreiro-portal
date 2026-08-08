@@ -16,6 +16,7 @@ export default class DocumentsController {
   }
 
   async store({ request, response, session }: HttpContext) {
+    this.normalizeBody(request)
     const payload = await request.validateUsing(documentValidator)
     const file = request.file('file', { size: '20mb', extnames: ['pdf'] })
 
@@ -38,6 +39,7 @@ export default class DocumentsController {
       isPublic: payload.isPublic,
     })
 
+    session.flash('success', 'Documento cadastrado com sucesso.')
     return response.redirect('/admin/documents')
   }
 
@@ -48,6 +50,7 @@ export default class DocumentsController {
 
   async update({ params, request, response, session }: HttpContext) {
     const document = await Document.findOrFail(params.id)
+    this.normalizeBody(request)
     const payload = await request.validateUsing(documentValidator)
     const file = request.file('file', { size: '20mb', extnames: ['pdf'] })
 
@@ -78,10 +81,11 @@ export default class DocumentsController {
     }
 
     await document.save()
+    session.flash('success', 'Documento atualizado com sucesso.')
     return response.redirect('/admin/documents')
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, session }: HttpContext) {
     const document = await Document.findOrFail(params.id)
     const filePath = document.filePath
     await document.delete()
@@ -90,6 +94,30 @@ export default class DocumentsController {
       await unlink(app.makePath('public', filePath.replace(/^\//, ''))).catch(() => undefined)
     }
 
+    session.flash('success', 'Documento excluído com sucesso.')
     return response.redirect('/admin/documents')
+  }
+
+  private normalizeBody(request: HttpContext['request']) {
+    const body = request.all()
+    const normalizeOptional = (value: unknown) => {
+      if (typeof value !== 'string') return value
+      const trimmed = value.trim()
+      return trimmed === '' ? undefined : trimmed
+    }
+
+    const publicValue = request.input('isPublic')
+    const isPublic = Array.isArray(publicValue)
+      ? publicValue.some((value) => value === 'true' || value === true)
+      : publicValue === true || publicValue === 'true' || publicValue === '1' || publicValue === 'on'
+
+    request.updateBody({
+      ...body,
+      category: normalizeOptional(body.category),
+      version: normalizeOptional(body.version),
+      documentDate: normalizeOptional(body.documentDate),
+      description: normalizeOptional(body.description),
+      isPublic,
+    })
   }
 }
