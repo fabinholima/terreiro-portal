@@ -3,30 +3,48 @@
     <div class="mb-8">
       <p class="text-sm font-medium text-emerald-700">Administração</p>
       <h1 class="text-3xl font-bold text-zinc-900">{{ action ? 'Editar ação social' : 'Nova ação social' }}</h1>
+      <p class="mt-2 text-slate-600">Cadastre campanhas, arrecadações e iniciativas comunitárias promovidas pelo Terreiro.</p>
     </div>
 
-    <form method="POST" action="{{ action ? '/admin/social-actions/' + action.id : '/admin/social-actions' }}" class="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+    <form method="POST" enctype="multipart/form-data" action="{{ action ? '/admin/social-actions/' + action.id : '/admin/social-actions' }}" class="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
       {{ csrfField() }}
+
       <div><label class="mb-2 block font-medium">Título</label><input class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="title" required value="{{ action?.title ?? '' }}"></div>
-      <div><label class="mb-2 block font-medium">Slug</label><input class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="slug" required value="{{ action?.slug ?? '' }}"></div>
+      <div><label class="mb-2 block font-medium">Identificador da URL (slug)</label><input class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="slug" required value="{{ action?.slug ?? '' }}"><p class="mt-1 text-sm text-slate-500">Exemplo: campanha-do-agasalho-2026</p></div>
       <div><label class="mb-2 block font-medium">Descrição</label><textarea class="min-h-36 w-full rounded-lg border border-zinc-300 px-3 py-2" name="description">{{ action?.description ?? '' }}</textarea></div>
 
-      <div class="grid gap-5 md:grid-cols-2">
-        <div><label class="mb-2 block font-medium">Status</label><select class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="status">
-          @each(status in ['planned','active','completed','permanent','cancelled'])
-            <option value="{{ status }}" @if((action?.status ?? 'planned') === status) selected @end>{{ status }}</option>
-          @end
-        </select></div>
-        <div><label class="mb-2 block font-medium">Unidade</label><input class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="unit" placeholder="cestas, kg, peças..." value="{{ action?.unit ?? '' }}"></div>
-        <div><label class="mb-2 block font-medium">Meta</label><input type="number" min="0" step="0.01" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="goal" value="{{ action?.goal ?? '' }}"></div>
-        <div><label class="mb-2 block font-medium">Resultado atual</label><input type="number" min="0" step="0.01" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="currentValue" value="{{ action?.currentValue ?? '' }}"></div>
-        <div><label class="mb-2 block font-medium">Início</label><input type="datetime-local" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="startsAt" value="{{ action?.startsAt ? action.startsAt.toFormat('yyyy-LL-dd\'T\'HH:mm') : '' }}"></div>
-        <div><label class="mb-2 block font-medium">Fim</label><input type="datetime-local" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="endsAt" value="{{ action?.endsAt ? action.endsAt.toFormat('yyyy-LL-dd\'T\'HH:mm') : '' }}"></div>
+      <div>
+        <label class="mb-2 block font-medium">Imagem de destaque</label>
+        @if(action?.imagePath)
+          <img src="{{ action.imagePath }}" alt="Imagem atual da ação {{ action.title }}" style="max-width:420px;max-height:260px;object-fit:contain;border-radius:12px;margin-bottom:12px;border:1px solid #e3e9e5">
+          <p class="mb-2 text-sm text-slate-500">Selecione outra imagem para substituir a atual.</p>
+        @end
+        <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="w-full rounded-lg border border-zinc-300 px-3 py-2">
+        <p class="mt-1 text-sm text-slate-500">JPG, PNG ou WebP. Recomendado: imagem horizontal, cerca de 1200 × 700 px.</p>
       </div>
 
-      <label class="flex items-center gap-3"><input type="hidden" name="isPublic" value="false"><input type="checkbox" name="isPublic" value="true" @if(action?.isPublic ?? true) checked @end><span>Publicar no site</span></label>
+      <div class="grid gap-5 md:grid-cols-2">
+        <div>
+          <label class="mb-2 block font-medium">Situação</label>
+          <select class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="status">
+            <option value="planned" @if((action?.status ?? 'planned') === 'planned') selected @end>Planejada</option>
+            <option value="active" @if(action?.status === 'active') selected @end>Em andamento</option>
+            <option value="completed" @if(action?.status === 'completed') selected @end>Concluída</option>
+            <option value="permanent" @if(action?.status === 'permanent') selected @end>Permanente</option>
+            <option value="cancelled" @if(action?.status === 'cancelled') selected @end>Cancelada</option>
+          </select>
+        </div>
+        <div><label class="mb-2 block font-medium">Unidade da meta</label><input class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="unit" placeholder="cestas, kg, peças, famílias..." value="{{ action?.unit ?? '' }}"></div>
+        <div><label class="mb-2 block font-medium">Meta</label><input type="number" min="0" step="0.01" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="goal" value="{{ action?.goal ?? '' }}"></div>
+        <div><label class="mb-2 block font-medium">Resultado alcançado</label><input type="number" min="0" step="0.01" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="currentValue" value="{{ action?.currentValue ?? '' }}"></div>
+        <div><label class="mb-2 block font-medium">Início</label><input type="datetime-local" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="startsAt" value="{{ action?.startsAt ? action.startsAt.toFormat('yyyy-LL-dd\'T\'HH:mm') : '' }}"></div>
+        <div><label class="mb-2 block font-medium">Término</label><input type="datetime-local" class="w-full rounded-lg border border-zinc-300 px-3 py-2" name="endsAt" value="{{ action?.endsAt ? action.endsAt.toFormat('yyyy-LL-dd\'T\'HH:mm') : '' }}"></div>
+      </div>
 
-      <div class="flex gap-3"><button class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white" type="submit">Salvar</button><a class="rounded-lg border border-zinc-300 px-4 py-2" href="/admin/social-actions">Cancelar</a></div>
+      <input type="hidden" name="isPublic" value="false">
+      <label class="flex items-center gap-3"><input type="checkbox" name="isPublic" value="true" @if(action?.isPublic ?? true) checked @end><span>Exibir esta ação no site público</span></label>
+
+      <div class="flex gap-3"><button class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white" type="submit">Salvar ação social</button><a class="rounded-lg border border-zinc-300 px-4 py-2" href="/admin/social-actions">Cancelar</a></div>
     </form>
   </div>
 @end
