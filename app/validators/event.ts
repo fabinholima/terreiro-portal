@@ -6,10 +6,12 @@ export const eventValidator = vine.compile(
     slug: vine.string().trim().minLength(3).maxLength(200),
     description: vine.string().trim().optional(),
     category: vine.string().trim().maxLength(80).optional(),
-    startsAt: vine.string(),
-    endsAt: vine.string().optional(),
+    startDate: vine.string(),
+    startTime: vine.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+    endDate: vine.string().optional(),
+    endTime: vine.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).optional(),
     location: vine.string().trim().maxLength(200).optional(),
     status: vine.enum(['scheduled', 'confirmed', 'postponed', 'cancelled', 'completed']),
-    isPublic: vine.boolean(),
+    isPublic: vine.boolean().optional(),
   })
 )
