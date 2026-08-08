@@ -33,6 +33,9 @@ export default class SocialAction extends BaseModel {
   declare endsAt: DateTime | null
 
   @column()
+  declare imagePath: string | null
+
+  @column()
   declare isPublic: boolean
 
   @column.dateTime({ autoCreate: true })
