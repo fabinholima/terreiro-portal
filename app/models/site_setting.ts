@@ -92,6 +92,24 @@ export default class SiteSetting extends BaseModel {
   @column()
   declare trajectoryButtonUrl: string | null
 
+  @column()
+  declare contributionVisible: boolean
+
+  @column()
+  declare contributionTitle: string | null
+
+  @column()
+  declare contributionText: string | null
+
+  @column()
+  declare pixKey: string | null
+
+  @column()
+  declare pixBeneficiary: string | null
+
+  @column()
+  declare pixQrCodePath: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
