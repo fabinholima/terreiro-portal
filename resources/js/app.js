@@ -1,3 +1,4 @@
+import '../css/admin-actions.css'
 import Alpine from 'alpinejs'
 
 Alpine.data('alert', function () {
