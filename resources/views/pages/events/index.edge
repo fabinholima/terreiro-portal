@@ -17,26 +17,36 @@
                 <img src="{{ event.imagePath }}" alt="Imagem do evento {{ event.title }}">
               </div>
             @end
+
             <div class="event-date">
               <strong>{{ event.startsAt.toFormat('dd/LL') }}</strong>
               <span>{{ event.startsAt.toFormat('HH:mm') }}</span>
             </div>
+
             <div>
               <h2>{{ event.title }}</h2>
               <p>{{ event.category ?? 'Atividade pública' }}{{ event.location ? ' · ' + event.location : '' }}</p>
+
               @if(event.description)
                 <p>{{ event.description }}</p>
               @end
+
               @if(event.endsAt)
                 <p class="meta">Término: {{ event.endsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
               @end
             </div>
+
             <span class="badge">
-              @if(event.status === 'scheduled') Agendado
-              @elseif(event.status === 'confirmed') Confirmado
-              @elseif(event.status === 'postponed') Adiado
-              @elseif(event.status === 'cancelled') Cancelado
-              @else Concluído
+              @if(event.status === 'scheduled')
+                Agendado
+              @elseif(event.status === 'confirmed')
+                Confirmado
+              @elseif(event.status === 'postponed')
+                Adiado
+              @elseif(event.status === 'cancelled')
+                Cancelado
+              @else
+                Concluído
               @end
             </span>
           </article>
