@@ -5,12 +5,15 @@
         <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Administração</p>
         <h1 class="mt-2 text-4xl font-bold">Documentos</h1>
       </div>
-      <a href="/admin/documents/create" class="rounded-lg bg-emerald-800 px-4 py-2 font-semibold text-white">Novo documento</a>
+      <a href="/admin/documents/create" class="admin-action admin-action--primary">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Novo documento
+      </a>
     </div>
 
     @if(flashMessages.has('error'))
       <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
-    @endif
+    @end
 
     <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
       <table class="min-w-full divide-y divide-slate-200">
@@ -25,9 +28,23 @@
               <td class="px-4 py-3">{{ document.documentDate ? document.documentDate.toFormat('dd/LL/yyyy') : '—' }}</td>
               <td class="px-4 py-3">{{ document.isPublic ? 'Público' : 'Privado' }}</td>
               <td class="px-4 py-3 text-right">
-                <a href="{{ document.filePath }}" target="_blank" class="mr-3 underline">PDF</a>
-                <a href="/admin/documents/{{ document.id }}/edit" class="mr-3 underline">Editar</a>
-                <form method="POST" action="/admin/documents/{{ document.id }}/delete" class="inline">{{ csrfField() }}<button class="text-red-700 underline" type="submit">Excluir</button></form>
+                <div class="admin-actions admin-actions--end">
+                  <a href="{{ document.filePath }}" target="_blank" class="admin-action admin-action--view" title="Visualizar documento">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+                    Visualizar
+                  </a>
+                  <a href="/admin/documents/{{ document.id }}/edit" class="admin-action admin-action--edit" title="Editar documento">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+                    Editar
+                  </a>
+                  <form method="POST" action="/admin/documents/{{ document.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este documento?')">
+                    {{ csrfField() }}
+                    <button class="admin-action admin-action--delete" type="submit" title="Excluir documento">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                      Excluir
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           @else
