@@ -60,6 +60,13 @@ export default class AlbumsController {
     return response.redirect(`/admin/albums/${album.id}/edit`)
   }
 
+  async publishAllPhotos({ params, response, session }: HttpContext) {
+    const album = await Album.findOrFail(params.id)
+    await Photo.query().where('album_id', album.id).update({ publication_authorized: true })
+    session.flash('success', 'Todas as fotos do álbum foram autorizadas para publicação.')
+    return response.redirect(`/admin/albums/${album.id}/edit`)
+  }
+
   async updatePhoto({ params, request, response }: HttpContext) {
     const photo = await Photo.findOrFail(params.photoId)
     photo.merge({
@@ -98,9 +105,7 @@ export default class AlbumsController {
       .then((rows) => Number(rows[0].$extras.total))
 
     for (const file of files) {
-      if (!file.isValid) {
-        continue
-      }
+      if (!file.isValid) continue
 
       const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
       await file.move(app.makePath('public/uploads/gallery'), { name: safeName })
@@ -112,7 +117,7 @@ export default class AlbumsController {
         caption: null,
         altText: album.title,
         credit: null,
-        publicationAuthorized: false,
+        publicationAuthorized: album.isPublic,
         position: position++,
       })
 
