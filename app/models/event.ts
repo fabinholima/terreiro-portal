@@ -27,6 +27,9 @@ export default class Event extends BaseModel {
   declare location: string | null
 
   @column()
+  declare imagePath: string | null
+
+  @column()
   declare status: 'scheduled' | 'confirmed' | 'postponed' | 'cancelled' | 'completed'
 
   @column()
