@@ -12,6 +12,11 @@
       <div class="event-list">
         @each(event in events)
           <article class="event-row">
+            @if(event.imagePath)
+              <div class="event-row__image">
+                <img src="{{ event.imagePath }}" alt="Imagem do evento {{ event.title }}">
+              </div>
+            @end
             <div class="event-date">
               <strong>{{ event.startsAt.toFormat('dd/LL') }}</strong>
               <span>{{ event.startsAt.toFormat('HH:mm') }}</span>
@@ -22,8 +27,18 @@
               @if(event.description)
                 <p>{{ event.description }}</p>
               @end
+              @if(event.endsAt)
+                <p class="meta">Término: {{ event.endsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+              @end
             </div>
-            <span class="badge">{{ event.status }}</span>
+            <span class="badge">
+              @if(event.status === 'scheduled') Agendado
+              @elseif(event.status === 'confirmed') Confirmado
+              @elseif(event.status === 'postponed') Adiado
+              @elseif(event.status === 'cancelled') Cancelado
+              @else Concluído
+              @end
+            </span>
           </article>
         @else
           <div class="empty-state">Nenhuma atividade pública agendada no momento.</div>
