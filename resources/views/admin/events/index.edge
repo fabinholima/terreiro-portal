@@ -4,27 +4,36 @@
       <h1>Agenda</h1>
       <p>Gerencie os eventos, giras, reuniões e atividades públicas do Terreiro.</p>
     </div>
-    <a class="admin-btn admin-btn--primary" href="/admin/events/create">+ Novo evento</a>
+    <a class="admin-action admin-action--primary" href="/admin/events/create">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Novo evento
+    </a>
   </header>
 
   <section class="admin-panel">
     <div style="overflow-x:auto">
       <table>
-        <thead>
-          <tr><th>Data</th><th>Evento</th><th>Status</th><th>Ações</th></tr>
-        </thead>
+        <thead><tr><th>Data</th><th>Evento</th><th>Status</th><th>Ações</th></tr></thead>
         <tbody>
           @each(event in events)
             <tr>
-              <td>{{ event.startsAt.toFormat('dd/LL/yyyy HH:mm') }}</td>
+              <td>{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</td>
               <td><strong>{{ event.title }}</strong></td>
               <td>{{ event.status }}</td>
               <td>
-                <a class="admin-btn" href="/admin/events/{{ event.id }}/edit">Editar</a>
-                <form method="POST" action="/admin/events/{{ event.id }}/delete" style="display:inline" onsubmit="return confirm('Excluir este evento?')">
-                  {{ csrfField() }}
-                  <button class="admin-btn admin-btn--danger" type="submit">Excluir</button>
-                </form>
+                <div class="admin-actions">
+                  <a class="admin-action admin-action--edit" href="/admin/events/{{ event.id }}/edit" title="Editar evento">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+                    Editar
+                  </a>
+                  <form method="POST" action="/admin/events/{{ event.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este evento?')">
+                    {{ csrfField() }}
+                    <button class="admin-action admin-action--delete" type="submit" title="Excluir evento">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                      Excluir
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           @else
