@@ -1,5 +1,5 @@
 @layout()
-  <section class="page-hero">
+  <section class="page-hero agenda-hero">
     <div class="site-container">
       <p class="eyebrow">Programação</p>
       <h1>Agenda</h1>
@@ -7,51 +7,107 @@
     </div>
   </section>
 
-  <section class="site-section site-section--soft">
+  <section class="agenda-section">
     <div class="site-container">
-      <div class="event-list">
+      <div class="agenda-list">
         @each(event in events)
-          <article class="event-row">
+          <article class="agenda-card">
             @if(event.imagePath)
-              <div class="event-row__image">
+              <div class="agenda-card__media">
                 <img src="{{ event.imagePath }}" alt="Imagem do evento {{ event.title }}">
               </div>
             @end
 
-            <div class="event-date">
-              <strong>{{ event.startsAt.toFormat('dd/LL') }}</strong>
-              <span>{{ event.startsAt.toFormat('HH:mm') }}</span>
+            <div class="agenda-card__date" aria-label="Data do evento">
+              <div class="agenda-calendar-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 2v3M17 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
+                </svg>
+              </div>
+              <strong>{{ event.startsAt.toFormat('dd') }}</strong>
+              <span>{{ event.startsAt.setLocale('pt-BR').toFormat('LLL') }}</span>
+              <small>{{ event.startsAt.toFormat('yyyy') }}</small>
             </div>
 
-            <div>
+            <div class="agenda-card__content">
+              <div class="agenda-card__topline">
+                <p class="agenda-card__category">{{ event.category ?? 'Atividade pública' }}</p>
+                <span class="agenda-status agenda-status--{{ event.status }}">
+                  @if(event.status === 'scheduled')
+                    Agendado
+                  @elseif(event.status === 'confirmed')
+                    Confirmado
+                  @elseif(event.status === 'postponed')
+                    Adiado
+                  @elseif(event.status === 'cancelled')
+                    Cancelado
+                  @else
+                    Concluído
+                  @end
+                </span>
+              </div>
+
               <h2>{{ event.title }}</h2>
-              <p>{{ event.category ?? 'Atividade pública' }}{{ event.location ? ' · ' + event.location : '' }}</p>
+
+              <div class="agenda-card__facts">
+                <div class="agenda-fact">
+                  <span class="agenda-fact__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                  </span>
+                  <div>
+                    <small>Horário</small>
+                    <strong>{{ event.startsAt.toFormat('HH:mm') }}@if(event.endsAt) – {{ event.endsAt.toFormat('HH:mm') }}@end</strong>
+                  </div>
+                </div>
+
+                @if(event.location)
+                  <div class="agenda-fact">
+                    <span class="agenda-fact__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                    </span>
+                    <div>
+                      <small>Local</small>
+                      <strong>{{ event.location }}</strong>
+                    </div>
+                  </div>
+                @end
+
+                <div class="agenda-fact">
+                  <span class="agenda-fact__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 12.5 9.2 17 19 7"/><circle cx="12" cy="12" r="10"/></svg>
+                  </span>
+                  <div>
+                    <small>Situação</small>
+                    <strong>
+                      @if(event.status === 'scheduled')
+                        Programado
+                      @elseif(event.status === 'confirmed')
+                        Confirmado
+                      @elseif(event.status === 'postponed')
+                        Nova data será informada
+                      @elseif(event.status === 'cancelled')
+                        Evento cancelado
+                      @else
+                        Atividade concluída
+                      @end
+                    </strong>
+                  </div>
+                </div>
+              </div>
 
               @if(event.description)
-                <p>{{ event.description }}</p>
-              @end
-
-              @if(event.endsAt)
-                <p class="meta">Término: {{ event.endsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+                <p class="agenda-card__description">{{ event.description }}</p>
               @end
             </div>
-
-            <span class="badge">
-              @if(event.status === 'scheduled')
-                Agendado
-              @elseif(event.status === 'confirmed')
-                Confirmado
-              @elseif(event.status === 'postponed')
-                Adiado
-              @elseif(event.status === 'cancelled')
-                Cancelado
-              @else
-                Concluído
-              @end
-            </span>
           </article>
         @else
-          <div class="empty-state">Nenhuma atividade pública agendada no momento.</div>
+          <div class="agenda-empty">
+            <span class="agenda-empty__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 2v3M17 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m9 15 2 2 4-4"/></svg>
+            </span>
+            <h2>Nenhuma atividade agendada</h2>
+            <p>Quando uma nova atividade pública for confirmada, ela aparecerá aqui.</p>
+          </div>
         @end
       </div>
     </div>
