@@ -1,36 +1,53 @@
 @layout()
-  <section class="page-hero">
+  <section class="page-hero documents-hero">
     <div class="site-container">
       <p class="eyebrow">Transparência</p>
       <h1>Documentos públicos</h1>
-      <p>Estatuto, regimento, atas, editais, relatórios e demais documentos disponibilizados pelo Terreiro.</p>
+      <p>Consulte estatutos, regimentos, atas, editais, relatórios e demais documentos institucionais disponibilizados pelo Terreiro.</p>
     </div>
   </section>
 
-  <section class="site-section site-section--soft">
+  <section class="documents-section">
     <div class="site-container">
-      <div class="document-list">
+      <div class="documents-grid">
         @each(document in documents)
-          <article class="document-row">
-            <div>
-              <div class="document-meta">
-                {{ document.category ?? 'Documento' }}
+          <article class="document-card">
+            <div class="document-card__icon" aria-hidden="true">
+              <span>PDF</span>
+              <svg viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg>
+            </div>
+
+            <div class="document-card__body">
+              <div class="document-card__meta">
+                <span>{{ document.category ?? 'Documento institucional' }}</span>
                 @if(document.version)
-                  · Versão {{ document.version }}
+                  <span>Versão {{ document.version }}</span>
                 @end
                 @if(document.documentDate)
-                  · {{ document.documentDate.toFormat('dd/LL/yyyy') }}
+                  <span>{{ document.documentDate.toFormat('dd/LL/yyyy') }}</span>
                 @end
               </div>
+
               <h2>{{ document.title }}</h2>
+
               @if(document.description)
                 <p>{{ document.description }}</p>
               @end
+
+              <div class="document-card__footer">
+                <a href="{{ document.filePath }}" target="_blank" rel="noopener" class="document-open-btn">
+                  <svg viewBox="0 0 24 24"><path d="M12 5v10M8 11l4 4 4-4M5 19h14"/></svg>
+                  Abrir PDF
+                </a>
+              </div>
             </div>
-            <a href="{{ document.filePath }}" target="_blank" rel="noopener" class="btn btn--green">Abrir PDF</a>
           </article>
         @else
-          <div class="empty-state">Nenhum documento público disponível no momento.</div>
+          <div class="documents-empty">
+            <svg viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg>
+            <h2>Nenhum documento disponível</h2>
+            <p>Os documentos públicos do Terreiro aparecerão aqui quando forem publicados.</p>
+          </div>
         @end
       </div>
     </div>
