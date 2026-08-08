@@ -1,29 +1,74 @@
 @layout()
-  <section class="mx-auto max-w-3xl px-6 py-12">
-    <div class="mb-8">
-      <a href="/admin/documents" class="text-sm text-slate-600 underline">← Voltar</a>
-      <h1 class="mt-4 text-4xl font-bold">{{ document ? 'Editar documento' : 'Novo documento' }}</h1>
+  <section class="document-admin-shell">
+    <div class="document-admin-head">
+      <div>
+        <p class="eyebrow">Administração</p>
+        <h1>{{ document ? 'Editar documento' : 'Novo documento' }}</h1>
+        <p>Publique estatutos, atas, editais, relatórios e outros arquivos institucionais em PDF.</p>
+      </div>
+      <a href="/admin/documents" class="admin-action admin-action--view">← Voltar</a>
     </div>
 
     @if(flashMessages.has('error'))
-      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+      <div class="document-alert document-alert--error">{{ flashMessages.get('error') }}</div>
     @end
 
-    <form method="POST" enctype="multipart/form-data" action="{{ document ? '/admin/documents/' + document.id : '/admin/documents' }}" class="space-y-6">
+    <form method="POST" enctype="multipart/form-data" action="{{ document ? '/admin/documents/' + document.id : '/admin/documents' }}" class="document-form-card">
       {{ csrfField() }}
-      <label class="block"><span class="mb-2 block font-semibold">Título</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="title" required value="{{ document?.title ?? '' }}"></label>
-      <div class="grid gap-6 md:grid-cols-2">
-        <label class="block"><span class="mb-2 block font-semibold">Categoria</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="category" placeholder="Estatuto, Ata, Edital..." value="{{ document?.category ?? '' }}"></label>
-        <label class="block"><span class="mb-2 block font-semibold">Versão</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" name="version" value="{{ document?.version ?? '' }}"></label>
+
+      <div class="document-form-section">
+        <div class="document-form-section__title">
+          <span class="document-form-icon">
+            <svg viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg>
+          </span>
+          <div><h2>Identificação</h2><p>Informações que aparecerão na página pública de documentos.</p></div>
+        </div>
+
+        <label><span>Título do documento</span><input name="title" required value="{{ document?.title ?? '' }}" placeholder="Ex.: Estatuto Social"></label>
+
+        <div class="document-form-grid">
+          <label><span>Categoria</span><input name="category" placeholder="Estatuto, Ata, Edital..." value="{{ document?.category ?? '' }}"></label>
+          <label><span>Versão</span><input name="version" placeholder="Ex.: 7.0" value="{{ document?.version ?? '' }}"></label>
+          <label><span>Data do documento</span><input type="date" name="documentDate" value="{{ document?.documentDate ? document.documentDate.toISODate() : '' }}"></label>
+        </div>
+
+        <label><span>Descrição</span><textarea name="description" rows="5" placeholder="Breve descrição sobre o conteúdo e finalidade deste documento.">{{ document?.description ?? '' }}</textarea></label>
       </div>
-      <label class="block"><span class="mb-2 block font-semibold">Data do documento</span><input class="rounded-lg border border-slate-300 px-3 py-2" type="date" name="documentDate" value="{{ document?.documentDate ? document.documentDate.toISODate() : '' }}"></label>
-      <label class="block"><span class="mb-2 block font-semibold">Descrição</span><textarea class="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2" name="description">{{ document?.description ?? '' }}</textarea></label>
-      <label class="block"><span class="mb-2 block font-semibold">Arquivo PDF {{ document ? '(opcional para manter o atual)' : '' }}</span><input class="w-full rounded-lg border border-slate-300 px-3 py-2" type="file" name="file" accept="application/pdf" {{ document ? '' : 'required' }}></label>
-      @if(document?.filePath)
-        <p class="text-sm"><a href="{{ document.filePath }}" target="_blank" class="text-emerald-800 underline">Abrir PDF atual</a></p>
-      @end
-      <label class="flex items-center gap-3"><input type="hidden" name="isPublic" value="false"><input type="checkbox" name="isPublic" value="true" {{ document ? (document.isPublic ? 'checked' : '') : 'checked' }}><span>Disponível publicamente</span></label>
-      <button class="rounded-lg bg-emerald-800 px-5 py-3 font-semibold text-white" type="submit">Salvar documento</button>
+
+      <div class="document-form-section">
+        <div class="document-form-section__title">
+          <span class="document-form-icon document-form-icon--gold">
+            <svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1 0-8h1a6 6 0 0 1 11.3 2.7A3.7 3.7 0 0 1 18 20H8"/><path d="m12 11 3 3-3 3M15 14H9"/></svg>
+          </span>
+          <div><h2>Arquivo PDF</h2><p>{{ document ? 'Envie um novo arquivo somente se desejar substituir o atual.' : 'O PDF é obrigatório para o cadastro inicial.' }}</p></div>
+        </div>
+
+        @if(document?.filePath)
+          <div class="document-current-file">
+            <span class="document-pdf-badge">PDF</span>
+            <div><strong>Arquivo atual</strong><a href="{{ document.filePath }}" target="_blank" rel="noopener">Visualizar documento</a></div>
+          </div>
+        @end
+
+        <label class="document-file-field"><span>{{ document ? 'Substituir arquivo PDF' : 'Selecionar arquivo PDF' }}</span><input type="file" name="file" accept="application/pdf" {{ document ? '' : 'required' }}><small>Somente PDF, até 20 MB.</small></label>
+      </div>
+
+      <div class="document-publish-box">
+        <input type="hidden" name="isPublic" value="false">
+        <label class="document-switch">
+          <input type="checkbox" name="isPublic" value="true" {{ document ? (document.isPublic ? 'checked' : '') : 'checked' }}>
+          <span class="document-switch__control"></span>
+          <span><strong>Publicar no portal</strong><small>Quando ativo, o documento ficará disponível em Documentos Públicos.</small></span>
+        </label>
+      </div>
+
+      <div class="document-form-actions">
+        <a href="/admin/documents" class="admin-action admin-action--view">Cancelar</a>
+        <button class="admin-action admin-action--primary" type="submit">
+          <svg viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7"/></svg>
+          Salvar documento
+        </button>
+      </div>
     </form>
   </section>
 @end
