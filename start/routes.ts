@@ -84,6 +84,7 @@ router
     router.get('/admin/albums/:id/edit', [AlbumsController, 'edit']).as('admin.albums.edit')
     router.post('/admin/albums/:id', [AlbumsController, 'update']).as('admin.albums.update')
     router.post('/admin/albums/:id/photos', [AlbumsController, 'upload']).as('admin.albums.photos.upload')
+    router.post('/admin/albums/:id/photos/publish-all', [AlbumsController, 'publishAllPhotos']).as('admin.albums.photos.publish_all')
     router.post('/admin/albums/:id/photos/:photoId', [AlbumsController, 'updatePhoto']).as('admin.albums.photos.update')
     router.post('/admin/albums/:id/photos/:photoId/delete', [AlbumsController, 'deletePhoto']).as('admin.albums.photos.destroy')
     router.post('/admin/albums/:id/delete', [AlbumsController, 'destroy']).as('admin.albums.destroy')
