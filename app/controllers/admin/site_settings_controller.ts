@@ -1,4 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+import { unlink } from 'node:fs/promises'
 import SiteSetting from '#models/site_setting'
 import { siteSettingValidator } from '#validators/site_setting'
 
@@ -20,6 +22,9 @@ const defaults = {
   trajectoryVisible: true,
   trajectoryButtonText: 'Conheça nossa história',
   trajectoryButtonUrl: '/o-terreiro',
+  contributionVisible: false,
+  contributionTitle: 'Contribua com a casa',
+  contributionText: 'Sua contribuição voluntária auxilia na manutenção das atividades religiosas, sociais e comunitárias do Terreiro.',
 }
 
 export default class SiteSettingsController {
@@ -39,6 +44,36 @@ export default class SiteSettingsController {
   async update({ request, response, session }: HttpContext) {
     const settings = await this.getSettings()
     const payload = await request.validateUsing(siteSettingValidator)
+    const qrCode = request.file('pixQrCode', {
+      size: '5mb',
+      extnames: ['png', 'jpg', 'jpeg', 'webp'],
+    })
+
+    let pixQrCodePath = settings.pixQrCodePath
+
+    if (qrCode) {
+      if (!qrCode.isValid) {
+        session.flash('error', 'O QR Code deve ser uma imagem PNG, JPG ou WebP de até 5 MB.')
+        return response.redirect().back()
+      }
+
+      const safeName = `${Date.now()}-${qrCode.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+      await qrCode.move(app.makePath('public/uploads/site'), { name: safeName })
+      const newPath = `/uploads/site/${safeName}`
+
+      if (settings.pixQrCodePath?.startsWith('/uploads/site/')) {
+        await unlink(app.makePath('public', settings.pixQrCodePath.replace(/^\//, ''))).catch(() => undefined)
+      }
+
+      pixQrCodePath = newPath
+    }
+
+    if (request.input('removePixQrCode') === 'true' && pixQrCodePath) {
+      if (pixQrCodePath.startsWith('/uploads/site/')) {
+        await unlink(app.makePath('public', pixQrCodePath.replace(/^\//, ''))).catch(() => undefined)
+      }
+      pixQrCodePath = null
+    }
 
     settings.merge({
       siteName: payload.siteName,
@@ -70,6 +105,12 @@ export default class SiteSettingsController {
       trajectoryVisible: payload.trajectoryVisible ?? false,
       trajectoryButtonText: payload.trajectoryButtonText ?? defaults.trajectoryButtonText,
       trajectoryButtonUrl: payload.trajectoryButtonUrl ?? defaults.trajectoryButtonUrl,
+      contributionVisible: payload.contributionVisible ?? false,
+      contributionTitle: payload.contributionTitle ?? defaults.contributionTitle,
+      contributionText: payload.contributionText ?? defaults.contributionText,
+      pixKey: payload.pixKey ?? null,
+      pixBeneficiary: payload.pixBeneficiary ?? null,
+      pixQrCodePath,
     })
     await settings.save()
 
