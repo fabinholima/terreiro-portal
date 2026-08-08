@@ -1,9 +1,9 @@
 @layout()
-  <section class="mx-auto max-w-6xl px-6 py-12">
-    <div class="mb-8 flex items-center justify-between gap-4">
+  <section class="document-admin-list">
+    <div class="document-admin-toolbar">
       <div>
-        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Administração</p>
-        <h1 class="mt-2 text-4xl font-bold">Documentos</h1>
+        <p class="eyebrow">Administração</p>
+        <h1>Documentos</h1>
       </div>
       <a href="/admin/documents/create" class="admin-action admin-action--primary">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -11,47 +11,57 @@
       </a>
     </div>
 
+    @if(flashMessages.has('success'))
+      <div class="document-alert document-alert--success">{{ flashMessages.get('success') }}</div>
+    @end
     @if(flashMessages.has('error'))
-      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+      <div class="document-alert document-alert--error">{{ flashMessages.get('error') }}</div>
     @end
 
-    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-      <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-50">
-          <tr><th class="px-4 py-3 text-left">Título</th><th class="px-4 py-3 text-left">Categoria</th><th class="px-4 py-3 text-left">Data</th><th class="px-4 py-3 text-left">Visibilidade</th><th class="px-4 py-3 text-right">Ações</th></tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          @each(document in documents)
-            <tr>
-              <td class="px-4 py-3 font-semibold">{{ document.title }}</td>
-              <td class="px-4 py-3">{{ document.category ?? '—' }}</td>
-              <td class="px-4 py-3">{{ document.documentDate ? document.documentDate.toFormat('dd/LL/yyyy') : '—' }}</td>
-              <td class="px-4 py-3">{{ document.isPublic ? 'Público' : 'Privado' }}</td>
-              <td class="px-4 py-3 text-right">
-                <div class="admin-actions admin-actions--end">
-                  <a href="{{ document.filePath }}" target="_blank" class="admin-action admin-action--view" title="Visualizar documento">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
-                    Visualizar
-                  </a>
-                  <a href="/admin/documents/{{ document.id }}/edit" class="admin-action admin-action--edit" title="Editar documento">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
-                    Editar
-                  </a>
-                  <form method="POST" action="/admin/documents/{{ document.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este documento?')">
-                    {{ csrfField() }}
-                    <button class="admin-action admin-action--delete" type="submit" title="Excluir documento">
-                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
-                      Excluir
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-          @else
-            <tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">Nenhum documento cadastrado.</td></tr>
-          @end
-        </tbody>
-      </table>
+    <div class="document-admin-cards">
+      @each(document in documents)
+        <article class="document-admin-card">
+          <div class="document-admin-card__icon">PDF</div>
+
+          <div>
+            <h2>{{ document.title }}</h2>
+            <div class="document-admin-card__meta">
+              <span>{{ document.category ?? 'Sem categoria' }}</span>
+              @if(document.version)
+                <span>· Versão {{ document.version }}</span>
+              @end
+              @if(document.documentDate)
+                <span>· {{ document.documentDate.toFormat('dd/LL/yyyy') }}</span>
+              @end
+              <span class="document-visibility {{ document.isPublic ? 'document-visibility--public' : 'document-visibility--private' }}">{{ document.isPublic ? 'Público' : 'Privado' }}</span>
+            </div>
+          </div>
+
+          <div class="admin-actions admin-actions--end">
+            <a href="{{ document.filePath }}" target="_blank" rel="noopener" class="admin-action admin-action--view" title="Visualizar documento">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              Visualizar
+            </a>
+            <a href="/admin/documents/{{ document.id }}/edit" class="admin-action admin-action--edit" title="Editar documento">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+              Editar
+            </a>
+            <form method="POST" action="/admin/documents/{{ document.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este documento?')">
+              {{ csrfField() }}
+              <button class="admin-action admin-action--delete" type="submit" title="Excluir documento">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                Excluir
+              </button>
+            </form>
+          </div>
+        </article>
+      @else
+        <div class="documents-empty">
+          <svg viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg>
+          <h2>Nenhum documento cadastrado</h2>
+          <p>Use o botão “Novo documento” para publicar o primeiro arquivo.</p>
+        </div>
+      @end
     </div>
   </section>
 @end
