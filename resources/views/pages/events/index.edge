@@ -56,7 +56,12 @@
                   </span>
                   <div>
                     <small>Horário</small>
-                    <strong>{{ event.startsAt.toFormat('HH:mm') }}@if(event.endsAt) – {{ event.endsAt.toFormat('HH:mm') }}@end</strong>
+                    <strong>
+                      {{ event.startsAt.toFormat('HH:mm') }}
+                      @if(event.endsAt)
+                        – {{ event.endsAt.toFormat('HH:mm') }}
+                      @end
+                    </strong>
                   </div>
                 </div>
 
