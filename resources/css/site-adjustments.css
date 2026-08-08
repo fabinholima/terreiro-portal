@@ -88,9 +88,13 @@
 .slim-footer__nav a{font-size:.88rem;color:#eef3ef}
 .slim-footer__nav a:hover{color:#e4b84e}
 .slim-footer__nav span{color:#d6a23c;font-size:.7rem}
-.slim-footer__social{display:flex;gap:9px;justify-content:flex-end}
-.slim-footer__social a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid #d6a23c;color:#e4b84e;font-size:.65rem;font-weight:800}
-.slim-footer__social a:hover{background:#d6a23c;color:#08351f}
+.slim-footer__social{display:flex;gap:10px;justify-content:flex-end;align-items:center}
+.slim-footer__social a{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(214,162,60,.72);color:#e4b84e;background:rgba(255,255,255,.025);transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease,border-color .2s ease}
+.slim-footer__social a svg{width:19px;height:19px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.slim-footer__social a:first-child svg{fill:currentColor;stroke:none}
+.slim-footer__social .social-icon-fill{fill:currentColor;stroke:none}
+.slim-footer__social a:hover{background:#d6a23c;color:#08351f;border-color:#e4b84e;transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.slim-footer__social a:focus-visible{outline:2px solid #f2cf79;outline-offset:3px}
 .site-footer--slim .site-footer__bottom{border-top:1px solid rgba(214,162,60,.5)}
 .slim-footer__bottom{padding:6px 0;text-align:center;color:#e5ebe6;font-size:.7rem}
 
