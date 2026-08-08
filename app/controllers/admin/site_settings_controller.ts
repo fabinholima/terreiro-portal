@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import { unlink } from 'node:fs/promises'
+import { mkdir, unlink } from 'node:fs/promises'
 import SiteSetting from '#models/site_setting'
 import { siteSettingValidator } from '#validators/site_setting'
 
@@ -57,8 +57,10 @@ export default class SiteSettingsController {
         return response.redirect().back()
       }
 
+      const uploadDir = app.makePath('public/uploads/site')
+      await mkdir(uploadDir, { recursive: true })
       const safeName = `${Date.now()}-${qrCode.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
-      await qrCode.move(app.makePath('public/uploads/site'), { name: safeName })
+      await qrCode.move(uploadDir, { name: safeName })
       const newPath = `/uploads/site/${safeName}`
 
       if (settings.pixQrCodePath?.startsWith('/uploads/site/')) {
