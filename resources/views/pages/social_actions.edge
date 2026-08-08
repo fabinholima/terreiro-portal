@@ -12,9 +12,29 @@
       <div class="card-grid">
         @each(action in actions)
           <article class="card">
+            @if(action.imagePath)
+              <img class="card__media" src="{{ action.imagePath }}" alt="Imagem da ação {{ action.title }}">
+            @end
             <div class="card__body">
-              <p class="card__meta">{{ action.status }}{{ action.startsAt ? ' · ' + action.startsAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <p class="card__meta">
+                @if(action.status === 'planned')
+                  Planejada
+                @elseif(action.status === 'active')
+                  Em andamento
+                @elseif(action.status === 'completed')
+                  Concluída
+                @elseif(action.status === 'permanent')
+                  Permanente
+                @else
+                  Cancelada
+                @end
+                @if(action.startsAt)
+                  · {{ action.startsAt.toFormat('dd/LL/yyyy') }}
+                @end
+              </p>
+
               <h3>{{ action.title }}</h3>
+
               @if(action.description)
                 <p>{{ action.description }}</p>
               @end
