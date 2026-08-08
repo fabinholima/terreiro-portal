@@ -38,7 +38,7 @@
   @if(request.url().startsWith('/admin'))
     <body class="admin-body" x-data="{ adminMenuOpen: false }">
       <div class="admin-shell">
-        <aside class="admin-sidebar" :class="adminMenuOpen ? 'is-open' : ''">
+        <aside class="admin-sidebar" :class="adminMenuOpen ? 'is-open' : ''>
           <a class="admin-brand" href="/admin">
             <img src="/images/logo-terreiro.png" alt="">
             <span>
@@ -137,18 +137,26 @@
             <a href="/">Início</a><span>•</span><a href="/o-terreiro">O Terreiro</a><span>•</span><a href="/agenda">Agenda</a><span>•</span><a href="/documentos">Documentos</a><span>•</span><a href="/contato">Contato</a>
           </nav>
 
-          <div class="slim-footer__social">
+          <div class="slim-footer__social" aria-label="Redes sociais">
             @if(siteSettings.whatsapp)
-              <a href="https://wa.me/{{ siteSettings.whatsapp }}" aria-label="WhatsApp">WA</a>
+              <a href="https://wa.me/{{ siteSettings.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.2-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.7.1-.2.1-.4 0-.6l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg>
+              </a>
             @end
             @if(siteSettings.instagramUrl)
-              <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+              <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.7" r="1" class="social-icon-fill"/></svg>
+              </a>
             @end
             @if(siteSettings.facebookUrl)
-              <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+              <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H8V13h2.8v8h3.4Z" class="social-icon-fill"/></svg>
+              </a>
             @end
             @if(siteSettings.youtubeUrl)
-              <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+              <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7.2a2.8 2.8 0 0 0-2-2C17.3 4.7 12 4.7 12 4.7s-5.3 0-7 .5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.5 12 29 29 0 0 0 3 16.8a2.8 2.8 0 0 0 2 2c1.7.5 7 .5 7 .5s5.3 0 7-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-4.8 29 29 0 0 0-.5-4.8Z"/><path d="m10 15.2 5-3.2-5-3.2v6.4Z" class="social-icon-fill"/></svg>
+              </a>
             @end
           </div>
         </div>
