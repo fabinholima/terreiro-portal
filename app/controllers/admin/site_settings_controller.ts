@@ -15,24 +15,24 @@ const defaults = {
 const menuDefs = [
   ['about','O Terreiro','/o-terreiro'],['events','Agenda','/agenda'],['gallery','Galeria','/galeria'],['posts','Notícias','/noticias'],['social','Ações sociais','/acoes-sociais'],['documents','Documentos','/documentos'],['contact','Contato','/contato'],
 ] as const
+const adminMenuDefs = [
+  ['events','Agenda','/admin/events'],['posts','Notícias','/admin/posts'],['albums','Galeria','/admin/albums'],['social','Ações sociais','/admin/social-actions'],['documents','Documentos','/admin/documents'],['pages','Páginas institucionais','/admin/institutional-pages'],
+] as const
 const defaultMenu = menuDefs.map(([key,label,href],index)=>({ key,label,href,visible:true,order:index+1 }))
+const defaultAdminMenu = adminMenuDefs.map(([key,label,href],index)=>({ key,label,href,visible:true,order:index+1 }))
 const fontOptions = ['Georgia','Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville','Arial','system-ui']
 const allowedFonts = new Set(fontOptions)
 
 export default class SiteSettingsController {
   private async getSettings() { let settings=await SiteSetting.first(); if(!settings) settings=await SiteSetting.create(defaults); return settings }
-  private getMenu(settings: SiteSetting) {
-    if (!settings.publicMenuConfig) return defaultMenu
-    try { const parsed=JSON.parse(settings.publicMenuConfig); return Array.isArray(parsed) ? parsed : defaultMenu } catch { return defaultMenu }
-  }
+  private parseMenu(raw: string | null | undefined, fallback: any[]) { if(!raw) return fallback; try{const parsed=JSON.parse(raw);return Array.isArray(parsed)?parsed:fallback}catch{return fallback} }
   async edit({ view }: HttpContext) {
     const settings=await this.getSettings()
     return view.render('admin/site_settings/form',{
       settings,
-      menuItems:this.getMenu(settings).sort((a:any,b:any)=>(a.order??0)-(b.order??0)),
-      fontOptions,
-      fontSizes:[14,15,16,17,18,19,20],
-      headingWeights:[400,500,600,700,800],
+      menuItems:this.parseMenu(settings.publicMenuConfig,defaultMenu).sort((a:any,b:any)=>(a.order??0)-(b.order??0)),
+      adminMenuItems:this.parseMenu(settings.adminMenuConfig,defaultAdminMenu).sort((a:any,b:any)=>(a.order??0)-(b.order??0)),
+      fontOptions,fontSizes:[14,15,16,17,18,19,20],headingWeights:[400,500,600,700,800],
     })
   }
 
@@ -43,8 +43,9 @@ export default class SiteSettingsController {
     if(request.input('removePixQrCode')==='true'&&pixQrCodePath){if(pixQrCodePath.startsWith('/uploads/site/'))await unlink(app.makePath('public',pixQrCodePath.replace(/^\//,''))).catch(()=>undefined);pixQrCodePath=null}
 
     const menu=menuDefs.map(([key,label,href],index)=>({key,href,label:String(request.input(`menu_${key}_label`)||label).slice(0,40),visible:request.input(`menu_${key}_visible`)==='true',order:Number(request.input(`menu_${key}_order`)||index+1)})).sort((a,b)=>a.order-b.order)
+    const adminMenu=adminMenuDefs.map(([key,label,href],index)=>({key,href,label:String(request.input(`admin_menu_${key}_label`)||label).slice(0,40),visible:request.input(`admin_menu_${key}_visible`)==='true',order:Number(request.input(`admin_menu_${key}_order`)||index+1)})).sort((a,b)=>a.order-b.order)
     const fontHeading=allowedFonts.has(payload.fontHeading||'')?payload.fontHeading!:defaults.fontHeading; const fontBody=allowedFonts.has(payload.fontBody||'')?payload.fontBody!:defaults.fontBody; const fontUi=allowedFonts.has(payload.fontUi||'')?payload.fontUi!:defaults.fontUi
-    settings.merge({siteName:payload.siteName,siteSubtitle:payload.siteSubtitle??null,address:payload.address??null,city:payload.city??null,state:payload.state?.toUpperCase()??null,postalCode:payload.postalCode??null,phone:payload.phone??null,whatsapp:payload.whatsapp??null,email:payload.email??null,instagramUrl:payload.instagramUrl??null,facebookUrl:payload.facebookUrl??null,youtubeUrl:payload.youtubeUrl??null,mapsUrl:payload.mapsUrl??null,openingHours:payload.openingHours??null,footerText:payload.footerText??null,homeEyebrow:payload.homeEyebrow??defaults.homeEyebrow,homeTitle:payload.homeTitle??defaults.homeTitle,homeSummary:payload.homeSummary??defaults.homeSummary,missionTitle:payload.missionTitle??defaults.missionTitle,missionText:payload.missionText??defaults.missionText,missionVisible:payload.missionVisible??false,valuesTitle:payload.valuesTitle??defaults.valuesTitle,valuesText:payload.valuesText??defaults.valuesText,valuesVisible:payload.valuesVisible??false,trajectoryTitle:payload.trajectoryTitle??defaults.trajectoryTitle,trajectoryText:payload.trajectoryText??defaults.trajectoryText,trajectoryVisible:payload.trajectoryVisible??false,trajectoryButtonText:payload.trajectoryButtonText??defaults.trajectoryButtonText,trajectoryButtonUrl:payload.trajectoryButtonUrl??defaults.trajectoryButtonUrl,contributionVisible:payload.contributionVisible??false,contributionTitle:payload.contributionTitle??defaults.contributionTitle,contributionText:payload.contributionText??defaults.contributionText,pixKey:payload.pixKey??null,pixBeneficiary:payload.pixBeneficiary??null,pixQrCodePath,themePrimary:payload.themePrimary??defaults.themePrimary,themeDark:payload.themeDark??defaults.themeDark,themeAccent:payload.themeAccent??defaults.themeAccent,themeBackground:payload.themeBackground??defaults.themeBackground,themeText:payload.themeText??defaults.themeText,fontHeading,fontBody,fontUi,fontSizeBase:payload.fontSizeBase??16,headingWeight:payload.headingWeight??600,publicMenuConfig:JSON.stringify(menu)})
+    settings.merge({siteName:payload.siteName,siteSubtitle:payload.siteSubtitle??null,address:payload.address??null,city:payload.city??null,state:payload.state?.toUpperCase()??null,postalCode:payload.postalCode??null,phone:payload.phone??null,whatsapp:payload.whatsapp??null,email:payload.email??null,instagramUrl:payload.instagramUrl??null,facebookUrl:payload.facebookUrl??null,youtubeUrl:payload.youtubeUrl??null,mapsUrl:payload.mapsUrl??null,openingHours:payload.openingHours??null,footerText:payload.footerText??null,homeEyebrow:payload.homeEyebrow??defaults.homeEyebrow,homeTitle:payload.homeTitle??defaults.homeTitle,homeSummary:payload.homeSummary??defaults.homeSummary,missionTitle:payload.missionTitle??defaults.missionTitle,missionText:payload.missionText??defaults.missionText,missionVisible:payload.missionVisible??false,valuesTitle:payload.valuesTitle??defaults.valuesTitle,valuesText:payload.valuesText??defaults.valuesText,valuesVisible:payload.valuesVisible??false,trajectoryTitle:payload.trajectoryTitle??defaults.trajectoryTitle,trajectoryText:payload.trajectoryText??defaults.trajectoryText,trajectoryVisible:payload.trajectoryVisible??false,trajectoryButtonText:payload.trajectoryButtonText??defaults.trajectoryButtonText,trajectoryButtonUrl:payload.trajectoryButtonUrl??defaults.trajectoryButtonUrl,contributionVisible:payload.contributionVisible??false,contributionTitle:payload.contributionTitle??defaults.contributionTitle,contributionText:payload.contributionText??defaults.contributionText,pixKey:payload.pixKey??null,pixBeneficiary:payload.pixBeneficiary??null,pixQrCodePath,themePrimary:payload.themePrimary??defaults.themePrimary,themeDark:payload.themeDark??defaults.themeDark,themeAccent:payload.themeAccent??defaults.themeAccent,themeBackground:payload.themeBackground??defaults.themeBackground,themeText:payload.themeText??defaults.themeText,fontHeading,fontBody,fontUi,fontSizeBase:payload.fontSizeBase??16,headingWeight:payload.headingWeight??600,publicMenuConfig:JSON.stringify(menu),adminMenuConfig:JSON.stringify(adminMenu)})
     await settings.save();session.flash('success','Configurações atualizadas com sucesso.');return response.redirect('/admin/site-settings')
   }
 }
