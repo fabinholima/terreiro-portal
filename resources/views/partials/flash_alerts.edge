@@ -1,3 +1,35 @@
+<style>
+  :root {
+    --theme-primary: {{ siteSettings.themePrimary ?? '#1E4620' }};
+    --theme-dark: {{ siteSettings.themeDark ?? '#08351F' }};
+    --theme-accent: {{ siteSettings.themeAccent ?? '#D6A23C' }};
+    --theme-background: {{ siteSettings.themeBackground ?? '#FFFDF9' }};
+    --theme-text: {{ siteSettings.themeText ?? '#223028' }};
+    --forest-950: var(--theme-dark);
+    --forest-900: var(--theme-dark);
+    --forest-850: var(--theme-primary);
+    --forest-800: var(--theme-primary);
+    --forest-700: var(--theme-primary);
+    --green: var(--theme-primary);
+    --gold: var(--theme-accent);
+    --gold-soft: var(--theme-accent);
+    --paper: var(--theme-background);
+    --ink: var(--theme-text);
+    --serif: "{{ siteSettings.fontHeading ?? 'Georgia' }}", Georgia, serif;
+    --sans: "{{ siteSettings.fontBody ?? 'Inter' }}", Inter, system-ui, sans-serif;
+    --font-ui: "{{ siteSettings.fontUi ?? 'Inter' }}", Inter, system-ui, sans-serif;
+  }
+  html { font-size: {{ siteSettings.fontSizeBase ?? 16 }}px; }
+  body { background: var(--theme-background); color: var(--theme-text); font-family: var(--sans); }
+  button,input,textarea,select,.site-nav,.mobile-nav,.admin-body,.admin-nav,.admin-topbar { font-family: var(--font-ui); }
+  h1,h2,h3,h4,h5,h6,.section-title,.site-brand__name,.institutional-hero__title { font-family: var(--serif); font-weight: {{ siteSettings.headingWeight ?? 600 }}; }
+  .site-header,.site-footer--slim { background: linear-gradient(90deg,var(--theme-dark) 0%,var(--theme-primary) 56%,var(--theme-dark) 100%) !important; }
+  .admin-sidebar { background: linear-gradient(180deg,var(--theme-dark),var(--theme-primary)) !important; }
+  .admin-nav a.is-active,.admin-nav a:hover { border-color: var(--theme-accent) !important; }
+  .admin-avatar,.admin-action--primary { background: var(--theme-primary) !important; }
+  .eyebrow,.site-brand__kicker,.site-brand__eyebrow,.slim-footer__brand small { color: var(--theme-accent) !important; }
+</style>
+
 <div class="flash-container">
   @if(flashMessages.has('error'))
     @alert.root({ variant: 'destructive', autoDismiss: true })
