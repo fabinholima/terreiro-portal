@@ -99,7 +99,7 @@
             </div>
 
             @if(page.body)
-              <p class="contact-instructions__text">{{ page.body }}</p>
+              <div class="contact-instructions__rich">{{{ page.body }}}</div>
             @else
               <div class="contact-instructions__list">
                 <div><strong>1</strong><span>Consulte a Agenda antes de se deslocar para confirmar datas e horários das atividades públicas.</span></div>
@@ -196,7 +196,7 @@
     </section>
 
     <section class="article-shell">
-      <div class="page-content__body">{{ page.body }}</div>
+      <div class="page-content__body">{{{ page.body }}}</div>
     </section>
   @end
 @end
