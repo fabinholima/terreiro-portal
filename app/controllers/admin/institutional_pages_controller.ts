@@ -41,6 +41,15 @@ const defaults = [
   },
 ]
 
+function sanitizeRichText(html: string) {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/\son\w+\s*=\s*(["']).*?\1/gi, '')
+    .replace(/\son\w+\s*=\s*[^\s>]+/gi, '')
+    .replace(/javascript\s*:/gi, '')
+}
+
 export default class InstitutionalPagesController {
   async index({ view }: HttpContext) {
     for (const item of defaults) {
@@ -67,7 +76,7 @@ export default class InstitutionalPagesController {
       title: payload.title,
       eyebrow: payload.eyebrow ?? null,
       summary: payload.summary ?? null,
-      body: payload.body,
+      body: sanitizeRichText(payload.body),
       isPublic: request.input('isPublic') === 'true',
     })
     await page.save()
