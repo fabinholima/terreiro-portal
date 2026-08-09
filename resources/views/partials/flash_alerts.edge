@@ -5,16 +5,8 @@
     --theme-accent: {{ siteSettings.themeAccent ?? '#D6A23C' }};
     --theme-background: {{ siteSettings.themeBackground ?? '#FFFDF9' }};
     --theme-text: {{ siteSettings.themeText ?? '#223028' }};
-    --forest-950: var(--theme-dark);
-    --forest-900: var(--theme-dark);
-    --forest-850: var(--theme-primary);
-    --forest-800: var(--theme-primary);
-    --forest-700: var(--theme-primary);
-    --green: var(--theme-primary);
-    --gold: var(--theme-accent);
-    --gold-soft: var(--theme-accent);
-    --paper: var(--theme-background);
-    --ink: var(--theme-text);
+    --forest-950: var(--theme-dark); --forest-900: var(--theme-dark); --forest-850: var(--theme-primary); --forest-800: var(--theme-primary); --forest-700: var(--theme-primary); --green: var(--theme-primary);
+    --gold: var(--theme-accent); --gold-soft: var(--theme-accent); --paper: var(--theme-background); --ink: var(--theme-text);
     --serif: "{{ siteSettings.fontHeading ?? 'Georgia' }}", Georgia, serif;
     --sans: "{{ siteSettings.fontBody ?? 'Inter' }}", Inter, system-ui, sans-serif;
     --font-ui: "{{ siteSettings.fontUi ?? 'Inter' }}", Inter, system-ui, sans-serif;
@@ -29,6 +21,36 @@
   .admin-avatar,.admin-action--primary { background: var(--theme-primary) !important; }
   .eyebrow,.site-brand__kicker,.site-brand__eyebrow,.slim-footer__brand small { color: var(--theme-accent) !important; }
 </style>
+
+<template id="configured-footer-nav">
+  <a href="/">Início</a>
+  @each(item in publicMenu)
+    <span>•</span><a href="{{ item.href }}">{{ item.label }}</a>
+  @end
+</template>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const footerNav = document.querySelector('.slim-footer__nav')
+    const configured = document.getElementById('configured-footer-nav')
+    if (footerNav && configured) footerNav.innerHTML = configured.innerHTML
+
+    const selectedFonts = [
+      '{{ siteSettings.fontHeading ?? "Georgia" }}',
+      '{{ siteSettings.fontBody ?? "Inter" }}',
+      '{{ siteSettings.fontUi ?? "Inter" }}'
+    ]
+    const webFonts = ['Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville']
+    const needed = [...new Set(selectedFonts.filter((font) => webFonts.includes(font)))]
+    if (needed.length && !document.getElementById('portal-google-fonts')) {
+      const link = document.createElement('link')
+      link.id = 'portal-google-fonts'
+      link.rel = 'stylesheet'
+      link.href = 'https://fonts.googleapis.com/css2?' + needed.map((font) => 'family=' + encodeURIComponent(font).replace(/%20/g, '+') + ':wght@400;500;600;700;800').join('&') + '&display=swap'
+      document.head.appendChild(link)
+    }
+  })
+</script>
 
 <div class="flash-container">
   @if(flashMessages.has('error'))
