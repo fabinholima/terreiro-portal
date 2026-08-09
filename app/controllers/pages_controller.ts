@@ -19,5 +19,5 @@ export default class PagesController {
   async history(ctx:HttpContext){ return this.renderPage('nossa-historia',ctx) }
   async umbanda(ctx:HttpContext){ return this.renderPage('umbanda',ctx) }
   async contact(ctx:HttpContext){ return this.renderPage('contato',ctx) }
-  async custom({ params,...rest }:HttpContext){ return this.renderPage(params.slug,{ params,...rest } as HttpContext) }
+  async custom(ctx:HttpContext){ return this.renderPage(ctx.params.slug,ctx) }
 }
