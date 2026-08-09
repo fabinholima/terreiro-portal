@@ -16,7 +16,8 @@ const menuDefs = [
   ['about','O Terreiro','/o-terreiro'],['events','Agenda','/agenda'],['gallery','Galeria','/galeria'],['posts','Notícias','/noticias'],['social','Ações sociais','/acoes-sociais'],['documents','Documentos','/documentos'],['contact','Contato','/contato'],
 ] as const
 const defaultMenu = menuDefs.map(([key,label,href],index)=>({ key,label,href,visible:true,order:index+1 }))
-const allowedFonts = new Set(['Georgia','Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville','Arial','system-ui'])
+const fontOptions = ['Georgia','Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville','Arial','system-ui']
+const allowedFonts = new Set(fontOptions)
 
 export default class SiteSettingsController {
   private async getSettings() { let settings=await SiteSetting.first(); if(!settings) settings=await SiteSetting.create(defaults); return settings }
@@ -24,7 +25,16 @@ export default class SiteSettingsController {
     if (!settings.publicMenuConfig) return defaultMenu
     try { const parsed=JSON.parse(settings.publicMenuConfig); return Array.isArray(parsed) ? parsed : defaultMenu } catch { return defaultMenu }
   }
-  async edit({ view }: HttpContext) { const settings=await this.getSettings(); return view.render('admin/site_settings/form',{ settings, menuItems:this.getMenu(settings).sort((a:any,b:any)=>(a.order??0)-(b.order??0)) }) }
+  async edit({ view }: HttpContext) {
+    const settings=await this.getSettings()
+    return view.render('admin/site_settings/form',{
+      settings,
+      menuItems:this.getMenu(settings).sort((a:any,b:any)=>(a.order??0)-(b.order??0)),
+      fontOptions,
+      fontSizes:[14,15,16,17,18,19,20],
+      headingWeights:[400,500,600,700,800],
+    })
+  }
 
   async update({ request,response,session }: HttpContext) {
     const settings=await this.getSettings(); const payload=await request.validateUsing(siteSettingValidator)
