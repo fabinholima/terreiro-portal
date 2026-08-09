@@ -1,16 +1,54 @@
 @layout()
   <section class="mx-auto max-w-6xl px-6 py-10">
     <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div><p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Conteúdo</p><h1 class="mt-2 text-3xl font-bold">Páginas</h1><p class="mt-2 text-slate-600">Crie páginas e depois organize sua posição no menu.</p></div>
-      <div class="admin-actions"><a href="/admin/menus" class="admin-action admin-action--view">Menus</a><a href="/admin/institutional-pages/create" class="admin-action admin-action--primary">+ Nova página</a></div>
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Conteúdo</p>
+        <h1 class="mt-2 text-3xl font-bold">Páginas</h1>
+        <p class="mt-2 text-slate-600">Crie páginas e depois organize sua posição no menu.</p>
+      </div>
+      <div class="admin-actions">
+        <a href="/admin/menus" class="admin-action admin-action--view">Menus</a>
+        <a href="/admin/institutional-pages/create" class="admin-action admin-action--primary">+ Nova página</a>
+      </div>
     </div>
 
     <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <table class="w-full text-left"><thead class="bg-slate-50 text-sm text-slate-600"><tr><th class="px-4 py-3">Página</th><th class="px-4 py-3">URL</th><th class="px-4 py-3">Visibilidade</th><th class="px-4 py-3">Ações</th></tr></thead><tbody>
-        @each(page in pages)
-          <tr class="border-t border-slate-100"><td class="px-4 py-3 font-medium">{{ page.title }}</td><td class="px-4 py-3 text-slate-600">{{ ['o-terreiro','nossa-historia','umbanda','contato'].includes(page.slug) ? '/' + page.slug : '/pagina/' + page.slug }}</td><td class="px-4 py-3">{{ page.isPublic ? 'Pública' : 'Oculta' }}</td><td class="px-4 py-3"><div class="admin-actions"><a class="admin-action admin-action--edit" href="/admin/institutional-pages/{{ page.id }}/edit">Editar</a>@if(!protectedSlugs.includes(page.slug))<form method="POST" action="/admin/institutional-pages/{{ page.id }}/delete" onsubmit="return confirm('Excluir esta página?')">{{ csrfField() }}<button class="admin-action admin-action--delete" type="submit">Excluir</button></form>@end</div></td></tr>
-        @end
-      </tbody></table>
+      <table class="w-full text-left">
+        <thead class="bg-slate-50 text-sm text-slate-600">
+          <tr>
+            <th class="px-4 py-3">Página</th>
+            <th class="px-4 py-3">URL</th>
+            <th class="px-4 py-3">Visibilidade</th>
+            <th class="px-4 py-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(page in pages)
+            <tr class="border-t border-slate-100">
+              <td class="px-4 py-3 font-medium">{{ page.title }}</td>
+              <td class="px-4 py-3 text-slate-600">
+                @if(['o-terreiro', 'nossa-historia', 'umbanda', 'contato'].includes(page.slug))
+                  /{{ page.slug }}
+                @else
+                  /pagina/{{ page.slug }}
+                @end
+              </td>
+              <td class="px-4 py-3">{{ page.isPublic ? 'Pública' : 'Oculta' }}</td>
+              <td class="px-4 py-3">
+                <div class="admin-actions">
+                  <a class="admin-action admin-action--edit" href="/admin/institutional-pages/{{ page.id }}/edit">Editar</a>
+                  @if(!protectedSlugs.includes(page.slug))
+                    <form method="POST" action="/admin/institutional-pages/{{ page.id }}/delete" onsubmit="return confirm('Excluir esta página?')">
+                      {{ csrfField() }}
+                      <button class="admin-action admin-action--delete" type="submit">Excluir</button>
+                    </form>
+                  @end
+                </div>
+              </td>
+            </tr>
+          @end
+        </tbody>
+      </table>
     </div>
   </section>
 @end
