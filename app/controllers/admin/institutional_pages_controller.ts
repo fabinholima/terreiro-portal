@@ -15,6 +15,10 @@ function sanitizeRichText(html: string) {
   return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'').replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,'').replace(/\son\w+\s*=\s*(["']).*?\1/gi,'').replace(/\son\w+\s*=\s*[^\s>]+/gi,'').replace(/javascript\s*:/gi,'')
 }
 
+function publicUrlFor(slug: string) {
+  return protectedSlugs.has(slug) ? `/${slug}` : `/pagina/${slug}`
+}
+
 export default class InstitutionalPagesController {
   private async ensureDefaults() {
     for (const item of defaults) await InstitutionalPage.firstOrCreate({ slug:item.slug }, { ...item, isPublic:true })
@@ -27,7 +31,12 @@ export default class InstitutionalPagesController {
   }
 
   async create({ view }: HttpContext) {
-    return view.render('admin/institutional_pages/form', { page:null })
+    return view.render('admin/institutional_pages/form', {
+      page: null,
+      isEdit: false,
+      isProtected: false,
+      previewUrl: null,
+    })
   }
 
   async store({ request, response, session }: HttpContext) {
@@ -42,7 +51,12 @@ export default class InstitutionalPagesController {
 
   async edit({ params, view }: HttpContext) {
     const page = await InstitutionalPage.findOrFail(params.id)
-    return view.render('admin/institutional_pages/form', { page })
+    return view.render('admin/institutional_pages/form', {
+      page,
+      isEdit: true,
+      isProtected: protectedSlugs.has(page.slug),
+      previewUrl: publicUrlFor(page.slug),
+    })
   }
 
   async update({ params, request, response, session }: HttpContext) {
