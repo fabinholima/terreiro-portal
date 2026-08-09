@@ -2,22 +2,25 @@
   <div class="site-container site-header__inner">
     <a href="/" class="site-brand" aria-label="{{ siteSettings.siteName }} — página inicial">
       <img class="site-brand__logo" src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
-      <span class="site-brand__text">
-        <span class="site-brand__kicker">Terreiro de Umbanda</span>
-        <span class="site-brand__name">Oxóssi e João Boiadeiro</span>
-        <span class="site-brand__eyebrow">Na fé, na lei e na caridade</span>
-      </span>
+      <span class="site-brand__text"><span class="site-brand__kicker">Terreiro de Umbanda</span><span class="site-brand__name">Oxóssi e João Boiadeiro</span><span class="site-brand__eyebrow">Na fé, na lei e na caridade</span></span>
     </a>
 
     <nav class="site-nav" aria-label="Navegação principal">
       @each(item in publicMenu)
-        <a data-nav-link href="{{ item.href }}">{{ item.label }}</a>
+        @if(item.children && item.children.length)
+          <div class="site-nav__group">
+            <a data-nav-link href="{{ item.href }}" {{ item.openNewTab ? 'target="_blank" rel="noopener"' : '' }}>{{ item.label }} <span class="site-nav__chevron">⌄</span></a>
+            <div class="site-submenu">
+              @each(child in item.children)
+                <a href="{{ child.href }}" {{ child.openNewTab ? 'target="_blank" rel="noopener"' : '' }}>{{ child.label }}</a>
+              @end
+            </div>
+          </div>
+        @else
+          <a data-nav-link href="{{ item.href }}" {{ item.openNewTab ? 'target="_blank" rel="noopener"' : '' }}>{{ item.label }}</a>
+        @end
       @end
-      @if(auth.user)
-        <a href="/admin" class="site-nav__admin">Admin</a>
-      @else
-        <a href="/login" class="site-nav__admin">Entrar</a>
-      @end
+      @if(auth.user)<a href="/admin" class="site-nav__admin">Admin</a>@else<a href="/login" class="site-nav__admin">Entrar</a>@end
     </nav>
 
     <button class="mobile-menu-button" type="button" aria-label="Abrir menu" :aria-expanded="open" @click="open = !open"><span></span></button>
@@ -26,11 +29,12 @@
   <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
     @each(item in publicMenu)
       <a data-nav-link href="{{ item.href }}" @click="open = false">{{ item.label }}</a>
+      @if(item.children && item.children.length)
+        <div class="mobile-submenu">
+          @each(child in item.children)<a href="{{ child.href }}" @click="open = false">{{ child.label }}</a>@end
+        </div>
+      @end
     @end
-    @if(auth.user)
-      <a href="/admin">Painel administrativo</a>
-    @else
-      <a href="/login">Entrar no portal</a>
-    @end
+    @if(auth.user)<a href="/admin">Painel administrativo</a>@else<a href="/login">Entrar no portal</a>@end
   </nav>
 </header>
