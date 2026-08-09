@@ -2,34 +2,102 @@
   <section class="mx-auto max-w-4xl px-6 py-10">
     <div class="mb-8">
       <a href="/admin/institutional-pages" class="text-sm font-semibold text-emerald-800 underline">← Páginas</a>
-      <h1 class="mt-4 text-3xl font-bold">{{ page ? 'Editar ' + page.title : 'Nova página' }}</h1>
-      <p class="mt-2 text-slate-600">Crie conteúdo sem alterar o layout do portal.</p>
+      @if(isEdit)
+        <h1 class="mt-4 text-3xl font-bold">Editar {{ page.title }}</h1>
+      @else
+        <h1 class="mt-4 text-3xl font-bold">Nova página</h1>
+      @end
+      <p class="mt-2 text-slate-600">Crie conteúdo sem alterar o layout do portal. Depois você poderá adicioná-lo ao menu.</p>
     </div>
 
-    <form method="POST" action="{{ page ? '/admin/institutional-pages/' + page.id : '/admin/institutional-pages' }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6" onsubmit="syncInstitutionalEditor()">
-      {{ csrfField() }}
+    @if(isEdit)
+      <form method="POST" action="/admin/institutional-pages/{{ page.id }}" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6" onsubmit="syncInstitutionalEditor()">
+        {{ csrfField() }}
+        <label class="block"><span class="mb-2 block font-semibold">Título</span><input name="title" required maxlength="180" value="{{ page.title }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Endereço da página</span><input name="slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" value="{{ page.slug }}" @if(isProtected) readonly @end><span class="mt-1 block text-sm text-slate-500">Use apenas letras minúsculas, números e hífen.</span></label>
+        <label class="block"><span class="mb-2 block font-semibold">Chamada superior</span><input name="eyebrow" maxlength="120" value="{{ page.eyebrow ?? '' }}"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Resumo</span><textarea class="min-h-28" name="summary">{{ page.summary ?? '' }}</textarea></label>
 
-      <label class="block"><span class="mb-2 block font-semibold">Título</span><input name="title" required maxlength="180" value="{{ page?.title ?? '' }}"></label>
-      <label class="block"><span class="mb-2 block font-semibold">Slug</span><input name="slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" value="{{ page?.slug ?? '' }}" {{ page && ['o-terreiro','nossa-historia','umbanda','contato'].includes(page.slug) ? 'readonly' : '' }}><span class="mt-1 block text-sm text-slate-500">Exemplo: historia-da-casa. Páginas novas serão acessadas em /pagina/slug.</span></label>
-      <label class="block"><span class="mb-2 block font-semibold">Chamada superior</span><input name="eyebrow" maxlength="120" value="{{ page?.eyebrow ?? '' }}"></label>
-      <label class="block"><span class="mb-2 block font-semibold">Resumo</span><textarea class="min-h-28" name="summary">{{ page?.summary ?? '' }}</textarea></label>
-
-      <div>
-        <span class="mb-2 block font-semibold">Texto completo</span>
-        <div class="institutional-editor">
-          <div class="institutional-editor__toolbar" role="toolbar" aria-label="Formatação do texto">
-            <button type="button" onclick="institutionalCommand('bold')"><strong>B</strong></button><button type="button" onclick="institutionalCommand('italic')"><em>I</em></button><button type="button" onclick="institutionalCommand('underline')"><u>U</u></button><span class="institutional-editor__separator"></span><button type="button" onclick="institutionalBlock('p')">P</button><button type="button" onclick="institutionalBlock('h2')">H2</button><button type="button" onclick="institutionalBlock('h3')">H3</button><span class="institutional-editor__separator"></span><button type="button" onclick="institutionalCommand('insertUnorderedList')">• Lista</button><button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button><button type="button" onclick="institutionalBlock('blockquote')">❝</button><span class="institutional-editor__separator"></span><button type="button" onclick="institutionalCreateLink()">🔗</button><button type="button" onclick="institutionalCommand('removeFormat')">Tx</button>
+        <div>
+          <span class="mb-2 block font-semibold">Texto completo</span>
+          <div class="institutional-editor">
+            <div class="institutional-editor__toolbar" role="toolbar" aria-label="Formatação do texto">
+              <button type="button" onclick="institutionalCommand('bold')"><strong>B</strong></button>
+              <button type="button" onclick="institutionalCommand('italic')"><em>I</em></button>
+              <button type="button" onclick="institutionalCommand('underline')"><u>U</u></button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalBlock('p')">P</button>
+              <button type="button" onclick="institutionalBlock('h2')">H2</button>
+              <button type="button" onclick="institutionalBlock('h3')">H3</button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalCommand('insertUnorderedList')">• Lista</button>
+              <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
+              <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalCreateLink()">🔗</button>
+              <button type="button" onclick="institutionalCommand('removeFormat')">Tx</button>
+            </div>
+            <div id="institutional-rich-editor" class="institutional-editor__content" contenteditable="true">{{{ page.body }}}</div>
           </div>
-          <div id="institutional-rich-editor" class="institutional-editor__content" contenteditable="true">{{{ page?.body ?? '<p>Digite o conteúdo da página.</p>' }}}</div>
+          <textarea id="institutional-body" class="hidden" name="body" required>{{ page.body }}</textarea>
         </div>
-        <textarea id="institutional-body" class="hidden" name="body" required>{{ page?.body ?? 'Digite o conteúdo da página.' }}</textarea>
-      </div>
 
-      <label class="flex items-center gap-3"><input class="w-auto" type="checkbox" name="isPublic" value="true" {{ !page || page.isPublic ? 'checked' : '' }}><span>Disponível publicamente</span></label>
-      <div class="flex flex-wrap gap-3"><button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white" type="submit">{{ page ? 'Salvar alterações' : 'Criar página' }}</button>@if(page)<a class="rounded-lg border border-slate-300 px-5 py-2.5" href="{{ ['o-terreiro','nossa-historia','umbanda','contato'].includes(page.slug) ? '/' + page.slug : '/pagina/' + page.slug }}" target="_blank">Visualizar página</a>@end</div>
-    </form>
+        <label class="flex items-center gap-3"><input class="w-auto" type="checkbox" name="isPublic" value="true" @if(page.isPublic) checked @end><span>Disponível publicamente</span></label>
+        <div class="flex flex-wrap gap-3">
+          <button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white" type="submit">Salvar alterações</button>
+          @if(previewUrl)
+            <a class="rounded-lg border border-slate-300 px-5 py-2.5" href="{{ previewUrl }}" target="_blank">Visualizar página</a>
+          @end
+          <a class="rounded-lg border border-slate-300 px-5 py-2.5" href="/admin/menus">Organizar no menu</a>
+        </div>
+      </form>
+    @else
+      <form method="POST" action="/admin/institutional-pages" class="space-y-6 rounded-xl border border-slate-200 bg-white p-6" onsubmit="syncInstitutionalEditor()">
+        {{ csrfField() }}
+        <label class="block"><span class="mb-2 block font-semibold">Título da página</span><input id="page-title" name="title" required maxlength="180" placeholder="Ex.: Nossa missão" oninput="suggestSlug(this.value)"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Endereço da página</span><div class="flex items-center gap-2"><span class="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-500">/pagina/</span><input id="page-slug" name="slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="nossa-missao"></div><span class="mt-1 block text-sm text-slate-500">Será preenchido automaticamente a partir do título e pode ser alterado.</span></label>
+        <label class="block"><span class="mb-2 block font-semibold">Chamada superior <small class="font-normal text-slate-500">(opcional)</small></span><input name="eyebrow" maxlength="120" placeholder="Ex.: Institucional"></label>
+        <label class="block"><span class="mb-2 block font-semibold">Resumo <small class="font-normal text-slate-500">(opcional)</small></span><textarea class="min-h-28" name="summary" placeholder="Uma apresentação curta da página."></textarea></label>
+
+        <div>
+          <span class="mb-2 block font-semibold">Texto completo</span>
+          <div class="institutional-editor">
+            <div class="institutional-editor__toolbar" role="toolbar" aria-label="Formatação do texto">
+              <button type="button" onclick="institutionalCommand('bold')"><strong>B</strong></button>
+              <button type="button" onclick="institutionalCommand('italic')"><em>I</em></button>
+              <button type="button" onclick="institutionalCommand('underline')"><u>U</u></button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalBlock('p')">P</button>
+              <button type="button" onclick="institutionalBlock('h2')">H2</button>
+              <button type="button" onclick="institutionalBlock('h3')">H3</button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalCommand('insertUnorderedList')">• Lista</button>
+              <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
+              <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
+              <span class="institutional-editor__separator"></span>
+              <button type="button" onclick="institutionalCreateLink()">🔗</button>
+              <button type="button" onclick="institutionalCommand('removeFormat')">Tx</button>
+            </div>
+            <div id="institutional-rich-editor" class="institutional-editor__content" contenteditable="true"><p>Digite o conteúdo da página.</p></div>
+          </div>
+          <textarea id="institutional-body" class="hidden" name="body" required>Digite o conteúdo da página.</textarea>
+        </div>
+
+        <label class="flex items-center gap-3"><input class="w-auto" type="checkbox" name="isPublic" value="true" checked><span>Publicar a página imediatamente</span></label>
+        <div class="rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900">Depois de criar a página, use <strong>Organizar no menu</strong> para escolher se ela será um item principal ou um submenu.</div>
+        <div class="flex flex-wrap gap-3"><button class="rounded-lg bg-emerald-800 px-5 py-2.5 font-semibold text-white" type="submit">Criar página</button><a class="rounded-lg border border-slate-300 px-5 py-2.5" href="/admin/institutional-pages">Cancelar</a></div>
+      </form>
+    @end
   </section>
 
   <style>.institutional-editor{overflow:hidden;border:1px solid #cbd5e1;border-radius:12px;background:#fff}.institutional-editor__toolbar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:9px;border-bottom:1px solid #e2e8f0;background:#f8fafc}.institutional-editor__toolbar button{min-width:34px;height:34px;padding:0 9px;border:1px solid #d6dde5;border-radius:7px;background:#fff;color:#334155}.institutional-editor__separator{width:1px;height:25px;background:#dbe1e7}.institutional-editor__content{min-height:330px;padding:18px;color:#334155;line-height:1.75;outline:none}.institutional-editor__content h2{font-size:1.6rem}.institutional-editor__content h3{font-size:1.25rem}.institutional-editor__content blockquote{padding:.7em 1em;border-left:3px solid #c89d45;background:#faf7ef}</style>
-  <script>function institutionalEditor(){return document.getElementById('institutional-rich-editor')}function institutionalCommand(c){institutionalEditor().focus();document.execCommand(c,false,null)}function institutionalBlock(t){institutionalEditor().focus();document.execCommand('formatBlock',false,t)}function institutionalCreateLink(){const u=window.prompt('Informe o endereço do link');if(u){institutionalEditor().focus();document.execCommand('createLink',false,u)}}function syncInstitutionalEditor(){document.getElementById('institutional-body').value=institutionalEditor().innerHTML}</script>
+  <script>
+    function institutionalEditor(){return document.getElementById('institutional-rich-editor')}
+    function institutionalCommand(c){institutionalEditor().focus();document.execCommand(c,false,null)}
+    function institutionalBlock(t){institutionalEditor().focus();document.execCommand('formatBlock',false,t)}
+    function institutionalCreateLink(){const u=window.prompt('Informe o endereço do link');if(u){institutionalEditor().focus();document.execCommand('createLink',false,u)}}
+    function syncInstitutionalEditor(){document.getElementById('institutional-body').value=institutionalEditor().innerHTML}
+    function suggestSlug(value){const slug=document.getElementById('page-slug');if(!slug||slug.dataset.edited==='true')return;slug.value=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
+    document.addEventListener('DOMContentLoaded',()=>{const slug=document.getElementById('page-slug');if(slug)slug.addEventListener('input',()=>slug.dataset.edited='true')})
+  </script>
 @end
