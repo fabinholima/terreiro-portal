@@ -31,20 +31,27 @@ export default class InstitutionalPagesController {
   }
 
   async create({ view }: HttpContext) {
-    return view.render('admin/institutional_pages/form', {
-      page: null,
-      isEdit: false,
-      isProtected: false,
-      previewUrl: null,
-    })
+    return view.render('admin/institutional_pages/create')
   }
 
   async store({ request, response, session }: HttpContext) {
     const payload = await request.validateUsing(institutionalPageValidator)
     const slug = payload.slug!
     const exists = await InstitutionalPage.findBy('slug', slug)
-    if (exists) { session.flash('error','Já existe uma página com este slug.'); return response.redirect().back() }
-    const page = await InstitutionalPage.create({ title:payload.title, slug, eyebrow:payload.eyebrow??null, summary:payload.summary??null, body:sanitizeRichText(payload.body), isPublic:request.input('isPublic')==='true' })
+    if (exists) {
+      session.flash('error','Já existe uma página com este slug.')
+      return response.redirect().back()
+    }
+
+    const page = await InstitutionalPage.create({
+      title:payload.title,
+      slug,
+      eyebrow:payload.eyebrow??null,
+      summary:payload.summary??null,
+      body:sanitizeRichText(payload.body),
+      isPublic:request.input('isPublic')==='true',
+    })
+
     session.flash('success','Página criada com sucesso.')
     return response.redirect(`/admin/institutional-pages/${page.id}/edit`)
   }
@@ -63,14 +70,35 @@ export default class InstitutionalPagesController {
     const page = await InstitutionalPage.findOrFail(params.id)
     const payload = await request.validateUsing(institutionalPageValidator)
     const newSlug = protectedSlugs.has(page.slug) ? page.slug : (payload.slug ?? page.slug)
-    if (newSlug !== page.slug && await InstitutionalPage.query().where('slug',newSlug).whereNot('id',page.id).first()) { session.flash('error','Já existe uma página com este slug.'); return response.redirect().back() }
-    page.merge({ title:payload.title, slug:newSlug, eyebrow:payload.eyebrow??null, summary:payload.summary??null, body:sanitizeRichText(payload.body), isPublic:request.input('isPublic')==='true' })
-    await page.save(); session.flash('success','Página atualizada com sucesso.'); return response.redirect('/admin/institutional-pages')
+
+    if (newSlug !== page.slug && await InstitutionalPage.query().where('slug',newSlug).whereNot('id',page.id).first()) {
+      session.flash('error','Já existe uma página com este slug.')
+      return response.redirect().back()
+    }
+
+    page.merge({
+      title:payload.title,
+      slug:newSlug,
+      eyebrow:payload.eyebrow??null,
+      summary:payload.summary??null,
+      body:sanitizeRichText(payload.body),
+      isPublic:request.input('isPublic')==='true',
+    })
+    await page.save()
+
+    session.flash('success','Página atualizada com sucesso.')
+    return response.redirect('/admin/institutional-pages')
   }
 
   async destroy({ params, response, session }: HttpContext) {
     const page = await InstitutionalPage.findOrFail(params.id)
-    if (protectedSlugs.has(page.slug)) { session.flash('error','Esta página faz parte da estrutura principal e não pode ser excluída.'); return response.redirect('/admin/institutional-pages') }
-    await page.delete(); session.flash('success','Página excluída.'); return response.redirect('/admin/institutional-pages')
+    if (protectedSlugs.has(page.slug)) {
+      session.flash('error','Esta página faz parte da estrutura principal e não pode ser excluída.')
+      return response.redirect('/admin/institutional-pages')
+    }
+
+    await page.delete()
+    session.flash('success','Página excluída.')
+    return response.redirect('/admin/institutional-pages')
   }
 }
