@@ -2,65 +2,42 @@ import type { HttpContext } from '@adonisjs/core/http'
 import InstitutionalPage from '#models/institutional_page'
 import { institutionalPageValidator } from '#validators/institutional_page'
 
+const protectedSlugs = new Set(['o-terreiro', 'nossa-historia', 'umbanda', 'contato'])
+
 const defaults = [
-  {
-    slug: 'o-terreiro',
-    title: 'O Terreiro',
-    eyebrow: 'Institucional',
-    summary:
-      'O Terreiro de Umbanda Oxóssi e João Boiadeiro é uma casa dedicada à fé, à caridade, ao acolhimento e à preservação da tradição umbandista.',
-    body:
-      'Nossa missão é promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.\n\nEntre nossos valores estão o respeito às diferenças, a valorização da ancestralidade, o compromisso com a comunidade, a responsabilidade religiosa, a solidariedade e o cuidado com as pessoas.\n\nA casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.',
-  },
-  {
-    slug: 'nossa-historia',
-    title: 'Nossa História',
-    eyebrow: 'Memória e ancestralidade',
-    summary:
-      'Uma trajetória construída desde 1991, marcada pela continuidade da fé, pelo cuidado com a comunidade e pela preservação da memória da casa.',
-    body:
-      'O Terreiro de Umbanda Oxóssi e João Boiadeiro está em atividade desde 1991. Ao longo dos anos, a casa consolidou sua prática religiosa e comunitária, mantendo vivas referências, saberes e vínculos construídos por seus integrantes.\n\nEste espaço institucional registra essa trajetória e será continuamente atualizado com documentos, fotografias, relatos e marcos importantes da história do Terreiro.',
-  },
-  {
-    slug: 'umbanda',
-    title: 'Umbanda',
-    eyebrow: 'Tradição religiosa brasileira',
-    summary:
-      'A Umbanda é uma religião brasileira constituída por diferentes influências históricas e espirituais, marcada pela diversidade, pela ancestralidade e pela prática da caridade.',
-    body:
-      'No Terreiro de Umbanda Oxóssi e João Boiadeiro, a vivência religiosa é orientada pelo respeito às tradições da casa, à ancestralidade e às entidades espirituais cultuadas.\n\nA prática religiosa busca conciliar fé, responsabilidade, acolhimento e serviço à comunidade, preservando a identidade própria do Terreiro e respeitando a diversidade existente dentro da Umbanda.',
-  },
-  {
-    slug: 'contato',
-    title: 'Contato',
-    eyebrow: 'Fale com o Terreiro',
-    summary:
-      'Consulte a agenda pública para conhecer as próximas atividades. Os canais oficiais de contato podem ser divulgados nesta página conforme decisão da administração da casa.',
-    body:
-      'Esta página poderá apresentar endereço público, telefone, WhatsApp, e-mail e orientações de atendimento.\n\nPor segurança e privacidade, publique apenas os canais que devem ser disponibilizados ao público.',
-  },
+  { slug:'o-terreiro', title:'O Terreiro', eyebrow:'Institucional', summary:'O Terreiro de Umbanda Oxóssi e João Boiadeiro é uma casa dedicada à fé, à caridade, ao acolhimento e à preservação da tradição umbandista.', body:'Nossa missão é promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.' },
+  { slug:'nossa-historia', title:'Nossa História', eyebrow:'Memória e ancestralidade', summary:'Uma trajetória construída desde 1991, marcada pela continuidade da fé, pelo cuidado com a comunidade e pela preservação da memória da casa.', body:'O Terreiro de Umbanda Oxóssi e João Boiadeiro está em atividade desde 1991.' },
+  { slug:'umbanda', title:'Umbanda', eyebrow:'Tradição religiosa brasileira', summary:'A Umbanda é uma religião brasileira constituída por diferentes influências históricas e espirituais.', body:'No Terreiro de Umbanda Oxóssi e João Boiadeiro, a vivência religiosa é orientada pelo respeito às tradições da casa.' },
+  { slug:'contato', title:'Contato', eyebrow:'Fale com o Terreiro', summary:'Consulte a agenda pública para conhecer as próximas atividades.', body:'Esta página poderá apresentar endereço público, telefone, WhatsApp, e-mail e orientações de atendimento.' },
 ]
 
 function sanitizeRichText(html: string) {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/\son\w+\s*=\s*(["']).*?\1/gi, '')
-    .replace(/\son\w+\s*=\s*[^\s>]+/gi, '')
-    .replace(/javascript\s*:/gi, '')
+  return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'').replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,'').replace(/\son\w+\s*=\s*(["']).*?\1/gi,'').replace(/\son\w+\s*=\s*[^\s>]+/gi,'').replace(/javascript\s*:/gi,'')
 }
 
 export default class InstitutionalPagesController {
-  async index({ view }: HttpContext) {
-    for (const item of defaults) {
-      await InstitutionalPage.firstOrCreate(
-        { slug: item.slug },
-        { ...item, isPublic: true }
-      )
-    }
+  private async ensureDefaults() {
+    for (const item of defaults) await InstitutionalPage.firstOrCreate({ slug:item.slug }, { ...item, isPublic:true })
+  }
 
-    const pages = await InstitutionalPage.query().orderBy('id', 'asc')
-    return view.render('admin/institutional_pages/index', { pages })
+  async index({ view }: HttpContext) {
+    await this.ensureDefaults()
+    const pages = await InstitutionalPage.query().orderBy('created_at','desc')
+    return view.render('admin/institutional_pages/index', { pages, protectedSlugs:[...protectedSlugs] })
+  }
+
+  async create({ view }: HttpContext) {
+    return view.render('admin/institutional_pages/form', { page:null })
+  }
+
+  async store({ request, response, session }: HttpContext) {
+    const payload = await request.validateUsing(institutionalPageValidator)
+    const slug = payload.slug!
+    const exists = await InstitutionalPage.findBy('slug', slug)
+    if (exists) { session.flash('error','Já existe uma página com este slug.'); return response.redirect().back() }
+    const page = await InstitutionalPage.create({ title:payload.title, slug, eyebrow:payload.eyebrow??null, summary:payload.summary??null, body:sanitizeRichText(payload.body), isPublic:request.input('isPublic')==='true' })
+    session.flash('success','Página criada com sucesso.')
+    return response.redirect(`/admin/institutional-pages/${page.id}/edit`)
   }
 
   async edit({ params, view }: HttpContext) {
@@ -68,19 +45,18 @@ export default class InstitutionalPagesController {
     return view.render('admin/institutional_pages/form', { page })
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, session }: HttpContext) {
     const page = await InstitutionalPage.findOrFail(params.id)
     const payload = await request.validateUsing(institutionalPageValidator)
+    const newSlug = protectedSlugs.has(page.slug) ? page.slug : (payload.slug ?? page.slug)
+    if (newSlug !== page.slug && await InstitutionalPage.query().where('slug',newSlug).whereNot('id',page.id).first()) { session.flash('error','Já existe uma página com este slug.'); return response.redirect().back() }
+    page.merge({ title:payload.title, slug:newSlug, eyebrow:payload.eyebrow??null, summary:payload.summary??null, body:sanitizeRichText(payload.body), isPublic:request.input('isPublic')==='true' })
+    await page.save(); session.flash('success','Página atualizada com sucesso.'); return response.redirect('/admin/institutional-pages')
+  }
 
-    page.merge({
-      title: payload.title,
-      eyebrow: payload.eyebrow ?? null,
-      summary: payload.summary ?? null,
-      body: sanitizeRichText(payload.body),
-      isPublic: request.input('isPublic') === 'true',
-    })
-    await page.save()
-
-    return response.redirect('/admin/institutional-pages')
+  async destroy({ params, response, session }: HttpContext) {
+    const page = await InstitutionalPage.findOrFail(params.id)
+    if (protectedSlugs.has(page.slug)) { session.flash('error','Esta página faz parte da estrutura principal e não pode ser excluída.'); return response.redirect('/admin/institutional-pages') }
+    await page.delete(); session.flash('success','Página excluída.'); return response.redirect('/admin/institutional-pages')
   }
 }
