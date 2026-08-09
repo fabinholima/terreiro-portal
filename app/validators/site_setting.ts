@@ -1,5 +1,7 @@
 import vine from '@vinejs/vine'
 
+const hexColor = vine.string().trim().regex(/^#[0-9A-Fa-f]{6}$/)
+
 export const siteSettingValidator = vine.compile(
   vine.object({
     siteName: vine.string().trim().minLength(3).maxLength(180),
@@ -15,26 +17,14 @@ export const siteSettingValidator = vine.compile(
     facebookUrl: vine.string().trim().url().maxLength(500).optional(),
     youtubeUrl: vine.string().trim().url().maxLength(500).optional(),
     mapsUrl: vine.string().trim().url().maxLength(1000).optional(),
-    openingHours: vine.string().optional(),
-    footerText: vine.string().optional(),
-    homeEyebrow: vine.string().trim().maxLength(120).optional(),
-    homeTitle: vine.string().trim().maxLength(180).optional(),
-    homeSummary: vine.string().trim().maxLength(255).optional(),
-    missionTitle: vine.string().trim().maxLength(120).optional(),
-    missionText: vine.string().optional(),
-    missionVisible: vine.boolean().optional(),
-    valuesTitle: vine.string().trim().maxLength(120).optional(),
-    valuesText: vine.string().optional(),
-    valuesVisible: vine.boolean().optional(),
-    trajectoryTitle: vine.string().trim().maxLength(120).optional(),
-    trajectoryText: vine.string().optional(),
-    trajectoryVisible: vine.boolean().optional(),
-    trajectoryButtonText: vine.string().trim().maxLength(120).optional(),
-    trajectoryButtonUrl: vine.string().trim().maxLength(500).optional(),
-    contributionVisible: vine.boolean().optional(),
-    contributionTitle: vine.string().trim().maxLength(120).optional(),
-    contributionText: vine.string().trim().maxLength(800).optional(),
-    pixKey: vine.string().trim().maxLength(255).optional(),
-    pixBeneficiary: vine.string().trim().maxLength(180).optional(),
+    openingHours: vine.string().optional(), footerText: vine.string().optional(),
+    homeEyebrow: vine.string().trim().maxLength(120).optional(), homeTitle: vine.string().trim().maxLength(180).optional(), homeSummary: vine.string().trim().maxLength(255).optional(),
+    missionTitle: vine.string().trim().maxLength(120).optional(), missionText: vine.string().optional(), missionVisible: vine.boolean().optional(),
+    valuesTitle: vine.string().trim().maxLength(120).optional(), valuesText: vine.string().optional(), valuesVisible: vine.boolean().optional(),
+    trajectoryTitle: vine.string().trim().maxLength(120).optional(), trajectoryText: vine.string().optional(), trajectoryVisible: vine.boolean().optional(), trajectoryButtonText: vine.string().trim().maxLength(120).optional(), trajectoryButtonUrl: vine.string().trim().maxLength(500).optional(),
+    contributionVisible: vine.boolean().optional(), contributionTitle: vine.string().trim().maxLength(120).optional(), contributionText: vine.string().trim().maxLength(800).optional(), pixKey: vine.string().trim().maxLength(255).optional(), pixBeneficiary: vine.string().trim().maxLength(180).optional(),
+    themePrimary: hexColor.optional(), themeDark: hexColor.optional(), themeAccent: hexColor.optional(), themeBackground: hexColor.optional(), themeText: hexColor.optional(),
+    fontHeading: vine.string().trim().maxLength(80).optional(), fontBody: vine.string().trim().maxLength(80).optional(), fontUi: vine.string().trim().maxLength(80).optional(),
+    fontSizeBase: vine.number().min(14).max(20).optional(), headingWeight: vine.number().min(400).max(800).optional(),
   })
 )
