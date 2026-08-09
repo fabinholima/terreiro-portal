@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Menu from '#models/menu'
 import InstitutionalPage from '#models/institutional_page'
 
@@ -20,6 +20,4 @@ export default class MenuItem extends BaseModel {
 
   @belongsTo(() => Menu) declare menu: BelongsTo<typeof Menu>
   @belongsTo(() => InstitutionalPage, { foreignKey: 'pageId' }) declare page: BelongsTo<typeof InstitutionalPage>
-  @belongsTo(() => MenuItem, { foreignKey: 'parentId' }) declare parent: BelongsTo<typeof MenuItem>
-  @hasMany(() => MenuItem, { foreignKey: 'parentId' }) declare children: HasMany<typeof MenuItem>
 }
