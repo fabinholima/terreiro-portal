@@ -10,13 +10,9 @@
     </a>
 
     <nav class="site-nav" aria-label="Navegação principal">
-      <a data-nav-link href="/o-terreiro">O Terreiro</a>
-      <a data-nav-link href="/agenda">Agenda</a>
-      <a data-nav-link href="/galeria">Galeria</a>
-      <a data-nav-link href="/noticias">Notícias</a>
-      <a data-nav-link href="/acoes-sociais">Ações sociais</a>
-      <a data-nav-link href="/documentos">Documentos</a>
-      <a data-nav-link href="/contato">Contato</a>
+      @each(item in publicMenu)
+        <a data-nav-link href="{{ item.href }}">{{ item.label }}</a>
+      @end
       @if(auth.user)
         <a href="/admin" class="site-nav__admin">Admin</a>
       @else
@@ -24,19 +20,13 @@
       @end
     </nav>
 
-    <button class="mobile-menu-button" type="button" aria-label="Abrir menu" :aria-expanded="open" @click="open = !open">
-      <span></span>
-    </button>
+    <button class="mobile-menu-button" type="button" aria-label="Abrir menu" :aria-expanded="open" @click="open = !open"><span></span></button>
   </div>
 
   <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
-    <a data-nav-link href="/o-terreiro">O Terreiro</a>
-    <a data-nav-link href="/agenda">Agenda</a>
-    <a data-nav-link href="/galeria">Galeria</a>
-    <a data-nav-link href="/noticias">Notícias</a>
-    <a data-nav-link href="/acoes-sociais">Ações sociais</a>
-    <a data-nav-link href="/documentos">Documentos</a>
-    <a data-nav-link href="/contato">Contato</a>
+    @each(item in publicMenu)
+      <a data-nav-link href="{{ item.href }}" @click="open = false">{{ item.label }}</a>
+    @end
     @if(auth.user)
       <a href="/admin">Painel administrativo</a>
     @else
