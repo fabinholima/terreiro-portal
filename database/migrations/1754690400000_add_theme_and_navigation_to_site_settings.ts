@@ -16,12 +16,13 @@ export default class extends BaseSchema {
       table.integer('font_size_base').notNullable().defaultTo(16)
       table.integer('heading_weight').notNullable().defaultTo(600)
       table.text('public_menu_config').nullable()
+      table.text('admin_menu_config').nullable()
     })
   }
 
   async down() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumns('theme_primary','theme_dark','theme_accent','theme_background','theme_text','font_heading','font_body','font_ui','font_size_base','heading_weight','public_menu_config')
+      table.dropColumns('theme_primary','theme_dark','theme_accent','theme_background','theme_text','font_heading','font_body','font_ui','font_size_base','heading_weight','public_menu_config','admin_menu_config')
     })
   }
 }
