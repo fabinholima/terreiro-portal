@@ -6,8 +6,12 @@
       <p class="mt-2 text-slate-600">Gerencie conteúdo institucional, aparência, navegação, contato e integrações do portal.</p>
     </div>
 
-    @if(flashMessages.has('success'))<div class="mb-6 rounded-lg bg-emerald-50 p-4 text-emerald-800">{{ flashMessages.get('success') }}</div>@end
-    @if(flashMessages.has('error'))<div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>@end
+    @if(flashMessages.has('success'))
+      <div class="mb-6 rounded-lg bg-emerald-50 p-4 text-emerald-800">{{ flashMessages.get('success') }}</div>
+    @end
+    @if(flashMessages.has('error'))
+      <div class="mb-6 rounded-lg bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+    @end
 
     <form method="POST" enctype="multipart/form-data" action="/admin/site-settings" class="space-y-9 rounded-2xl border border-slate-200 bg-white p-6">
       {{ csrfField() }}
@@ -15,24 +19,37 @@
       <section class="space-y-5">
         <div><p class="text-sm font-medium text-emerald-700">Página inicial</p><h2 class="text-xl font-bold">Apresentação</h2></div>
         <div class="grid gap-5 md:grid-cols-2">
-          <label class="block"><span class="mb-2 block font-semibold">Chamada superior</span><input name="homeEyebrow" value="{{ settings.homeEyebrow ?? 'Institucional' }}"></label>
-          <label class="block"><span class="mb-2 block font-semibold">Título principal</span><input name="homeTitle" value="{{ settings.homeTitle ?? 'O Terreiro' }}"></label>
+          <label><span class="mb-2 block font-semibold">Chamada superior</span><input name="homeEyebrow" value="{{ settings.homeEyebrow ?? 'Institucional' }}"></label>
+          <label><span class="mb-2 block font-semibold">Título principal</span><input name="homeTitle" value="{{ settings.homeTitle ?? 'O Terreiro' }}"></label>
         </div>
-        <label class="block"><span class="mb-2 block font-semibold">Texto de apresentação</span><textarea class="min-h-24" name="homeSummary">{{ settings.homeSummary ?? '' }}</textarea></label>
+        <label><span class="mb-2 block font-semibold">Texto de apresentação</span><textarea class="min-h-24" name="homeSummary">{{ settings.homeSummary ?? '' }}</textarea></label>
       </section>
 
       <section class="space-y-5 border-t border-slate-200 pt-7">
         <h2 class="text-xl font-bold">Missão, valores e trajetória</h2>
         <div class="grid gap-6 lg:grid-cols-3">
-          <div class="space-y-3 rounded-xl border border-slate-200 p-4"><input name="missionTitle" value="{{ settings.missionTitle ?? 'Nossa missão' }}"><textarea class="min-h-36" name="missionText">{{ settings.missionText ?? '' }}</textarea><label class="flex gap-2"><input class="w-auto" type="checkbox" name="missionVisible" value="true" {{ settings.missionVisible !== false ? 'checked' : '' }}> Exibir</label></div>
-          <div class="space-y-3 rounded-xl border border-slate-200 p-4"><input name="valuesTitle" value="{{ settings.valuesTitle ?? 'Nossos valores' }}"><textarea class="min-h-36" name="valuesText">{{ settings.valuesText ?? '' }}</textarea><label class="flex gap-2"><input class="w-auto" type="checkbox" name="valuesVisible" value="true" {{ settings.valuesVisible !== false ? 'checked' : '' }}> Exibir</label></div>
-          <div class="space-y-3 rounded-xl border border-slate-200 p-4"><input name="trajectoryTitle" value="{{ settings.trajectoryTitle ?? 'Nossa trajetória' }}"><textarea class="min-h-36" name="trajectoryText">{{ settings.trajectoryText ?? '' }}</textarea><input name="trajectoryButtonText" value="{{ settings.trajectoryButtonText ?? 'Conheça nossa história' }}"><input name="trajectoryButtonUrl" value="{{ settings.trajectoryButtonUrl ?? '/o-terreiro' }}"><label class="flex gap-2"><input class="w-auto" type="checkbox" name="trajectoryVisible" value="true" {{ settings.trajectoryVisible !== false ? 'checked' : '' }}> Exibir</label></div>
+          <div class="space-y-3 rounded-xl border border-slate-200 p-4">
+            <input name="missionTitle" value="{{ settings.missionTitle ?? 'Nossa missão' }}">
+            <textarea class="min-h-36" name="missionText">{{ settings.missionText ?? '' }}</textarea>
+            <label class="flex gap-2"><input class="w-auto" type="checkbox" name="missionVisible" value="true" {{ settings.missionVisible !== false ? 'checked' : '' }}> Exibir</label>
+          </div>
+          <div class="space-y-3 rounded-xl border border-slate-200 p-4">
+            <input name="valuesTitle" value="{{ settings.valuesTitle ?? 'Nossos valores' }}">
+            <textarea class="min-h-36" name="valuesText">{{ settings.valuesText ?? '' }}</textarea>
+            <label class="flex gap-2"><input class="w-auto" type="checkbox" name="valuesVisible" value="true" {{ settings.valuesVisible !== false ? 'checked' : '' }}> Exibir</label>
+          </div>
+          <div class="space-y-3 rounded-xl border border-slate-200 p-4">
+            <input name="trajectoryTitle" value="{{ settings.trajectoryTitle ?? 'Nossa trajetória' }}">
+            <textarea class="min-h-36" name="trajectoryText">{{ settings.trajectoryText ?? '' }}</textarea>
+            <input name="trajectoryButtonText" value="{{ settings.trajectoryButtonText ?? 'Conheça nossa história' }}">
+            <input name="trajectoryButtonUrl" value="{{ settings.trajectoryButtonUrl ?? '/o-terreiro' }}">
+            <label class="flex gap-2"><input class="w-auto" type="checkbox" name="trajectoryVisible" value="true" {{ settings.trajectoryVisible !== false ? 'checked' : '' }}> Exibir</label>
+          </div>
         </div>
       </section>
 
       <section class="space-y-6 border-t border-slate-200 pt-7">
         <div><p class="text-sm font-medium text-amber-700">Personalização global</p><h2 class="text-xl font-bold">Aparência do portal</h2><p class="text-sm text-slate-600">As escolhas abaixo afetam o site público e o painel administrativo.</p></div>
-
         <div class="grid gap-4 md:grid-cols-5">
           <label><span class="mb-2 block font-semibold">Principal</span><input type="color" name="themePrimary" value="{{ settings.themePrimary ?? '#1E4620' }}" class="h-12"></label>
           <label><span class="mb-2 block font-semibold">Escura</span><input type="color" name="themeDark" value="{{ settings.themeDark ?? '#08351F' }}" class="h-12"></label>
@@ -42,27 +59,55 @@
         </div>
 
         <div class="grid gap-5 md:grid-cols-3">
-          <label><span class="mb-2 block font-semibold">Fonte dos títulos</span><select name="fontHeading">@each(font in ['Georgia','Lora','Merriweather','Source Serif 4','Libre Baskerville','Inter','Arial'])<option value="{{ font }}" {{ (settings.fontHeading ?? 'Georgia') === font ? 'selected' : '' }}>{{ font }}</option>@end</select></label>
-          <label><span class="mb-2 block font-semibold">Fonte do texto</span><select name="fontBody">@each(font in ['Inter','Source Sans 3','Georgia','Lora','Merriweather','Arial','system-ui'])<option value="{{ font }}" {{ (settings.fontBody ?? 'Inter') === font ? 'selected' : '' }}>{{ font }}</option>@end</select></label>
-          <label><span class="mb-2 block font-semibold">Fonte de menus e botões</span><select name="fontUi">@each(font in ['Inter','Source Sans 3','Arial','system-ui','Georgia'])<option value="{{ font }}" {{ (settings.fontUi ?? 'Inter') === font ? 'selected' : '' }}>{{ font }}</option>@end</select></label>
+          <label><span class="mb-2 block font-semibold">Fonte dos títulos</span><select name="fontHeading">
+            @each(font in fontOptions)
+              <option value="{{ font }}" {{ (settings.fontHeading ?? 'Georgia') === font ? 'selected' : '' }}>{{ font }}</option>
+            @end
+          </select></label>
+          <label><span class="mb-2 block font-semibold">Fonte do texto</span><select name="fontBody">
+            @each(font in fontOptions)
+              <option value="{{ font }}" {{ (settings.fontBody ?? 'Inter') === font ? 'selected' : '' }}>{{ font }}</option>
+            @end
+          </select></label>
+          <label><span class="mb-2 block font-semibold">Fonte de menus e botões</span><select name="fontUi">
+            @each(font in fontOptions)
+              <option value="{{ font }}" {{ (settings.fontUi ?? 'Inter') === font ? 'selected' : '' }}>{{ font }}</option>
+            @end
+          </select></label>
         </div>
+
         <div class="grid gap-5 md:grid-cols-2">
-          <label><span class="mb-2 block font-semibold">Tamanho base</span><select name="fontSizeBase">@each(size in [14,15,16,17,18,19,20])<option value="{{ size }}" {{ (settings.fontSizeBase ?? 16) === size ? 'selected' : '' }}>{{ size }} px</option>@end</select></label>
-          <label><span class="mb-2 block font-semibold">Peso dos títulos</span><select name="headingWeight">@each(weight in [400,500,600,700,800])<option value="{{ weight }}" {{ (settings.headingWeight ?? 600) === weight ? 'selected' : '' }}>{{ weight }}</option>@end</select></label>
+          <label><span class="mb-2 block font-semibold">Tamanho base</span><select name="fontSizeBase">
+            @each(size in fontSizes)
+              <option value="{{ size }}" {{ (settings.fontSizeBase ?? 16) === size ? 'selected' : '' }}>{{ size }} px</option>
+            @end
+          </select></label>
+          <label><span class="mb-2 block font-semibold">Peso dos títulos</span><select name="headingWeight">
+            @each(weight in headingWeights)
+              <option value="{{ weight }}" {{ (settings.headingWeight ?? 600) === weight ? 'selected' : '' }}>{{ weight }}</option>
+            @end
+          </select></label>
         </div>
+
         <button type="button" class="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-amber-900" onclick="document.querySelector('[name=themePrimary]').value='#1E4620';document.querySelector('[name=themeDark]').value='#08351F';document.querySelector('[name=themeAccent]').value='#D6A23C';document.querySelector('[name=themeBackground]').value='#FFFDF9';document.querySelector('[name=themeText]').value='#223028';document.querySelector('[name=fontHeading]').value='Georgia';document.querySelector('[name=fontBody]').value='Inter';document.querySelector('[name=fontUi]').value='Inter';document.querySelector('[name=fontSizeBase]').value='16';document.querySelector('[name=headingWeight]').value='600'">Restaurar tema do Terreiro</button>
       </section>
 
       <section class="space-y-5 border-t border-slate-200 pt-7">
-        <div><p class="text-sm font-medium text-emerald-700">Navegação</p><h2 class="text-xl font-bold">Menu público</h2><p class="text-sm text-slate-600">Altere o nome, a ordem e a visibilidade. O acesso administrativo continua separado e protegido.</p></div>
+        <div><p class="text-sm font-medium text-emerald-700">Navegação</p><h2 class="text-xl font-bold">Menu público</h2><p class="text-sm text-slate-600">Altere nome, ordem e visibilidade de cada item.</p></div>
         <div class="overflow-x-auto rounded-xl border border-slate-200">
-          <table class="min-w-full"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Item</th><th class="p-3 text-left">Nome exibido</th><th class="p-3 text-left">Ordem</th><th class="p-3 text-left">Visível</th></tr></thead><tbody>
-            @each(item in [
-              {key:'about',label:'O Terreiro',order:1},{key:'events',label:'Agenda',order:2},{key:'gallery',label:'Galeria',order:3},{key:'posts',label:'Notícias',order:4},{key:'social',label:'Ações sociais',order:5},{key:'documents',label:'Documentos',order:6},{key:'contact',label:'Contato',order:7}
-            ])
-              <tr class="border-t border-slate-200"><td class="p-3 font-semibold">{{ item.label }}</td><td class="p-3"><input name="menu_{{ item.key }}_label" value="{{ item.label }}"></td><td class="p-3"><input type="number" min="1" max="20" name="menu_{{ item.key }}_order" value="{{ item.order }}" class="w-24"></td><td class="p-3"><input type="checkbox" class="w-auto" name="menu_{{ item.key }}_visible" value="true" checked></td></tr>
-            @end
-          </tbody></table>
+          <table class="min-w-full">
+            <thead class="bg-slate-50"><tr><th class="p-3 text-left">Item</th><th class="p-3 text-left">Nome exibido</th><th class="p-3 text-left">Ordem</th><th class="p-3 text-left">Visível</th></tr></thead>
+            <tbody>
+              @each(item in menuItems)
+                <tr class="border-t border-slate-200">
+                  <td class="p-3 font-semibold">{{ item.label }}</td>
+                  <td class="p-3"><input name="menu_{{ item.key }}_label" value="{{ item.label }}"></td>
+                  <td class="p-3"><input type="number" min="1" max="20" name="menu_{{ item.key }}_order" value="{{ item.order }}" class="w-24"></td>
+                  <td class="p-3"><input type="checkbox" class="w-auto" name="menu_{{ item.key }}_visible" value="true" {{ item.visible !== false ? 'checked' : '' }}></td>
+                </tr>
+              @end
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -82,14 +127,19 @@
         <h2 class="text-xl font-bold">Contribuição voluntária via PIX</h2>
         <label class="flex gap-3"><input class="w-auto" type="checkbox" name="contributionVisible" value="true" {{ settings.contributionVisible ? 'checked' : '' }}> Exibir card de contribuição na página Contato</label>
         <div class="grid gap-4 md:grid-cols-2"><input name="contributionTitle" placeholder="Título" value="{{ settings.contributionTitle ?? 'Contribua com a casa' }}"><input name="pixBeneficiary" placeholder="Favorecido" value="{{ settings.pixBeneficiary ?? '' }}"></div>
-        <textarea name="contributionText">{{ settings.contributionText ?? '' }}</textarea><input name="pixKey" placeholder="Chave PIX" value="{{ settings.pixKey ?? '' }}">
+        <textarea name="contributionText">{{ settings.contributionText ?? '' }}</textarea>
+        <input name="pixKey" placeholder="Chave PIX" value="{{ settings.pixKey ?? '' }}">
         <input type="file" name="pixQrCode" accept="image/png,image/jpeg,image/webp">
-        @if(settings.pixQrCodePath)<div class="flex items-center gap-4"><img src="{{ settings.pixQrCodePath }}" class="h-32 w-32 rounded-lg border object-contain"><label class="flex gap-2 text-red-700"><input class="w-auto" type="checkbox" name="removePixQrCode" value="true"> Remover QR Code atual</label></div>@end
+        @if(settings.pixQrCodePath)
+          <div class="flex items-center gap-4"><img src="{{ settings.pixQrCodePath }}" class="h-32 w-32 rounded-lg border object-contain"><label class="flex gap-2 text-red-700"><input class="w-auto" type="checkbox" name="removePixQrCode" value="true"> Remover QR Code atual</label></div>
+        @end
       </section>
 
       <section class="space-y-5 border-t border-slate-200 pt-7">
         <h2 class="text-xl font-bold">Redes sociais</h2>
-        <input type="url" name="instagramUrl" placeholder="Instagram" value="{{ settings.instagramUrl ?? '' }}"><input type="url" name="facebookUrl" placeholder="Facebook" value="{{ settings.facebookUrl ?? '' }}"><input type="url" name="youtubeUrl" placeholder="YouTube" value="{{ settings.youtubeUrl ?? '' }}">
+        <input type="url" name="instagramUrl" placeholder="Instagram" value="{{ settings.instagramUrl ?? '' }}">
+        <input type="url" name="facebookUrl" placeholder="Facebook" value="{{ settings.facebookUrl ?? '' }}">
+        <input type="url" name="youtubeUrl" placeholder="YouTube" value="{{ settings.youtubeUrl ?? '' }}">
       </section>
 
       <div class="flex justify-end border-t border-slate-200 pt-6"><button class="rounded-lg bg-emerald-800 px-6 py-3 font-semibold text-white" type="submit">Salvar configurações</button></div>
