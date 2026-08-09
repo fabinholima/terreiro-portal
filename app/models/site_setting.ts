@@ -49,6 +49,7 @@ export default class SiteSetting extends BaseModel {
   @column() declare fontSizeBase: number
   @column() declare headingWeight: number
   @column() declare publicMenuConfig: string | null
+  @column() declare adminMenuConfig: string | null
   @column.dateTime({ autoCreate: true }) declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime | null
 }
