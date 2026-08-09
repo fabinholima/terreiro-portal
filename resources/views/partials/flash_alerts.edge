@@ -29,23 +29,85 @@
   @end
 </template>
 
+<template id="configured-admin-menu">
+  @each(item in adminMenu)
+    <span data-admin-spec data-href="{{ item.href }}" data-label="{{ item.label }}"></span>
+  @end
+</template>
+
+<template id="admin-menu-settings-template">
+  <section class="space-y-5 border-t border-slate-200 pt-7" data-admin-menu-settings>
+    <div>
+      <p class="text-sm font-medium text-emerald-700">Painel administrativo</p>
+      <h2 class="text-xl font-bold">Menu administrativo</h2>
+      <p class="text-sm text-slate-600">Personalize os módulos de conteúdo. Dashboard, Configurações, Usuários e Sair permanecem fixos.</p>
+    </div>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="min-w-full">
+        <thead class="bg-slate-50"><tr><th class="p-3 text-left">Módulo</th><th class="p-3 text-left">Nome exibido</th><th class="p-3 text-left">Ordem</th><th class="p-3 text-left">Visível</th></tr></thead>
+        <tbody>
+          @each(item in adminMenuAll)
+            <tr class="border-t border-slate-200">
+              <td class="p-3 font-semibold">{{ item.label }}</td>
+              <td class="p-3"><input name="admin_menu_{{ item.key }}_label" value="{{ item.label }}"></td>
+              <td class="p-3"><input type="number" min="1" max="20" name="admin_menu_{{ item.key }}_order" value="{{ item.order }}" class="w-24"></td>
+              <td class="p-3"><input type="checkbox" class="w-auto" name="admin_menu_{{ item.key }}_visible" value="true" {{ item.visible !== false ? 'checked' : '' }}></td>
+            </tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </section>
+</template>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const footerNav = document.querySelector('.slim-footer__nav')
-    const configured = document.getElementById('configured-footer-nav')
-    if (footerNav && configured) footerNav.innerHTML = configured.innerHTML
+    const configuredFooter = document.getElementById('configured-footer-nav')
+    if (footerNav && configuredFooter) footerNav.innerHTML = configuredFooter.innerHTML
 
-    const selectedFonts = [
-      '{{ siteSettings.fontHeading ?? "Georgia" }}',
-      '{{ siteSettings.fontBody ?? "Inter" }}',
-      '{{ siteSettings.fontUi ?? "Inter" }}'
-    ]
+    const adminSpecs = [...document.querySelectorAll('#configured-admin-menu [data-admin-spec]')]
+    const contentLabel = [...document.querySelectorAll('.admin-nav-label')].find((el) => el.textContent.trim() === 'Conteúdo')
+    const contentNav = contentLabel?.nextElementSibling
+    if (contentNav && adminSpecs.length) {
+      const anchors = new Map([...document.querySelectorAll('.admin-nav a[data-admin-link]')].map((a) => [a.getAttribute('href'), a]))
+      const managedHrefs = ['/admin/events','/admin/posts','/admin/albums','/admin/social-actions','/admin/documents','/admin/institutional-pages']
+      managedHrefs.forEach((href) => { const a = anchors.get(href); if (a) a.style.display = 'none' })
+      adminSpecs.forEach((spec) => {
+        const href = spec.dataset.href
+        const anchor = anchors.get(href)
+        if (!anchor) return
+        anchor.style.display = ''
+        const icon = anchor.querySelector('.admin-nav__icon')
+        anchor.textContent = ''
+        if (icon) anchor.appendChild(icon)
+        anchor.appendChild(document.createTextNode(spec.dataset.label || ''))
+        contentNav.appendChild(anchor)
+      })
+      const institutionalLabel = [...document.querySelectorAll('.admin-nav-label')].find((el) => el.textContent.trim() === 'Institucional')
+      if (institutionalLabel) {
+        const institutionalNav = institutionalLabel.nextElementSibling
+        institutionalLabel.style.display = 'none'
+        if (institutionalNav) institutionalNav.style.display = 'none'
+      }
+    }
+
+    if (window.location.pathname === '/admin/site-settings') {
+      const form = document.querySelector('form[action="/admin/site-settings"]')
+      const publicMenuInput = form?.querySelector('[name="menu_about_label"]')
+      const publicMenuSection = publicMenuInput?.closest('section')
+      const adminSettings = document.getElementById('admin-menu-settings-template')
+      if (form && publicMenuSection && adminSettings && !form.querySelector('[data-admin-menu-settings]')) {
+        publicMenuSection.insertAdjacentElement('afterend', adminSettings.content.firstElementChild.cloneNode(true))
+      }
+    }
+
+    const selectedFonts = ['{{ siteSettings.fontHeading ?? "Georgia" }}','{{ siteSettings.fontBody ?? "Inter" }}','{{ siteSettings.fontUi ?? "Inter" }}']
     const webFonts = ['Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville']
     const needed = [...new Set(selectedFonts.filter((font) => webFonts.includes(font)))]
     if (needed.length && !document.getElementById('portal-google-fonts')) {
       const link = document.createElement('link')
-      link.id = 'portal-google-fonts'
-      link.rel = 'stylesheet'
+      link.id = 'portal-google-fonts'; link.rel = 'stylesheet'
       link.href = 'https://fonts.googleapis.com/css2?' + needed.map((font) => 'family=' + encodeURIComponent(font).replace(/%20/g, '+') + ':wght@400;500;600;700;800').join('&') + '&display=swap'
       document.head.appendChild(link)
     }
