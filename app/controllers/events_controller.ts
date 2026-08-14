@@ -12,6 +12,7 @@ export default class EventsController {
     const month = parsedMonth.isValid ? parsedMonth.startOf('month') : DateTime.now().startOf('month')
     const monthStart = month.startOf('month')
     const monthEnd = month.endOf('month')
+    const now = DateTime.now()
 
     const events = await Event.query()
       .where('is_public', true)
@@ -19,6 +20,15 @@ export default class EventsController {
       .where('starts_at', '>=', monthStart.toSQL()!)
       .where('starts_at', '<=', monthEnd.toSQL()!)
       .orderBy('starts_at', 'asc')
+
+    for (const event of events) {
+      const eventFinishedAt = event.endsAt ?? event.startsAt.endOf('day')
+      const canAutoComplete = event.status === 'scheduled' || event.status === 'confirmed'
+
+      event.$extras.publicStatus = canAutoComplete && eventFinishedAt < now
+        ? 'completed'
+        : event.status
+    }
 
     const eventDays = new Set(events.map((event) => event.startsAt.toISODate()))
 
@@ -30,7 +40,7 @@ export default class EventsController {
         day: date.day,
         inMonth: date.month === month.month && date.year === month.year,
         hasEvent: eventDays.has(date.toISODate()),
-        isToday: date.hasSame(DateTime.now(), 'day'),
+        isToday: date.hasSame(now, 'day'),
       }
     })
 
