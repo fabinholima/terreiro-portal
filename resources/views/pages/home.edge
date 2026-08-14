@@ -1,23 +1,121 @@
 @layout()
-  <div class="hero">
-    <h1>It works — welcome to the simplicity of a Hypermedia app</h1>
-    <p>
-      A lightweight foundation for building modern web interfaces — straightforward, flexible, and true to the web's core simplicity.
-    </p>
-  </div>
+  <section class="home-showcase">
+    <div class="site-container home-showcase__inner">
+      <div class="home-showcase__logo-wrap">
+        <img class="home-showcase__logo" src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
+      </div>
+      <div class="home-showcase__copy">
+        <p class="eyebrow">{{ siteSettings.homeEyebrow ?? 'Institucional' }}</p>
+        <h1>{{ siteSettings.homeTitle ?? 'O Terreiro' }}</h1>
+        <div class="gold-rule" aria-hidden="true"><span></span></div>
+        <p>{{ siteSettings.homeSummary ?? 'Casa de fé, caridade, ancestralidade e acolhimento.' }}</p>
+      </div>
+    </div>
+  </section>
 
-  <div class="cards">
-    <a href="https://insiders.adonisjs.com/docs/v7-alpha/introduction" target="_blank">
-      <h3>Official Docs &nbsp;›</h3>
-      <p>Comprehensive reference for building with AdonisJS</p>
-    </a>
-    <a href="https://adocasts.com/" target="_blank">
-      <h3>Adocasts &nbsp;›</h3>
-      <p>Guided video tutorials for everyday development</p>
-    </a>
-    <a href="https://discord.gg/vDcEjq6" target="_blank">
-      <h3>Discord &nbsp;›</h3>
-      <p>Connect with developers building with AdonisJS every day</p>
-    </a>
-  </div>
+  <section class="home-values">
+    <div class="site-container home-values__grid">
+      @if(siteSettings.missionVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.missionTitle ?? 'Nossa missão' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.missionText }}</p>
+          </div>
+        </article>
+      @end
+
+      @if(siteSettings.valuesVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.valuesTitle ?? 'Nossos valores' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.valuesText }}</p>
+          </div>
+        </article>
+      @end
+
+      @if(siteSettings.trajectoryVisible !== false)
+        <article class="home-value-card">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
+          </div>
+          <div>
+            <h2>{{ siteSettings.trajectoryTitle ?? 'Nossa trajetória' }}</h2>
+            <span class="mini-gold-line"></span>
+            <p>{{ siteSettings.trajectoryText }}</p>
+            @if(siteSettings.trajectoryButtonText && siteSettings.trajectoryButtonUrl)
+              <a href="{{ siteSettings.trajectoryButtonUrl }}" class="button home-value-card__button">{{ siteSettings.trajectoryButtonText }}</a>
+            @end
+          </div>
+        </article>
+      @end
+    </div>
+  </section>
+
+  <section class="home-teasers">
+    <div class="site-container home-teasers__grid">
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Próximas atividades</h2>
+          <a href="/agenda">Ver agenda →</a>
+        </div>
+        @each(event in events)
+          <div class="home-teaser__card">
+            <p class="meta">{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</p>
+            <h3>{{ event.title }}</h3>
+            @if(event.location)
+              <p>{{ event.location }}</p>
+            @end
+          </div>
+        @else
+          <p class="home-teaser__empty">Nenhuma atividade pública agendada.</p>
+        @end
+      </article>
+
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Notícias recentes</h2>
+          <a href="/noticias">Ver todas →</a>
+        </div>
+        @each(post in posts)
+          <a href="/noticias/{{ post.slug }}" class="home-teaser__card home-teaser__card--media">
+            @if(post.featuredImagePath)
+              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}">
+            @end
+            <div>
+              <p class="meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy') : '' }}</p>
+              <h3>{{ post.title }}</h3>
+            </div>
+          </a>
+        @else
+          <p class="home-teaser__empty">Nenhuma notícia publicada.</p>
+        @end
+      </article>
+
+      <article class="home-teaser">
+        <div class="home-teaser__heading">
+          <h2>Ações sociais</h2>
+          <a href="/acoes-sociais">Ver todas →</a>
+        </div>
+        @each(action in actions)
+          <div class="home-teaser__card">
+            <p class="meta">{{ action.status }}</p>
+            <h3>{{ action.title }}</h3>
+            @if(action.description)
+              <p>{{ action.description }}</p>
+            @end
+          </div>
+        @else
+          <p class="home-teaser__empty">Nenhuma ação social publicada.</p>
+        @end
+      </article>
+    </div>
+  </section>
 @end

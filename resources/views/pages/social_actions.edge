@@ -1,0 +1,80 @@
+@layout()
+  <section class="page-hero social-hero">
+    <div class="site-container">
+      <p class="eyebrow">Solidariedade e comunidade</p>
+      <h1>Ações sociais</h1>
+      <p>Conheça as campanhas e iniciativas promovidas pelo Terreiro de Umbanda Oxóssi e João Boiadeiro.</p>
+    </div>
+  </section>
+
+  <section class="social-section">
+    <div class="site-container">
+      <div class="social-grid">
+        @each(action in actions)
+          <article class="social-card">
+            <div class="social-card__media">
+              @if(action.imagePath)
+                <img src="{{ action.imagePath }}" alt="Imagem da ação {{ action.title }}">
+              @else
+                <div class="social-card__media-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
+                </div>
+              @end
+
+              <span class="social-status social-status--{{ action.status }}">
+                @if(action.status === 'planned')
+                  Planejada
+                @elseif(action.status === 'active')
+                  Em andamento
+                @elseif(action.status === 'completed')
+                  Concluída
+                @elseif(action.status === 'permanent')
+                  Permanente
+                @else
+                  Cancelada
+                @end
+              </span>
+            </div>
+
+            <div class="social-card__body">
+              @if(action.startsAt)
+                <div class="social-card__date">
+                  <svg viewBox="0 0 24 24"><path d="M7 2v3M17 2v3M4 9h16M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
+                  <span>
+                    {{ action.startsAt.toFormat('dd/LL/yyyy') }}
+                    @if(action.endsAt)
+                      – {{ action.endsAt.toFormat('dd/LL/yyyy') }}
+                    @end
+                  </span>
+                </div>
+              @end
+
+              <h2>{{ action.title }}</h2>
+
+              @if(action.description)
+                <p class="social-card__description">{{ action.description }}</p>
+              @end
+
+              @if(action.progressPercent !== null)
+                <div class="social-progress">
+                  <div class="social-progress__top">
+                    <span>Progresso da ação</span>
+                    <strong>{{ action.progressPercent }}%</strong>
+                  </div>
+                  <div class="social-progress__bar"><span style="width: {{ action.progressPercent }}%"></span></div>
+                  <div class="social-progress__value">{{ action.currentValue }} de {{ action.goal }} {{ action.unit ?? '' }}</div>
+                </div>
+              @end
+            </div>
+          </article>
+        @else
+          <div class="social-empty">
+            <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/></svg>
+            <h2>Nenhuma ação social publicada</h2>
+            <p>As próximas campanhas e iniciativas comunitárias aparecerão aqui.</p>
+          </div>
+        @end
+      </div>
+    </div>
+  </section>
+@end

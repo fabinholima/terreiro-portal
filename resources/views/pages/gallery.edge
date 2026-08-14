@@ -1,0 +1,40 @@
+@layout()
+  <section class="page-hero gallery-hero">
+    <div class="site-container">
+      <p class="eyebrow">Memória</p>
+      <h1>Galeria</h1>
+      <p>Registros públicos das atividades, celebrações e ações do Terreiro.</p>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="site-container">
+      <div class="gallery-album-grid">
+        @each(album in albums)
+          <a href="/galeria/{{ album.slug }}" class="gallery-album-card">
+            <div class="gallery-album-card__media">
+              @if(album.coverPath)
+                <img src="{{ album.coverPath }}" alt="{{ album.title }}">
+              @else
+                <div class="gallery-album-card__placeholder">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m5 17 4-4 3 3 2-2 5 5"/></svg>
+                </div>
+              @end
+              <span class="gallery-album-card__count">{{ album.photos.length }} foto(s)</span>
+            </div>
+            <div class="gallery-album-card__body">
+              <p class="gallery-album-card__meta">{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória da casa' }}</p>
+              <h2>{{ album.title }}</h2>
+              @if(album.description)
+                <p>{{ album.description }}</p>
+              @end
+              <span class="gallery-album-card__link">Abrir álbum <span>→</span></span>
+            </div>
+          </a>
+        @else
+          <div class="gallery-empty">Nenhum álbum público disponível.</div>
+        @end
+      </div>
+    </div>
+  </section>
+@end

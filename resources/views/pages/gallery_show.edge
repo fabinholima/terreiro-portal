@@ -1,0 +1,59 @@
+@layout()
+  <section class="page-hero gallery-hero">
+    <div class="site-container">
+      <a href="/galeria" class="gallery-back">← Voltar para a galeria</a>
+      <p class="eyebrow">Galeria</p>
+      <h1>{{ album.title }}</h1>
+      @if(album.description)
+        <p>{{ album.description }}</p>
+      @end
+    </div>
+  </section>
+
+  <section class="gallery-section" x-data="lightbox">
+    <div class="site-container">
+      <div class="gallery-toolbar">
+        <div>
+          <p class="gallery-toolbar__meta">{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória da casa' }}</p>
+          <h2>{{ album.photos.length }} foto(s) publicadas</h2>
+        </div>
+        <a href="/galeria" class="gallery-toolbar__back">Todos os álbuns</a>
+      </div>
+
+      <div class="gallery-photo-grid">
+        @each(photo in album.photos)
+          <figure class="gallery-photo" data-lightbox-image="{{ photo.path }}">
+            <button type="button" class="gallery-photo__button" @click="open('{{ photo.path }}')" aria-label="Ampliar foto">
+              <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" loading="lazy">
+              <span class="gallery-photo__zoom" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4M8 11h6M11 8v6"/></svg>
+              </span>
+            </button>
+            @if(photo.caption || photo.credit)
+              <figcaption class="gallery-photo__caption">
+                @if(photo.caption)
+                  <span>{{ photo.caption }}</span>
+                @end
+                @if(photo.credit)
+                  <small>Foto: {{ photo.credit }}</small>
+                @end
+              </figcaption>
+            @end
+          </figure>
+        @else
+          <div class="gallery-empty">Nenhuma foto autorizada para publicação neste álbum.</div>
+        @end
+      </div>
+    </div>
+
+    <div class="gallery-lightbox" x-cloak x-show="image" @keydown.escape.window="close()" @keydown.arrow-left.window="previous()" @keydown.arrow-right.window="next()" @click.self="close()">
+      <button class="gallery-lightbox__close" type="button" @click="close()" aria-label="Fechar imagem">×</button>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" type="button" @click.stop="previous()" aria-label="Foto anterior">‹</button>
+      <div class="gallery-lightbox__content">
+        <img :src="image" alt="Visualização ampliada">
+        <div class="gallery-lightbox__counter" x-text="counter"></div>
+      </div>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--next" type="button" @click.stop="next()" aria-label="Próxima foto">›</button>
+    </div>
+  </section>
+@end

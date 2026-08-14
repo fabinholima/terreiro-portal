@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: terreiro
+      POSTGRES_USER: terreiro
+      POSTGRES_PASSWORD: terreiro
+    ports:
+      - "5432:5432"
+    volumes:
+      - terreiro_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U terreiro -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  terreiro_pgdata:

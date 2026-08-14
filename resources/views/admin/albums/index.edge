@@ -1,0 +1,41 @@
+@layout()
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Galerias</h1>
+        <p class="text-sm text-gray-600">Álbuns e fotografias do Terreiro.</p>
+      </div>
+      <a href="/admin/albums/create" class="admin-action admin-action--primary">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Novo álbum
+      </a>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      @each(album in albums)
+        <article class="rounded-xl border p-4 bg-white">
+          @if(album.coverPath)
+            <img src="{{ album.coverPath }}" alt="Capa do álbum {{ album.title }}" class="w-full h-44 object-cover rounded-lg mb-3">
+          @end
+          <h2 class="font-semibold text-lg">{{ album.title }}</h2>
+          <p class="text-sm text-gray-600">{{ album.$extras.photos_count ?? 0 }} foto(s)</p>
+          <div class="mt-4 admin-actions">
+            <a href="/admin/albums/{{ album.id }}/edit" class="admin-action admin-action--edit" title="Editar álbum">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+              Editar
+            </a>
+            <form method="POST" action="/admin/albums/{{ album.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este álbum?')">
+              {{ csrfField() }}
+              <button type="submit" class="admin-action admin-action--delete" title="Excluir álbum">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                Excluir
+              </button>
+            </form>
+          </div>
+        </article>
+      @else
+        <p>Nenhum álbum cadastrado.</p>
+      @end
+    </div>
+  </div>
+@end

@@ -1,17 +1,170 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdonisJS - A fully featured web framework for Node.js</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta name="theme-color" content="#0c351f" />
+    <title>{{ seo.title }}</title>
+    <meta name="description" content="{{ seo.description }}" />
+    <link rel="canonical" href="{{ seo.canonicalUrl }}" />
+
+    @if(seo.noindex)
+      <meta name="robots" content="noindex,nofollow" />
+    @else
+      <meta name="robots" content="index,follow" />
+    @end
+
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="{{ seo.type }}" />
+    <meta property="og:title" content="{{ seo.title }}" />
+    <meta property="og:description" content="{{ seo.description }}" />
+    <meta property="og:url" content="{{ seo.canonicalUrl }}" />
+    <meta property="og:site_name" content="{{ siteSettings.siteName }}" />
+    @if(seo.imageUrl)
+      <meta property="og:image" content="{{ seo.imageUrl }}" />
+    @end
+
+    <meta name="twitter:card" content="{{ seo.imageUrl ? 'summary_large_image' : 'summary' }}" />
+    <meta name="twitter:title" content="{{ seo.title }}" />
+    <meta name="twitter:description" content="{{ seo.description }}" />
+    @if(seo.imageUrl)
+      <meta name="twitter:image" content="{{ seo.imageUrl }}" />
+    @end
+
+    @vite(['resources/css/app.css', 'resources/css/site-adjustments.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body>
-    @include('partials/header')
-    <main>
-      @include('partials/flash_alerts')
-      {{{ await $slots.main() }}}
-    </main>
-  </body>
+
+  @if(request.url().startsWith('/admin'))
+    <body class="admin-body" x-data="{ adminMenuOpen: false }">
+      <div class="admin-shell">
+        <aside class="admin-sidebar" :class="adminMenuOpen ? 'is-open' : ''>
+          <a class="admin-brand" href="/admin">
+            <img src="/images/logo-terreiro.png" alt="">
+            <span>
+              <strong>Oxóssi e João Boiadeiro</strong>
+              <small>Painel administrativo</small>
+            </span>
+          </a>
+
+          <div>
+            <div class="admin-nav-label">Principal</div>
+            <nav class="admin-nav" aria-label="Administração">
+              <a data-admin-link href="/admin"><span class="admin-nav__icon">▦</span>Dashboard</a>
+            </nav>
+
+            <div class="admin-nav-label">Conteúdo</div>
+            <nav class="admin-nav">
+              <a data-admin-link href="/admin/events"><span class="admin-nav__icon">◷</span>Agenda</a>
+              <a data-admin-link href="/admin/posts"><span class="admin-nav__icon">▤</span>Notícias</a>
+              <a data-admin-link href="/admin/albums"><span class="admin-nav__icon">▧</span>Galeria</a>
+              <a data-admin-link href="/admin/social-actions"><span class="admin-nav__icon">♡</span>Ações sociais</a>
+              <a data-admin-link href="/admin/documents"><span class="admin-nav__icon">▥</span>Documentos</a>
+            </nav>
+
+            <div class="admin-nav-label">Institucional</div>
+            <nav class="admin-nav">
+              <a data-admin-link href="/admin/institutional-pages"><span class="admin-nav__icon">▣</span>Páginas institucionais</a>
+            </nav>
+
+            @if(auth.user?.role === 'admin')
+              <div class="admin-nav-label">Sistema</div>
+              <nav class="admin-nav">
+                <a data-admin-link href="/admin/site-settings"><span class="admin-nav__icon">⚙</span>Configurações</a>
+                <a data-admin-link href="/admin/users"><span class="admin-nav__icon">♙</span>Usuários</a>
+              </nav>
+            @end
+          </div>
+
+          <div class="admin-sidebar__bottom">
+            <a href="/" target="_blank" rel="noopener"><span>↗</span>Ver site público</a>
+            <form method="POST" action="/logout">
+              {{ csrfField() }}
+              <button type="submit"><span>⇥</span>Sair</button>
+            </form>
+          </div>
+        </aside>
+
+        <div class="admin-main">
+          <header class="admin-topbar">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="admin-mobile-toggle" type="button" @click="adminMenuOpen = !adminMenuOpen" aria-label="Abrir menu">☰</button>
+              <div class="admin-topbar__title">Painel administrativo</div>
+            </div>
+            <div class="admin-topbar__user">
+              <span>{{ auth.user?.fullName ?? auth.user?.email }}</span>
+              <span class="admin-avatar">{{ (auth.user?.fullName ?? auth.user?.email ?? 'A').charAt(0).toUpperCase() }}</span>
+            </div>
+          </header>
+
+          <main class="admin-content" @click="adminMenuOpen = false">
+            @include('partials/flash_alerts')
+            {{{ await $slots.main() }}}
+          </main>
+        </div>
+      </div>
+
+      <script>
+        (() => {
+          const path = window.location.pathname
+          document.querySelectorAll('[data-admin-link]').forEach((link) => {
+            const href = link.getAttribute('href')
+            const active = href === '/admin' ? path === '/admin' : path === href || path.startsWith(href + '/')
+            if (active) link.classList.add('is-active')
+          })
+        })()
+      </script>
+    </body>
+  @else
+    <body>
+      @include('partials/header')
+      <main>
+        @include('partials/flash_alerts')
+        {{{ await $slots.main() }}}
+      </main>
+
+      <footer class="site-footer site-footer--slim">
+        <div class="site-container slim-footer__row">
+          <div class="slim-footer__brand">
+            <img src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
+            <div>
+              <strong>Terreiro de Umbanda<br>Oxóssi e João Boiadeiro</strong>
+              <small>Na fé, na lei e na caridade.</small>
+            </div>
+          </div>
+
+          <nav class="slim-footer__nav" aria-label="Navegação do rodapé">
+            <a href="/">Início</a><span>•</span><a href="/o-terreiro">O Terreiro</a><span>•</span><a href="/agenda">Agenda</a><span>•</span><a href="/documentos">Documentos</a><span>•</span><a href="/contato">Contato</a>
+          </nav>
+
+          <div class="slim-footer__social" aria-label="Redes sociais">
+            @if(siteSettings.whatsapp)
+              <a href="https://wa.me/{{ siteSettings.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.2-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.7.1-.2.1-.4 0-.6l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z"/></svg>
+              </a>
+            @end
+            @if(siteSettings.instagramUrl)
+              <a href="{{ siteSettings.instagramUrl }}" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.7" r="1" class="social-icon-fill"/></svg>
+              </a>
+            @end
+            @if(siteSettings.facebookUrl)
+              <a href="{{ siteSettings.facebookUrl }}" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H8V13h2.8v8h3.4Z" class="social-icon-fill"/></svg>
+              </a>
+            @end
+            @if(siteSettings.youtubeUrl)
+              <a href="{{ siteSettings.youtubeUrl }}" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7.2a2.8 2.8 0 0 0-2-2C17.3 4.7 12 4.7 12 4.7s-5.3 0-7 .5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2.5 12 29 29 0 0 0 3 16.8a2.8 2.8 0 0 0 2 2c1.7.5 7 .5 7 .5s5.3 0 7-.5a2.8 2.8 0 0 0 2-2 29 29 0 0 0 .5-4.8 29 29 0 0 0-.5-4.8Z"/><path d="m10 15.2 5-3.2-5-3.2v6.4Z" class="social-icon-fill"/></svg>
+              </a>
+            @end
+          </div>
+        </div>
+
+        <div class="site-footer__bottom slim-footer__bottom">
+          <div class="site-container">© 2026 {{ siteSettings.siteName }}. Todos os direitos reservados.</div>
+        </div>
+      </footer>
+    </body>
+  @end
 </html>

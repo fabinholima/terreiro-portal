@@ -1,0 +1,202 @@
+@layout()
+  @if(page.slug === 'o-terreiro')
+    <section class="institutional-hero">
+      <div class="site-container institutional-hero__inner">
+        <div class="institutional-hero__logo-wrap">
+          <img class="institutional-hero__logo" src="/images/logo-terreiro.png" alt="Logotipo do {{ siteSettings.siteName }}">
+        </div>
+        <div>
+          <p class="eyebrow">Institucional</p>
+          <h1 class="institutional-hero__title">O Terreiro</h1>
+          <div class="gold-rule" aria-hidden="true"><span></span></div>
+          <p class="institutional-hero__summary">Casa de fé, caridade, ancestralidade e acolhimento.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="institutional-content">
+      <div class="site-container institutional-list">
+        <article class="institutional-item">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M24 39s-14-8.2-14-19a8 8 0 0 1 14-5.2A8 8 0 0 1 38 20c0 10.8-14 19-14 19Z"/><path d="M8 35h8l4-4h9a4 4 0 0 1 4 4H20"/><path d="M8 31H4v12h4"/></svg>
+          </div>
+          <div>
+            <h2>Nossa missão</h2>
+            <p>Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.</p>
+          </div>
+        </article>
+
+        <article class="institutional-item">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="7"/><circle cx="11" cy="20" r="5"/><circle cx="37" cy="20" r="5"/><path d="M12 38v-5c0-6 5-10 12-10s12 4 12 10v5"/><path d="M3 38v-4c0-5 3-8 8-8M45 38v-4c0-5-3-8-8-8"/></svg>
+          </div>
+          <div>
+            <h2>Nossos valores</h2>
+            <p>Respeito às diferenças, valorização da ancestralidade, compromisso com a comunidade, responsabilidade religiosa, solidariedade e cuidado com as pessoas.</p>
+          </div>
+        </article>
+
+        <article class="institutional-item">
+          <div class="institutional-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M7 22 24 8l17 14v20H7Z"/><path d="M24 42V25"/><path d="M24 33c-6 0-9-4-9-9 6 0 9 3 9 9Zm0 0c6 0 9-4 9-9-6 0-9 3-9 9Z"/></svg>
+          </div>
+          <div>
+            <h2>Nossa trajetória</h2>
+            <p>A casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  @elseif(page.slug === 'contato')
+    <section class="page-hero contact-hero">
+      <div class="site-container">
+        <p class="eyebrow">Fale conosco</p>
+        <h1>Contato</h1>
+        <p>Use nossos canais oficiais para informações sobre atendimento, atividades e localização do Terreiro.</p>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="site-container contact-wrap">
+        <div class="contact-main">
+          <article class="contact-intro">
+            <h2>Canais oficiais</h2>
+            <p>Escolha o canal mais conveniente. Para assuntos relacionados às atividades religiosas e comunitárias, utilize preferencialmente os contatos oficiais abaixo.</p>
+
+            <div class="contact-channel-list">
+              @if(siteSettings.whatsapp)
+                <a class="contact-channel" href="https://wa.me/{{ siteSettings.whatsapp.replace(/\D/g, '') }}" target="_blank" rel="noopener">
+                  <span class="contact-channel__icon"><svg viewBox="0 0 24 24"><path d="M5 20l1.2-3.6A8 8 0 1 1 9 19.5L5 20Z"/><path d="M9.2 8.5c.5 2.1 2.2 3.8 4.3 4.3"/></svg></span>
+                  <span><small>WhatsApp</small><strong>{{ siteSettings.whatsapp }}</strong></span>
+                </a>
+              @end
+
+              @if(siteSettings.phone)
+                <a class="contact-channel" href="tel:{{ siteSettings.phone }}">
+                  <span class="contact-channel__icon"><svg viewBox="0 0 24 24"><path d="M7 3h3l1.5 5-2 1.5a15 15 0 0 0 5 5L16 12.5l5 1.5v3c0 2.2-1.8 4-4 4C9.3 21 3 14.7 3 7c0-2.2 1.8-4 4-4Z"/></svg></span>
+                  <span><small>Telefone</small><strong>{{ siteSettings.phone }}</strong></span>
+                </a>
+              @end
+
+              @if(siteSettings.email)
+                <a class="contact-channel" href="mailto:{{ siteSettings.email }}">
+                  <span class="contact-channel__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
+                  <span><small>E-mail</small><strong>{{ siteSettings.email }}</strong></span>
+                </a>
+              @end
+            </div>
+          </article>
+
+          <article class="contact-instructions">
+            <div class="contact-instructions__heading">
+              <span class="contact-instructions__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16H5V5a2 2 0 0 1 2-2Z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+              </span>
+              <div>
+                <p class="eyebrow">Orientações</p>
+                <h2>Instruções</h2>
+              </div>
+            </div>
+
+            @if(page.body)
+              <div class="contact-instructions__rich">{{{ page.body }}}</div>
+            @else
+              <div class="contact-instructions__list">
+                <div><strong>1</strong><span>Consulte a Agenda antes de se deslocar para confirmar datas e horários das atividades públicas.</span></div>
+                <div><strong>2</strong><span>Para dúvidas sobre atendimento, utilize os canais oficiais informados nesta página.</span></div>
+                <div><strong>3</strong><span>Em caso de alteração de programação, as informações atualizadas serão publicadas no portal.</span></div>
+              </div>
+            @end
+          </article>
+        </div>
+
+        <div class="contact-side">
+          <article class="contact-panel">
+            <h2>Endereço e atendimento</h2>
+            @if(siteSettings.address || siteSettings.city || siteSettings.state)
+              <div class="contact-panel__row">
+                <svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <div>
+                  @if(siteSettings.address)
+                    <p>{{ siteSettings.address }}</p>
+                  @end
+                  @if(siteSettings.city || siteSettings.state)
+                    <p>{{ siteSettings.city ?? '' }}{{ siteSettings.city && siteSettings.state ? ' - ' : '' }}{{ siteSettings.state ?? '' }}</p>
+                  @end
+                </div>
+              </div>
+            @end
+
+            @if(siteSettings.openingHours)
+              <div class="contact-panel__row">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                <div><p>{{ siteSettings.openingHours }}</p></div>
+              </div>
+            @end
+
+            @if(siteSettings.mapsUrl)
+              <a class="contact-map-btn" href="{{ siteSettings.mapsUrl }}" target="_blank" rel="noopener">Abrir localização no mapa</a>
+            @end
+          </article>
+
+          <aside class="contact-note">
+            <strong>Programação pública</strong>
+            A Agenda do portal é a referência para confirmar as próximas atividades e seus horários.
+            <a href="/agenda">Consultar Agenda →</a>
+          </aside>
+
+          @if(siteSettings.contributionVisible && (siteSettings.pixQrCodePath || siteSettings.pixKey))
+            <aside class="contribution-card">
+              <div class="contribution-card__heading">
+                <span class="contribution-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.1-7-9.5A4.5 4.5 0 0 1 12 6.8a4.5 4.5 0 0 1 7 3.7C19 15.9 12 20 12 20Z"/></svg>
+                </span>
+                <div>
+                  <p class="eyebrow">Contribuição voluntária</p>
+                  <h2>{{ siteSettings.contributionTitle ?? 'Contribua com a casa' }}</h2>
+                </div>
+              </div>
+
+              @if(siteSettings.contributionText)
+                <p class="contribution-card__text">{{ siteSettings.contributionText }}</p>
+              @end
+
+              <div class="contribution-card__pix">
+                @if(siteSettings.pixQrCodePath)
+                  <img src="{{ siteSettings.pixQrCodePath }}" alt="QR Code PIX para contribuição voluntária ao Terreiro">
+                @end
+                <div class="contribution-card__details">
+                  <strong>Contribuição via PIX</strong>
+                  @if(siteSettings.pixBeneficiary)
+                    <span>Favorecido: {{ siteSettings.pixBeneficiary }}</span>
+                  @end
+                  @if(siteSettings.pixKey)
+                    <span class="contribution-card__key">Chave PIX: {{ siteSettings.pixKey }}</span>
+                  @end
+                </div>
+              </div>
+
+              <small class="contribution-card__notice">Toda contribuição é espontânea e facultativa.</small>
+            </aside>
+          @end
+        </div>
+      </div>
+    </section>
+  @else
+    <section class="page-hero">
+      <div class="site-container">
+        @if(page.eyebrow)
+          <p class="eyebrow">{{ page.eyebrow }}</p>
+        @end
+        <h1>{{ page.title }}</h1>
+        @if(page.summary)
+          <p class="section-lead">{{ page.summary }}</p>
+        @end
+      </div>
+    </section>
+
+    <section class="article-shell">
+      <div class="page-content__body">{{{ page.body }}}</div>
+    </section>
+  @end
+@end

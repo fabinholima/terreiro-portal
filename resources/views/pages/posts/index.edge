@@ -1,0 +1,33 @@
+@layout()
+  <section class="page-hero">
+    <div class="site-container">
+      <p class="eyebrow">Comunicação</p>
+      <h1>Notícias</h1>
+      <p>Comunicados, registros e atualizações das atividades do Terreiro.</p>
+    </div>
+  </section>
+
+  <section class="site-section">
+    <div class="site-container">
+      <div class="card-grid">
+        @each(post in posts)
+          <article class="card">
+            @if(post.featuredImagePath)
+              <img src="{{ post.featuredImagePath }}" alt="{{ post.title }}" class="card__image">
+            @end
+            <div class="card__body">
+              <p class="card__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy · HH:mm') : 'Data não definida' }}</p>
+              <h3>{{ post.title }}</h3>
+              @if(post.summary)
+                <p>{{ post.summary }}</p>
+              @end
+              <a href="/noticias/{{ post.slug }}" class="card__link">Ler notícia →</a>
+            </div>
+          </article>
+        @else
+          <div class="empty-state">Nenhuma notícia publicada no momento.</div>
+        @end
+      </div>
+    </div>
+  </section>
+@end

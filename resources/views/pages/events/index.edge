@@ -1,0 +1,119 @@
+@layout()
+  <section class="page-hero agenda-hero">
+    <div class="site-container agenda-hero__inner">
+      <p class="eyebrow">Programação</p>
+      <h1>Agenda</h1>
+      <p>Confira as atividades públicas da casa. Navegue pelos meses e veja os dias com programação.</p>
+    </div>
+  </section>
+
+  <section class="agenda-month-section">
+    <div class="site-container">
+      <div class="agenda-month-nav">
+        <a href="/agenda?mes={{ previousMonth }}" class="agenda-month-nav__button">‹ Mês anterior</a>
+        <h2>{{ monthLabel }}</h2>
+        <a href="/agenda?mes={{ nextMonth }}" class="agenda-month-nav__button">Próximo mês ›</a>
+      </div>
+
+      <div class="agenda-month-layout">
+        <aside class="agenda-calendar-panel" aria-label="Calendário de {{ monthLabel }}">
+          <div class="agenda-calendar__weekdays">
+            <span>Seg</span>
+            <span>Ter</span>
+            <span>Qua</span>
+            <span>Qui</span>
+            <span>Sex</span>
+            <span>Sáb</span>
+            <span>Dom</span>
+          </div>
+
+          <div class="agenda-calendar__grid">
+            @each(day in calendarDays)
+              <div class="agenda-calendar__day {{ day.inMonth ? '' : 'is-outside' }} {{ day.hasEvent ? 'has-event' : '' }} {{ day.isToday ? 'is-today' : '' }}">
+                <span>{{ day.day }}</span>
+                @if(day.hasEvent)
+                  <i aria-label="Há atividade neste dia"></i>
+                @end
+              </div>
+            @end
+          </div>
+
+          <div class="agenda-calendar__legend">
+            <span><i class="agenda-dot agenda-dot--event"></i> Dia com atividade</span>
+            <span><i class="agenda-dot agenda-dot--today"></i> Hoje</span>
+          </div>
+        </aside>
+
+        <div class="agenda-month-events">
+          @each(event in events)
+            <article class="agenda-month-event">
+              <div class="agenda-month-event__date">
+                <strong>{{ event.startsAt.toFormat('dd') }}</strong>
+                <span>{{ event.startsAt.setLocale('pt-BR').toFormat('LLL') }}</span>
+                <small>{{ event.startsAt.toFormat('HH:mm') }}</small>
+              </div>
+
+              <div class="agenda-month-event__content">
+                <div class="agenda-month-event__topline">
+                  <div>
+                    <p class="agenda-month-event__category">{{ event.category ?? 'Atividade pública' }}</p>
+                    <h3>{{ event.title }}</h3>
+                  </div>
+
+                  <span class="agenda-status agenda-status--{{ event.$extras.publicStatus }}">
+                    @if(event.$extras.publicStatus === 'scheduled')
+                      Agendado
+                    @elseif(event.$extras.publicStatus === 'confirmed')
+                      Confirmado
+                    @elseif(event.$extras.publicStatus === 'postponed')
+                      Adiado
+                    @elseif(event.$extras.publicStatus === 'completed')
+                      Concluído
+                    @else
+                      {{ event.$extras.publicStatus }}
+                    @end
+                  </span>
+                </div>
+
+                <div class="agenda-month-event__meta">
+                  <span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                    {{ event.startsAt.toFormat('HH:mm') }}
+                    @if(event.endsAt)
+                      – {{ event.endsAt.toFormat('HH:mm') }}
+                    @end
+                  </span>
+
+                  @if(event.location)
+                    <span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                      {{ event.location }}
+                    </span>
+                  @end
+                </div>
+
+                @if(event.description)
+                  <p class="agenda-month-event__description">{{ event.description }}</p>
+                @end
+              </div>
+
+              @if(event.imagePath)
+                <div class="agenda-month-event__image">
+                  <img src="{{ event.imagePath }}" alt="Imagem do evento {{ event.title }}">
+                </div>
+              @end
+            </article>
+          @else
+            <div class="agenda-empty agenda-empty--month">
+              <span class="agenda-empty__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 2v3M17 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="m9 15 2 2 4-4"/></svg>
+              </span>
+              <h2>Nenhuma atividade neste mês</h2>
+              <p>Use os botões acima para consultar outros meses.</p>
+            </div>
+          @end
+        </div>
+      </div>
+    </div>
+  </section>
+@end

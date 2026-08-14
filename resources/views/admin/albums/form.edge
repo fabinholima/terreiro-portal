@@ -1,0 +1,64 @@
+@layout()
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <h1 class="text-2xl font-bold mb-6">{{ album ? 'Editar álbum' : 'Novo álbum' }}</h1>
+
+    <form method="POST" enctype="multipart/form-data" action="{{ album ? '/admin/albums/' + album.id : '/admin/albums' }}" class="grid gap-4 mb-10">
+      {{ csrfField() }}
+      <label class="grid gap-1">Título<input class="border rounded px-3 py-2" name="title" value="{{ album?.title ?? '' }}" required></label>
+      <label class="grid gap-1">Slug<input class="border rounded px-3 py-2" name="slug" value="{{ album?.slug ?? '' }}" required></label>
+      <label class="grid gap-1">Descrição<textarea class="border rounded px-3 py-2" name="description" rows="4">{{ album?.description ?? '' }}</textarea></label>
+      <label class="grid gap-1">Data do evento<input class="border rounded px-3 py-2" type="date" name="eventDate" value="{{ album?.eventDate?.toISODate() ?? '' }}"></label>
+
+      @if(!album)
+        <label class="grid gap-1">
+          Fotografias iniciais
+          <input class="border rounded px-3 py-2" type="file" name="photos" accept="image/jpeg,image/png,image/webp" multiple>
+          <span class="text-sm text-gray-600">Você pode selecionar várias imagens. A primeira será usada como capa do álbum.</span>
+        </label>
+      @end
+
+      <label class="flex gap-2 items-center">
+        <input type="checkbox" name="isPublic" value="true" @if(album?.isPublic ?? true) checked @end>
+        Álbum público
+      </label>
+      <div><button class="btn btn-primary" type="submit">Salvar</button></div>
+    </form>
+
+    @if(album)
+      <section class="border-t pt-8">
+        <h2 class="text-xl font-semibold mb-3">Adicionar fotografias</h2>
+        <form method="POST" action="/admin/albums/{{ album.id }}/photos" enctype="multipart/form-data" class="grid gap-3 mb-8">
+          {{ csrfField() }}
+          <input type="file" name="photos" accept="image/jpeg,image/png,image/webp" multiple required>
+          <p class="text-sm text-gray-600">As fotos novas ficam privadas até a autorização de publicação.</p>
+          <div><button class="btn btn-primary" type="submit">Enviar fotos</button></div>
+        </form>
+
+        <div class="grid gap-5">
+          @each(photo in album.photos)
+            <article class="grid md:grid-cols-[220px_1fr] gap-4 border rounded-xl p-4">
+              <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" class="w-full h-44 object-cover rounded-lg">
+              <div>
+                <form method="POST" action="/admin/albums/{{ album.id }}/photos/{{ photo.id }}" class="grid gap-3">
+                  {{ csrfField() }}
+                  <label class="grid gap-1">Legenda<input class="border rounded px-3 py-2" name="caption" value="{{ photo.caption ?? '' }}"></label>
+                  <label class="grid gap-1">Texto alternativo<input class="border rounded px-3 py-2" name="altText" value="{{ photo.altText ?? '' }}"></label>
+                  <label class="grid gap-1">Crédito<input class="border rounded px-3 py-2" name="credit" value="{{ photo.credit ?? '' }}"></label>
+                  <label class="grid gap-1">Posição<input class="border rounded px-3 py-2" type="number" name="position" value="{{ photo.position }}"></label>
+                  <label class="flex items-center gap-2"><input type="hidden" name="publicationAuthorized" value="false"><input type="checkbox" name="publicationAuthorized" value="true" @if(photo.publicationAuthorized) checked @end> Autorizada para publicação</label>
+                  <div><button class="btn btn-primary" type="submit">Atualizar foto</button></div>
+                </form>
+                <form method="POST" action="/admin/albums/{{ album.id }}/photos/{{ photo.id }}/delete" class="mt-3" onsubmit="return confirm('Excluir esta foto?')">
+                  {{ csrfField() }}
+                  <button type="submit" class="text-red-700 underline">Excluir foto</button>
+                </form>
+              </div>
+            </article>
+          @else
+            <p>Nenhuma fotografia enviada.</p>
+          @end
+        </div>
+      </section>
+    @end
+  </div>
+@end

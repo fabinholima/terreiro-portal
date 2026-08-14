@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" role="img" aria-labelledby="title desc">
+  <title id="title">Terreiro de Umbanda Oxóssi e João Boiadeiro</title>
+  <desc id="desc">Emblema circular em verde, dourado e marrom com arco, flecha, chapéu e laço.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#f4ecdc"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d5b878"/><stop offset="1" stop-color="#9f7428"/></linearGradient>
+  </defs>
+  <circle cx="260" cy="260" r="250" fill="url(#paper)" stroke="#b28a3a" stroke-width="4"/>
+  <circle cx="260" cy="260" r="240" fill="none" stroke="#0c351f" stroke-width="9"/>
+  <circle cx="260" cy="260" r="226" fill="none" stroke="#b28a3a" stroke-width="2"/>
+  <text x="260" y="67" text-anchor="middle" font-family="Georgia,serif" font-size="25" font-weight="700" letter-spacing="7" fill="#0c351f">TERREIRO DE UMBANDA</text>
+  <path d="M162 169 C122 214 125 310 174 356 C206 386 235 352 225 322 C210 278 202 222 229 171" fill="none" stroke="#0c351f" stroke-width="13" stroke-linecap="round"/>
+  <line x1="143" y1="258" x2="367" y2="258" stroke="#0c351f" stroke-width="7"/>
+  <polygon points="132,258 160,243 160,273" fill="#0c351f"/>
+  <polygon points="380,258 352,243 352,273" fill="#0c351f"/>
+  <line x1="260" y1="132" x2="260" y2="347" stroke="#6d4b1f" stroke-width="7"/>
+  <polygon points="260,112 247,142 273,142" fill="#0c351f"/>
+  <polygon points="260,365 247,337 273,337" fill="#0c351f"/>
+  <path d="M277 182 C304 156 352 154 381 173 C394 181 401 195 399 209 C373 216 338 216 307 205 C291 200 281 192 277 182 Z" fill="#8a5a23" stroke="#5b3915" stroke-width="5"/>
+  <path d="M304 181 C311 150 326 133 355 142 C367 150 369 170 365 188" fill="#9c6728" stroke="#5b3915" stroke-width="5"/>
+  <path d="M314 224 C354 205 401 236 397 282 C394 318 354 337 326 318 C299 300 299 247 326 228" fill="none" stroke="#8a5a23" stroke-width="10"/>
+  <path d="M325 232 C353 216 387 237 384 269 C382 294 354 309 334 296 C315 283 313 249 332 235" fill="none" stroke="#5b3915" stroke-width="4"/>
+  <path d="M145 196 C128 178 119 158 123 142 M149 196 C135 171 142 148 153 130 M156 198 C155 169 168 150 185 139" fill="none" stroke="#4e7d2f" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="121" cy="152" rx="11" ry="22" transform="rotate(-35 121 152)" fill="#5f9139"/>
+  <ellipse cx="145" cy="146" rx="11" ry="22" transform="rotate(15 145 146)" fill="#4d7f31"/>
+  <ellipse cx="175" cy="151" rx="11" ry="22" transform="rotate(40 175 151)" fill="#6b9a45"/>
+  <path d="M113 326 C98 348 98 369 103 387 M125 319 C126 347 143 366 160 375" fill="none" stroke="#4e7d2f" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="102" cy="358" rx="10" ry="20" transform="rotate(-20 102 358)" fill="#5f9139"/>
+  <ellipse cx="136" cy="349" rx="10" ry="20" transform="rotate(35 136 349)" fill="#4d7f31"/>
+  <text x="260" y="408" text-anchor="middle" font-family="Georgia,serif" font-size="61" font-weight="700" letter-spacing="5" fill="#0c351f">OXÓSSI</text>
+  <text x="260" y="450" text-anchor="middle" font-family="Georgia,serif" font-size="31" font-weight="700" letter-spacing="2" fill="#6d4216">JOÃO BOIADEIRO</text>
+  <line x1="120" y1="469" x2="215" y2="469" stroke="url(#gold)" stroke-width="3"/>
+  <polygon points="260,462 267,469 260,476 253,469" fill="#b28a3a"/>
+  <line x1="305" y1="469" x2="400" y2="469" stroke="url(#gold)" stroke-width="3"/>
+  <text x="260" y="494" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="4" fill="#0c351f">NA FÉ, NA LEI E NA CARIDADE</text>
+</svg>
