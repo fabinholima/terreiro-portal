@@ -3,7 +3,7 @@
     <div class="site-container agenda-hero__inner">
       <p class="eyebrow">Programação</p>
       <h1>Agenda</h1>
-      <p>Confira as próximas atividades públicas da casa. Navegue pelos meses e veja os dias com programação.</p>
+      <p>Confira as atividades públicas da casa. Navegue pelos meses e veja os dias com programação.</p>
     </div>
   </section>
 
@@ -59,15 +59,18 @@
                     <p class="agenda-month-event__category">{{ event.category ?? 'Atividade pública' }}</p>
                     <h3>{{ event.title }}</h3>
                   </div>
-                  <span class="agenda-status agenda-status--{{ event.status }}">
-                    @if(event.status === 'scheduled')
+
+                  <span class="agenda-status agenda-status--{{ event.$extras.publicStatus }}">
+                    @if(event.$extras.publicStatus === 'scheduled')
                       Agendado
-                    @elseif(event.status === 'confirmed')
+                    @elseif(event.$extras.publicStatus === 'confirmed')
                       Confirmado
-                    @elseif(event.status === 'postponed')
+                    @elseif(event.$extras.publicStatus === 'postponed')
                       Adiado
-                    @else
+                    @elseif(event.$extras.publicStatus === 'completed')
                       Concluído
+                    @else
+                      {{ event.$extras.publicStatus }}
                     @end
                   </span>
                 </div>
