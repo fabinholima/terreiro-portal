@@ -26,10 +26,11 @@ export default class EventsController {
     }
 
     const imagePath = await this.saveImage(request)
+    const slug = await this.uniqueSlug(payload.slug)
 
     await Event.create({
       title: payload.title,
-      slug: payload.slug,
+      slug,
       description: payload.description ?? null,
       category: payload.category ?? null,
       startsAt,
@@ -63,9 +64,11 @@ export default class EventsController {
     const newImagePath = await this.saveImage(request)
     if (newImagePath && event.imagePath) await this.deleteImage(event.imagePath)
 
+    const slug = await this.uniqueSlug(payload.slug, event.id)
+
     event.merge({
       title: payload.title,
-      slug: payload.slug,
+      slug,
       description: payload.description ?? null,
       category: payload.category ?? null,
       startsAt,
@@ -90,6 +93,21 @@ export default class EventsController {
 
   private combineDateTime(date: string, time: string) {
     return DateTime.fromFormat(`${date} ${time}`, 'yyyy-LL-dd HH:mm')
+  }
+
+  private async uniqueSlug(requestedSlug: string, ignoreId?: number) {
+    const baseSlug = requestedSlug.trim().toLowerCase()
+    let candidate = baseSlug
+    let suffix = 2
+
+    while (true) {
+      const query = Event.query().where('slug', candidate)
+      if (ignoreId) query.whereNot('id', ignoreId)
+      const existing = await query.first()
+      if (!existing) return candidate
+      candidate = `${baseSlug}-${suffix}`
+      suffix += 1
+    }
   }
 
   private async saveImage(request: HttpContext['request']) {
