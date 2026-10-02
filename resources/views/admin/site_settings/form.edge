@@ -61,7 +61,7 @@
         <div class="grid gap-5 md:grid-cols-3">
           <label><span class="mb-2 block font-semibold">Fonte dos títulos</span><select name="fontHeading">
             @each(font in fontOptions)
-              <option value="{{ font }}" {{ (settings.fontHeading ?? 'Georgia') === font ? 'selected' : '' }}>{{ font }}</option>
+              <option value="{{ font }}" {{ (settings.fontHeading ?? 'Cormorant Garamond') === font ? 'selected' : '' }}>{{ font }}</option>
             @end
           </select></label>
           <label><span class="mb-2 block font-semibold">Fonte do texto</span><select name="fontBody">
@@ -89,7 +89,7 @@
           </select></label>
         </div>
 
-        <button type="button" class="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-amber-900" onclick="document.querySelector('[name=themePrimary]').value='#1E4620';document.querySelector('[name=themeDark]').value='#08351F';document.querySelector('[name=themeAccent]').value='#D6A23C';document.querySelector('[name=themeBackground]').value='#FFFDF9';document.querySelector('[name=themeText]').value='#223028';document.querySelector('[name=fontHeading]').value='Georgia';document.querySelector('[name=fontBody]').value='Inter';document.querySelector('[name=fontUi]').value='Inter';document.querySelector('[name=fontSizeBase]').value='16';document.querySelector('[name=headingWeight]').value='600'">Restaurar tema do Terreiro</button>
+        <button type="button" class="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-amber-900" onclick="document.querySelector('[name=themePrimary]').value='#1E4620';document.querySelector('[name=themeDark]').value='#08351F';document.querySelector('[name=themeAccent]').value='#D6A23C';document.querySelector('[name=themeBackground]').value='#FFFDF9';document.querySelector('[name=themeText]').value='#223028';document.querySelector('[name=fontHeading]').value='Cormorant Garamond';document.querySelector('[name=fontBody]').value='Inter';document.querySelector('[name=fontUi]').value='Inter';document.querySelector('[name=fontSizeBase]').value='16';document.querySelector('[name=headingWeight]').value='600'">Restaurar tema do Terreiro</button>
       </section>
 
       <section class="space-y-5 border-t border-slate-200 pt-7">

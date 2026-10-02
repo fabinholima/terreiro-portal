@@ -7,7 +7,7 @@
     --theme-text: {{ siteSettings.themeText ?? '#223028' }};
     --forest-950: var(--theme-dark); --forest-900: var(--theme-dark); --forest-850: var(--theme-primary); --forest-800: var(--theme-primary); --forest-700: var(--theme-primary); --green: var(--theme-primary);
     --gold: var(--theme-accent); --gold-soft: var(--theme-accent); --paper: var(--theme-background); --ink: var(--theme-text);
-    --serif: "{{ siteSettings.fontHeading ?? 'Georgia' }}", Georgia, serif;
+    --serif: "{{ siteSettings.fontHeading ?? 'Cormorant Garamond' }}", Georgia, serif;
     --sans: "{{ siteSettings.fontBody ?? 'Inter' }}", Inter, system-ui, sans-serif;
     --font-ui: "{{ siteSettings.fontUi ?? 'Inter' }}", Inter, system-ui, sans-serif;
   }
@@ -102,8 +102,8 @@
       }
     }
 
-    const selectedFonts = ['{{ siteSettings.fontHeading ?? "Georgia" }}','{{ siteSettings.fontBody ?? "Inter" }}','{{ siteSettings.fontUi ?? "Inter" }}']
-    const webFonts = ['Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville']
+    const selectedFonts = ['{{ siteSettings.fontHeading ?? "Cormorant Garamond" }}','{{ siteSettings.fontBody ?? "Inter" }}','{{ siteSettings.fontUi ?? "Inter" }}']
+    const webFonts = ['Cormorant Garamond','Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville']
     const needed = [...new Set(selectedFonts.filter((font) => webFonts.includes(font)))]
     if (needed.length && !document.getElementById('portal-google-fonts')) {
       const link = document.createElement('link')

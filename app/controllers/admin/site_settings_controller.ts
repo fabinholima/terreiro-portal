@@ -9,7 +9,7 @@ const defaults = {
   homeEyebrow:'Institucional', homeTitle:'O Terreiro', homeSummary:'Casa de fé, caridade, ancestralidade e acolhimento.', missionTitle:'Nossa missão', missionText:'Promover o exercício religioso da Umbanda com respeito, responsabilidade e compromisso com a caridade, oferecendo um espaço de acolhimento espiritual e convivência comunitária.', missionVisible:true,
   valuesTitle:'Nossos valores', valuesText:'Respeito às diferenças, valorização da ancestralidade, compromisso com a comunidade, responsabilidade religiosa, solidariedade e cuidado com as pessoas.', valuesVisible:true,
   trajectoryTitle:'Nossa trajetória', trajectoryText:'A casa está em atividade desde 1991 e, ao longo de sua trajetória, desenvolveu atividades religiosas, ações de caridade e iniciativas voltadas à comunidade.', trajectoryVisible:true, trajectoryButtonText:'Conheça nossa história', trajectoryButtonUrl:'/o-terreiro',
-  contributionVisible:false, contributionTitle:'Contribua com a casa', contributionText:'Sua contribuição voluntária auxilia na manutenção das atividades religiosas, sociais e comunitárias do Terreiro.', themePrimary:'#1E4620', themeDark:'#08351F', themeAccent:'#D6A23C', themeBackground:'#FFFDF9', themeText:'#223028', fontHeading:'Georgia', fontBody:'Inter', fontUi:'Inter', fontSizeBase:16, headingWeight:600,
+  contributionVisible:false, contributionTitle:'Contribua com a casa', contributionText:'Sua contribuição voluntária auxilia na manutenção das atividades religiosas, sociais e comunitárias do Terreiro.', themePrimary:'#1E4620', themeDark:'#08351F', themeAccent:'#D6A23C', themeBackground:'#FFFDF9', themeText:'#223028', fontHeading:'Cormorant Garamond', fontBody:'Inter', fontUi:'Inter', fontSizeBase:16, headingWeight:600,
 }
 
 const menuDefs = [
@@ -20,7 +20,7 @@ const adminMenuDefs = [
 ] as const
 const defaultMenu = menuDefs.map(([key,label,href],index)=>({ key,label,href,visible:true,order:index+1 }))
 const defaultAdminMenu = adminMenuDefs.map(([key,label,href],index)=>({ key,label,href,visible:true,order:index+1 }))
-const fontOptions = ['Georgia','Inter','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville','Arial','system-ui']
+const fontOptions = ['Cormorant Garamond','Inter','Georgia','Lora','Merriweather','Source Sans 3','Source Serif 4','Libre Baskerville','Arial','system-ui']
 const allowedFonts = new Set(fontOptions)
 
 export default class SiteSettingsController {
