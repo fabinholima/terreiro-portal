@@ -2,7 +2,7 @@
   <section class="page-hero social-hero">
     <div class="site-container">
       <p class="eyebrow">Solidariedade e comunidade</p>
-      <h1>Ações sociais</h1>
+      <h1><span class="page-title-icon" aria-hidden="true">♡</span>Ações sociais</h1>
       <p>Conheça as campanhas e iniciativas promovidas pelo Terreiro de Umbanda Oxóssi e João Boiadeiro.</p>
     </div>
   </section>
@@ -23,13 +23,13 @@
 
               <span class="social-status social-status--{{ action.status }}">
                 @if(action.status === 'planned')
-                  Planejada
+                  <span aria-hidden="true">◷</span> Planejada
                 @elseif(action.status === 'active')
-                  Em andamento
+                  <span aria-hidden="true">●</span> Em andamento
                 @elseif(action.status === 'completed')
-                  Concluída
+                  <span aria-hidden="true">✓</span> Concluída
                 @elseif(action.status === 'permanent')
-                  Permanente
+                  <span aria-hidden="true">∞</span> Permanente
                 @else
                   Cancelada
                 @end

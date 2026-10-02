@@ -19,5 +19,14 @@ export default class PagesController {
   async history(ctx:HttpContext){ return this.renderPage('nossa-historia',ctx) }
   async umbanda(ctx:HttpContext){ return this.renderPage('umbanda',ctx) }
   async contact(ctx:HttpContext){ return this.renderPage('contato',ctx) }
+  async sendContact({ request, response }: HttpContext) {
+    const { name, email, subject, message } = request.only(['name', 'email', 'subject', 'message'])
+    if (!name || !email || !subject || !message) return response.badRequest({ message: 'Preencha todos os campos.' })
+    const apiKey = process.env.BREVO_API_KEY
+    if (!apiKey) return response.serviceUnavailable({ message: 'O envio direto ainda não está configurado.' })
+    const result = await fetch('https://api.brevo.com/v3/smtp/email', { method: 'POST', headers: { 'api-key': apiKey, 'content-type': 'application/json' }, body: JSON.stringify({ sender: { email: process.env.CONTACT_EMAIL_FROM }, to: [{ email: process.env.CONTACT_EMAIL_TO }], replyTo: { email }, subject, textContent: `Nome: ${name}\nE-mail: ${email}\n\n${message}` }) })
+    if (!result.ok) return response.internalServerError({ message: 'Não foi possível enviar agora. Tente novamente.' })
+    return response.ok({ message: 'Mensagem enviada com sucesso.' })
+  }
   async custom(ctx:HttpContext){ return this.renderPage(ctx.params.slug,ctx) }
 }

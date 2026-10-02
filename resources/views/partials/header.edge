@@ -1,3 +1,4 @@
+<a class="skip-link" href="#main-content">Pular para o conteúdo</a>
 <header class="site-header" x-data="{ open: false }">
   <div class="site-container site-header__inner">
     <a href="/" class="site-brand" aria-label="{{ siteSettings.siteName }} — página inicial">
@@ -9,7 +10,7 @@
       @each(item in publicMenu)
         @if(item.children && item.children.length)
           <div class="site-nav__group">
-            <a data-nav-link href="{{ item.href }}">{{ item.label }} <span class="site-nav__chevron">⌄</span></a>
+          <a data-nav-link href="{{ item.href }}"><span class="site-nav__icon" aria-hidden="true">⌂</span>{{ item.label }} <span class="site-nav__chevron">⌄</span></a>
             <div class="site-submenu">
               @each(child in item.children)
                 <a href="{{ child.href }}">{{ child.label }}</a>
@@ -17,13 +18,13 @@
             </div>
           </div>
         @else
-          <a data-nav-link href="{{ item.href }}">{{ item.label }}</a>
+          <a data-nav-link href="{{ item.href }}"><span class="site-nav__icon" aria-hidden="true">{{ item.href === '/agenda' ? '◷' : item.href === '/galeria' ? '▧' : item.href === '/noticias' ? '▤' : item.href === '/acoes-sociais' ? '♡' : item.href === '/documentos' ? '▥' : item.href === '/contato' ? '◌' : '⌂' }}</span>{{ item.label }}</a>
         @end
       @end
       @if(auth.user)
-        <a href="/admin" class="site-nav__admin">Admin</a>
+        <a href="/admin" class="site-nav__admin"><span aria-hidden="true">♙</span> Admin</a>
       @else
-        <a href="/login" class="site-nav__admin">Entrar</a>
+        <a href="/login" class="site-nav__admin"><span aria-hidden="true">♙</span> Entrar</a>
       @end
     </nav>
 
@@ -32,7 +33,7 @@
 
   <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
     @each(item in publicMenu)
-      <a data-nav-link href="{{ item.href }}" @click="open = false">{{ item.label }}</a>
+      <a data-nav-link href="{{ item.href }}" @click="open = false"><span class="site-nav__icon" aria-hidden="true">{{ item.href === '/agenda' ? '◷' : item.href === '/galeria' ? '▧' : item.href === '/noticias' ? '▤' : item.href === '/acoes-sociais' ? '♡' : item.href === '/documentos' ? '▥' : item.href === '/contato' ? '◌' : '⌂' }}</span>{{ item.label }}</a>
       @if(item.children && item.children.length)
         <div class="mobile-submenu">
           @each(child in item.children)

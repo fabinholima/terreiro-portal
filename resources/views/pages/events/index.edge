@@ -2,7 +2,7 @@
   <section class="page-hero agenda-hero">
     <div class="site-container agenda-hero__inner">
       <p class="eyebrow">Programação</p>
-      <h1>Agenda</h1>
+      <h1><span class="page-title-icon" aria-hidden="true">◷</span>Agenda</h1>
       <p>Confira as atividades públicas da casa. Navegue pelos meses e veja os dias com programação.</p>
     </div>
   </section>
@@ -11,7 +11,7 @@
     <div class="site-container">
       <div class="agenda-month-nav">
         <a href="/agenda?mes={{ previousMonth }}" class="agenda-month-nav__button">‹ Mês anterior</a>
-        <h2>{{ monthLabel }}</h2>
+        <h2><span class="agenda-month-icon" aria-hidden="true">▣</span>{{ monthLabel }}</h2>
         <a href="/agenda?mes={{ nextMonth }}" class="agenda-month-nav__button">Próximo mês ›</a>
       </div>
 
@@ -62,13 +62,13 @@
 
                   <span class="agenda-status agenda-status--{{ event.$extras.publicStatus }}">
                     @if(event.$extras.publicStatus === 'scheduled')
-                      Agendado
+                      <span aria-hidden="true">◷</span> Agendado
                     @elseif(event.$extras.publicStatus === 'confirmed')
-                      Confirmado
+                      <span aria-hidden="true">✓</span> Confirmado
                     @elseif(event.$extras.publicStatus === 'postponed')
-                      Adiado
+                      <span aria-hidden="true">!</span> Adiado
                     @elseif(event.$extras.publicStatus === 'completed')
-                      Concluído
+                      <span aria-hidden="true">✓</span> Concluído
                     @else
                       {{ event.$extras.publicStatus }}
                     @end

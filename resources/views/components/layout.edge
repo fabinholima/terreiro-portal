@@ -118,7 +118,7 @@
   @else
     <body>
       @include('partials/header')
-      <main>
+      <main id="main-content">
         @include('partials/flash_alerts')
         {{{ await $slots.main() }}}
       </main>

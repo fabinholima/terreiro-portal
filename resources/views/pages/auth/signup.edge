@@ -1,15 +1,15 @@
 @layout()
   <div class="form-container">
     <div>
-      <h1>Signup</h1>
-      <p>Enter your details below to create your account</p>
+      <h1><span class="page-title-icon" aria-hidden="true">♙</span>Criar conta</h1>
+      <p>Informe seus dados para criar um acesso ao painel.</p>
     </div>
 
     <div>
       @form({ route: 'new_account.store', method: 'POST' })
         <div>
           @field.root({ name: 'fullName' })
-            @!field.label({ text: 'Full name' })
+            @!field.label({ text: 'Nome completo' })
             @!input.control()
             @!field.error()
           @end
@@ -17,7 +17,7 @@
 
         <div>
           @field.root({ name: 'email' })
-            @!field.label({ text: 'Email' })
+            @!field.label({ text: 'E-mail' })
             @!input.control({ type: 'email', autocomplete: 'email' })
             @!field.error()
           @end
@@ -25,7 +25,7 @@
 
         <div>
           @field.root({ name: 'password' })
-            @!field.label({ text: 'Password' })
+            @!field.label({ text: 'Senha' })
             @!input.control({ type: 'password', autocomplete: 'new-password' })
             @!field.error()
           @end
@@ -33,14 +33,14 @@
 
         <div>
           @field.root({ name: 'passwordConfirmation' })
-            @!field.label({ text: 'Confirm password' })
+            @!field.label({ text: 'Confirme a senha' })
             @!input.control({ type: 'password', autocomplete: 'new-password' })
             @!field.error()
           @end
         </div>
 
         <div>
-          @!button({ text: 'Sign up', type: 'submit' })
+          @!button({ text: 'Criar conta', type: 'submit' })
         </div>
       @end
     </div>

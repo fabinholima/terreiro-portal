@@ -1,8 +1,20 @@
-# Deploy de produção
+# Deploy de produção — Hetzner + Coolify
 
-Este projeto possui uma stack de produção com AdonisJS, PostgreSQL e Nginx.
+Este projeto roda em um VPS Hetzner na Alemanha, gerenciado pelo Coolify, com AdonisJS, PostgreSQL e volumes persistentes. O Coolify assume o proxy reverso e a emissão/renovação do HTTPS.
 
-## 1. Preparar o servidor
+## Configuração recomendada
+
+- VPS Hetzner em Falkenstein ou Nuremberg, com IPv4 e IPv6 públicos.
+- Coolify instalado no Ubuntu LTS.
+- Serviço da aplicação conectado ao repositório GitHub.
+- PostgreSQL persistente no Coolify.
+- Volume persistente montado em `/app/build/public/uploads`.
+
+No Coolify, configure o domínio da aplicação como `https://joaoboiadeiro.org.br`. O deploy automático deve ficar habilitado para a branch de produção.
+
+No DNS, use um registro `A` para o IPv4 e um registro `AAAA` para o IPv6 do VPS. O Coolify emitirá o certificado TLS depois que o domínio estiver apontando para o servidor.
+
+## 1. Preparar o servidor (instalação manual alternativa)
 
 Instale Docker Engine e Docker Compose Plugin. Clone o repositório e entre na pasta do projeto.
 
@@ -26,7 +38,7 @@ Mantenha:
 NODE_ENV=production
 HOST=0.0.0.0
 PORT=3333
-APP_URL=https://www.terreirojoaoboiadeiro.org.br
+APP_URL=https://joaoboiadeiro.org.br
 DB_HOST=db
 ```
 
@@ -85,8 +97,19 @@ docker compose --env-file .env.production -f docker-compose.prod.yml run --rm ap
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d
 ```
 
-## HTTPS
+## HTTPS no Coolify
 
-O Nginx incluído escuta HTTP na porta 80. Para produção pública, coloque TLS na frente dele usando Certbot/Nginx, Caddy ou um proxy gerenciado. O DNS de `terreirojoaoboiadeiro.org.br` e `www.terreirojoaoboiadeiro.org.br` deve apontar para o servidor antes da emissão do certificado.
+Quando a aplicação for criada pelo Coolify, informe o domínio com `https://`. O proxy integrado gerencia o certificado e redireciona HTTP para HTTPS. O Nginx incluído no `docker-compose.prod.yml` serve apenas para uma instalação manual fora do Coolify.
+
+## Deploy automático pelo GitHub
+
+1. No Coolify, conecte o GitHub App ao repositório.
+2. Crie uma aplicação a partir do `Dockerfile`.
+3. Selecione a branch de produção e ative o auto deploy.
+4. Configure as variáveis do `.env.production` no painel do Coolify.
+5. Adicione o volume `/app/build/public/uploads`.
+6. Configure o health check como `/health` na porta `3333`.
+
+Cada push na branch configurada cria uma nova imagem, executa o health check e substitui a versão anterior conforme a política de deploy do Coolify.
 
 Nunca versione `.env.production`.

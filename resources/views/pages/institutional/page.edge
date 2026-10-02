@@ -51,7 +51,7 @@
     <section class="page-hero contact-hero">
       <div class="site-container">
         <p class="eyebrow">Fale conosco</p>
-        <h1>Contato</h1>
+        <h1><span class="page-title-icon" aria-hidden="true">◌</span>Contato</h1>
         <p>Use nossos canais oficiais para informações sobre atendimento, atividades e localização do Terreiro.</p>
       </div>
     </section>
@@ -79,12 +79,36 @@
               @end
 
               @if(siteSettings.email)
-                <a class="contact-channel" href="mailto:{{ siteSettings.email }}">
+                <a class="contact-channel contact-channel--email" href="#contact-form" data-contact-email="{{ siteSettings.email }}" aria-controls="contact-form" aria-expanded="false">
                   <span class="contact-channel__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
-                  <span><small>E-mail</small><strong>{{ siteSettings.email }}</strong></span>
+                  <span><small>E-mail</small><strong>{{ siteSettings.email }}</strong><em>Enviar mensagem</em></span>
                 </a>
               @end
             </div>
+
+            @if(siteSettings.email)
+              <form id="contact-form" class="contact-form" data-contact-form data-endpoint="/contato/mensagem" hidden>
+                <div class="contact-form__heading">
+                  <div>
+                    <p class="eyebrow">Mensagem rápida</p>
+                    <h3>Fale com o Terreiro</h3>
+                  </div>
+                  <span aria-hidden="true">✉</span>
+                </div>
+                <p class="contact-form__hint">Preencha os campos abaixo. Ao enviar, seu aplicativo de e-mail será aberto com a mensagem pronta.</p>
+                <div class="contact-form__grid">
+                  <label>Seu nome<input name="name" type="text" autocomplete="name" required placeholder="Como podemos chamar você?"></label>
+                  <label>Seu e-mail<input name="email" type="email" autocomplete="email" required placeholder="voce@exemplo.com"></label>
+                </div>
+                <label>Assunto<input name="subject" type="text" required placeholder="Sobre o que você gostaria de falar?"></label>
+                <label>Mensagem<textarea name="message" rows="5" required placeholder="Escreva sua mensagem..."></textarea></label>
+                <div class="contact-form__actions">
+                  <button type="submit" class="contact-form__submit">Abrir e-mail <span aria-hidden="true">→</span></button>
+                  <button type="button" class="contact-form__cancel" data-contact-close>Fechar</button>
+                </div>
+                <p class="contact-form__status" data-contact-status role="status" aria-live="polite"></p>
+              </form>
+            @end
           </article>
 
           <article class="contact-instructions">
@@ -188,15 +212,15 @@
         @if(page.eyebrow)
           <p class="eyebrow">{{ page.eyebrow }}</p>
         @end
-        <h1>{{ page.title }}</h1>
+        <h1><span class="page-title-icon" aria-hidden="true">{{ page.slug === 'nossa-historia' ? '◷' : '✦' }}</span>{{ page.title }}</h1>
         @if(page.summary)
           <p class="section-lead">{{ page.summary }}</p>
         @end
       </div>
     </section>
 
-    <section class="article-shell">
-      <div class="page-content__body">{{{ page.body }}}</div>
+    <section class="article-shell institutional-article-shell">
+      <div class="page-content__body"><div class="institutional-article-card">{{{ page.body }}}</div></div>
     </section>
   @end
 @end

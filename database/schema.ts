@@ -7,31 +7,375 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AlbumSchema extends BaseModel {
+  static $columns = ['coverPath', 'createdAt', 'description', 'eventDate', 'id', 'isPublic', 'slug', 'title', 'updatedAt'] as const
+  $columns = AlbumSchema.$columns
+  @column()
+  declare coverPath: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column.date()
+  declare eventDate: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isPublic: boolean
+  @column()
+  declare slug: string
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class DocumentSchema extends BaseModel {
+  static $columns = ['category', 'createdAt', 'description', 'documentDate', 'filePath', 'id', 'isPublic', 'title', 'updatedAt', 'version'] as const
+  $columns = DocumentSchema.$columns
+  @column()
+  declare category: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column.date()
+  declare documentDate: DateTime | null
+  @column()
+  declare filePath: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isPublic: boolean
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare version: string | null
+}
+
+export class EventSchema extends BaseModel {
+  static $columns = ['category', 'createdAt', 'description', 'endsAt', 'id', 'imagePath', 'isPublic', 'location', 'slug', 'startsAt', 'status', 'title', 'updatedAt'] as const
+  $columns = EventSchema.$columns
+  @column()
+  declare category: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column.dateTime()
+  declare endsAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imagePath: string | null
+  @column()
+  declare isPublic: boolean
+  @column()
+  declare location: string | null
+  @column()
+  declare slug: string
+  @column.dateTime()
+  declare startsAt: DateTime
+  @column()
+  declare status: string
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class InstitutionalPageSchema extends BaseModel {
+  static $columns = ['body', 'createdAt', 'eyebrow', 'id', 'isPublic', 'slug', 'summary', 'title', 'updatedAt'] as const
+  $columns = InstitutionalPageSchema.$columns
+  @column()
+  declare body: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare eyebrow: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isPublic: boolean
+  @column()
+  declare slug: string
+  @column()
+  declare summary: string | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class MenuItemSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'isVisible', 'label', 'menuId', 'openNewTab', 'pageId', 'parentId', 'position', 'type', 'updatedAt', 'url'] as const
+  $columns = MenuItemSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isVisible: boolean
+  @column()
+  declare label: string
+  @column()
+  declare menuId: number
+  @column()
+  declare openNewTab: boolean
+  @column()
+  declare pageId: number | null
+  @column()
+  declare parentId: number | null
+  @column()
+  declare position: number
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare url: string | null
+}
+
+export class MenuSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'isActive', 'location', 'name', 'updatedAt'] as const
+  $columns = MenuSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isActive: boolean
+  @column()
+  declare location: string
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PhotoSchema extends BaseModel {
+  static $columns = ['albumId', 'altText', 'caption', 'createdAt', 'credit', 'id', 'path', 'position', 'publicationAuthorized', 'updatedAt'] as const
+  $columns = PhotoSchema.$columns
+  @column()
+  declare albumId: number
+  @column()
+  declare altText: string | null
+  @column()
+  declare caption: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare credit: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare path: string
+  @column()
+  declare position: number
+  @column()
+  declare publicationAuthorized: boolean
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PostSchema extends BaseModel {
+  static $columns = ['body', 'contentImageHeight', 'contentImageWidth', 'createdAt', 'featuredImageFit', 'featuredImageHeight', 'featuredImagePath', 'featuredImageWidth', 'id', 'imageDisplaySize', 'imagePaths', 'imageSettings', 'publishedAt', 'slug', 'status', 'summary', 'title', 'updatedAt'] as const
+  $columns = PostSchema.$columns
+  @column()
+  declare body: string | null
+  @column()
+  declare contentImageHeight: number | null
+  @column()
+  declare contentImageWidth: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare featuredImageFit: string
+  @column()
+  declare featuredImageHeight: number | null
+  @column()
+  declare featuredImagePath: string | null
+  @column()
+  declare featuredImageWidth: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageDisplaySize: string
+  @column()
+  declare imagePaths: any
+  @column()
+  declare imageSettings: any
+  @column.dateTime()
+  declare publishedAt: DateTime | null
+  @column()
+  declare slug: string
+  @column()
+  declare status: string
+  @column()
+  declare summary: string | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class SiteSettingSchema extends BaseModel {
+  static $columns = ['address', 'adminMenuConfig', 'city', 'contributionText', 'contributionTitle', 'contributionVisible', 'createdAt', 'email', 'facebookUrl', 'fontBody', 'fontHeading', 'fontSizeBase', 'fontUi', 'footerText', 'headingWeight', 'homeEyebrow', 'homeSummary', 'homeTitle', 'id', 'instagramUrl', 'mapsUrl', 'missionText', 'missionTitle', 'missionVisible', 'openingHours', 'phone', 'pixBeneficiary', 'pixKey', 'pixQrCodePath', 'postalCode', 'publicMenuConfig', 'siteName', 'siteSubtitle', 'state', 'themeAccent', 'themeBackground', 'themeDark', 'themePrimary', 'themeText', 'trajectoryButtonText', 'trajectoryButtonUrl', 'trajectoryText', 'trajectoryTitle', 'trajectoryVisible', 'updatedAt', 'valuesText', 'valuesTitle', 'valuesVisible', 'whatsapp', 'youtubeUrl'] as const
+  $columns = SiteSettingSchema.$columns
+  @column()
+  declare address: string | null
+  @column()
+  declare adminMenuConfig: string | null
+  @column()
+  declare city: string | null
+  @column()
+  declare contributionText: string | null
+  @column()
+  declare contributionTitle: string | null
+  @column()
+  declare contributionVisible: boolean
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare email: string | null
+  @column()
+  declare facebookUrl: string | null
+  @column()
+  declare fontBody: string
+  @column()
+  declare fontHeading: string
+  @column()
+  declare fontSizeBase: number
+  @column()
+  declare fontUi: string
+  @column()
+  declare footerText: string | null
+  @column()
+  declare headingWeight: number
+  @column()
+  declare homeEyebrow: string | null
+  @column()
+  declare homeSummary: string | null
+  @column()
+  declare homeTitle: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare instagramUrl: string | null
+  @column()
+  declare mapsUrl: string | null
+  @column()
+  declare missionText: string | null
+  @column()
+  declare missionTitle: string | null
+  @column()
+  declare missionVisible: boolean
+  @column()
+  declare openingHours: string | null
+  @column()
+  declare phone: string | null
+  @column()
+  declare pixBeneficiary: string | null
+  @column()
+  declare pixKey: string | null
+  @column()
+  declare pixQrCodePath: string | null
+  @column()
+  declare postalCode: string | null
+  @column()
+  declare publicMenuConfig: string | null
+  @column()
+  declare siteName: string
+  @column()
+  declare siteSubtitle: string | null
+  @column()
+  declare state: string | null
+  @column()
+  declare themeAccent: string
+  @column()
+  declare themeBackground: string
+  @column()
+  declare themeDark: string
+  @column()
+  declare themePrimary: string
+  @column()
+  declare themeText: string
+  @column()
+  declare trajectoryButtonText: string | null
+  @column()
+  declare trajectoryButtonUrl: string | null
+  @column()
+  declare trajectoryText: string | null
+  @column()
+  declare trajectoryTitle: string | null
+  @column()
+  declare trajectoryVisible: boolean
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare valuesText: string | null
+  @column()
+  declare valuesTitle: string | null
+  @column()
+  declare valuesVisible: boolean
+  @column()
+  declare whatsapp: string | null
+  @column()
+  declare youtubeUrl: string | null
+}
+
+export class SocialActionSchema extends BaseModel {
+  static $columns = ['createdAt', 'currentValue', 'description', 'endsAt', 'goal', 'id', 'imagePath', 'isPublic', 'slug', 'startsAt', 'status', 'title', 'unit', 'updatedAt'] as const
+  $columns = SocialActionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare currentValue: string | null
+  @column()
+  declare description: string | null
+  @column.dateTime()
+  declare endsAt: DateTime | null
+  @column()
+  declare goal: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imagePath: string | null
+  @column()
+  declare isPublic: boolean
+  @column()
+  declare slug: string
+  @column.dateTime()
+  declare startsAt: DateTime | null
+  @column()
+  declare status: string
+  @column()
+  declare title: string
+  @column()
+  declare unit: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'email', 'fullName', 'id', 'isActive', 'password', 'role', 'updatedAt'] as const
   $columns = UserSchema.$columns
-
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
-
   @column()
   declare email: string
-
   @column()
   declare fullName: string | null
-
   @column({ isPrimary: true })
   declare id: number
-
   @column()
   declare isActive: boolean
-
   @column({ serializeAs: null })
   declare password: string
-
   @column()
-  declare role: 'admin' | 'editor'
-
+  declare role: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
