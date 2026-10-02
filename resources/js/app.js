@@ -4,6 +4,8 @@ import '../css/social-contact.css'
 import '../css/documents.css'
 import '../css/gallery.css'
 import '../css/cms-navigation.css'
+import '../css/site-adjustments.css'
+import '../css/documents.css'
 import Alpine from 'alpinejs'
 
 Alpine.data('alert', function () {
