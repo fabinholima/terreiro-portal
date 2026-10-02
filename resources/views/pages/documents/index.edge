@@ -1,6 +1,7 @@
 @layout()
   <section class="page-hero documents-hero">
     <div class="site-container">
+      <div class="documents-toolbar"><label class="documents-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg><span class="sr-only">Buscar documentos</span><input type="search" data-document-search placeholder="Buscar por título ou categoria"></label><span class="documents-count" data-document-count></span></div>
       <p class="eyebrow">Transparência</p>
       <h1><span class="page-title-icon" aria-hidden="true">▥</span>Documentos públicos</h1>
       <p>Consulte estatutos, regimentos, atas, editais, relatórios e demais documentos institucionais disponibilizados pelo Terreiro.</p>
@@ -11,7 +12,7 @@
     <div class="site-container">
       <div class="documents-grid">
         @each(document in documents)
-          <article class="document-card">
+          <article class="document-card" data-document-card data-document-text="{{ document.title }} {{ document.category ?? '' }} {{ document.description ?? '' }}">
             <div class="document-card__icon" aria-hidden="true">
               <span>PDF</span>
               <svg viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></svg>

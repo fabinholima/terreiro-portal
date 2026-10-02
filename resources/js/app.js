@@ -105,4 +105,11 @@ document.querySelectorAll('input[type="password"]').forEach((input) => {
   });
   wrapper.appendChild(toggle);
 });
+const documentSearch = document.querySelector('[data-document-search]');
+if (documentSearch) {
+  const cards = [...document.querySelectorAll('[data-document-card]')];
+  const count = document.querySelector('[data-document-count]');
+  const updateDocuments = () => { const term = documentSearch.value.trim().toLocaleLowerCase(); let visible = 0; cards.forEach((card) => { const match = !term || card.dataset.documentText.toLocaleLowerCase().includes(term); card.hidden = !match; if (match) visible += 1; }); if (count) count.textContent = `${visible} documento${visible === 1 ? '' : 's'}`; };
+  documentSearch.addEventListener('input', updateDocuments); updateDocuments();
+}
 Alpine.start()
