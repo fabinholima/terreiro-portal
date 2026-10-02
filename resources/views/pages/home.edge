@@ -107,23 +107,6 @@
         @end
       </article>
 
-      <article class="home-teaser">
-        <div class="home-teaser__heading">
-          <h2>Ações sociais</h2>
-          <a href="/acoes-sociais">Ver todas →</a>
-        </div>
-        @each(action in actions)
-          <div class="home-teaser__card">
-            <p class="meta">{{ action.status }}</p>
-            <h3>{{ action.title }}</h3>
-            @if(action.description)
-              <p>{{ action.description }}</p>
-            @end
-          </div>
-        @else
-          <p class="home-teaser__empty">Nenhuma ação social publicada.</p>
-        @end
-      </article>
     </div>
   </section>
 @end
