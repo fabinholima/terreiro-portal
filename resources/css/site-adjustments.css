@@ -7,9 +7,9 @@ body{font-family:var(--sans)}
 body:not(.admin-body) h1,body:not(.admin-body) h2,body:not(.admin-body) h3,body:not(.admin-body) h4,body:not(.admin-body) h5,body:not(.admin-body) h6{font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif!important}
 .site-header{background:linear-gradient(90deg,#08351f 0%,#0d482a 56%,#08351f 100%)}
 .skip-link{position:fixed;z-index:200;left:16px;top:-60px;padding:10px 14px;border-radius:0 0 8px 8px;background:#f2cf79;color:#082b19;font-weight:800;transition:top .2s}.skip-link:focus{top:0}
-.site-header__inner{min-height:104px}
-.site-brand{min-width:390px;gap:18px}
-.site-brand__logo{width:92px;height:92px;object-fit:contain;flex:none;filter:drop-shadow(0 5px 14px rgba(0,0,0,.17))}
+.site-header__inner{min-height:104px;gap:14px}
+.site-brand{min-width:350px;gap:12px}
+.site-brand__logo{width:78px;height:78px;object-fit:contain;flex:none;filter:drop-shadow(0 5px 14px rgba(0,0,0,.17))}
 .site-brand__text{display:flex;flex-direction:column;line-height:1.03}
 .site-brand__kicker{color:var(--gold-soft);font-family:var(--serif);font-size:.76rem;letter-spacing:.04em;text-transform:uppercase}
 .site-brand__name{font-family:var(--serif);font-size:1.55rem;line-height:1.02;max-width:285px;color:#fff;margin-top:2px}
@@ -35,6 +35,7 @@ body:not(.admin-body) h1,body:not(.admin-body) h2,body:not(.admin-body) h3,body:
 .site-nav{gap:10px;flex-wrap:nowrap}
 .site-nav a{padding:17px 8px 13px;font-size:.88rem;text-transform:uppercase;font-weight:600}
 .site-nav a::after{left:8px;right:8px;bottom:5px;background:#d6a23c}
+@media(min-width:1051px) and (max-width:1250px){.site-header__inner{gap:8px}.site-brand{min-width:305px;gap:8px}.site-brand__logo{width:68px;height:68px}.site-brand__name{font-size:1.25rem;max-width:230px}.site-brand__kicker{font-size:.66rem}.site-brand__eyebrow{font-size:.58rem;margin-top:5px}.site-nav{gap:1px}.site-nav a{padding-inline:5px;font-size:.76rem}.site-nav a::after{left:5px;right:5px}.site-nav__icon{margin-right:3px}}
 
 /* Hero principal */
 .home-showcase{position:relative;overflow:hidden;background:linear-gradient(90deg,#faf4e7 0%,#fffaf1 50%,#f8f0df 100%);border-bottom:1px solid #eadfca}
