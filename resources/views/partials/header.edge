@@ -18,7 +18,7 @@
             </div>
           </div>
         @else
-          <a data-nav-link href="{{ item.href }}"><span class="site-nav__icon" aria-hidden="true">{{ item.href === '/agenda' ? '◷' : item.href === '/galeria' ? '▧' : item.href === '/noticias' ? '▤' : item.href === '/acoes-sociais' ? '♡' : item.href === '/documentos' ? '▥' : item.href === '/contato' ? '◌' : '⌂' }}</span>{{ item.label }}</a>
+          <a data-nav-link href="{{ item.href }}"><span class="site-nav__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="{{ item.href === '/agenda' ? 'M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Z' : item.href === '/galeria' ? 'M4 5h16v14H4zM8 15l3-3 2 2 2-2 3 3M8 9h.01' : item.href === '/noticias' ? 'M5 4h14v16H5zM8 8h8M8 12h8M8 16h5' : item.href === '/documentos' ? 'M6 3h9l3 3v15H6zM14 3v4h4M9 12h6M9 16h6' : item.href === '/contato' ? 'M4 6h16v12H4zM5 7l7 6 7-6' : 'm3 11 9-8 9 8v9H5v-9Z' }}"/></svg></span>{{ item.label }}</a>
         @end
       @end
       @if(auth.user)
@@ -33,7 +33,7 @@
 
   <nav class="mobile-nav" :class="open ? 'is-open' : ''" aria-label="Navegação móvel">
     @each(item in publicMenu)
-      <a data-nav-link href="{{ item.href }}" @click="open = false"><span class="site-nav__icon" aria-hidden="true">{{ item.href === '/agenda' ? '◷' : item.href === '/galeria' ? '▧' : item.href === '/noticias' ? '▤' : item.href === '/acoes-sociais' ? '♡' : item.href === '/documentos' ? '▥' : item.href === '/contato' ? '◌' : '⌂' }}</span>{{ item.label }}</a>
+      <a data-nav-link href="{{ item.href }}" @click="open = false"><span class="site-nav__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="{{ item.href === '/agenda' ? 'M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Z' : item.href === '/galeria' ? 'M4 5h16v14H4zM8 15l3-3 2 2 2-2 3 3M8 9h.01' : item.href === '/noticias' ? 'M5 4h14v16H5zM8 8h8M8 12h8M8 16h5' : item.href === '/documentos' ? 'M6 3h9l3 3v15H6zM14 3v4h4M9 12h6M9 16h6' : item.href === '/contato' ? 'M4 6h16v12H4zM5 7l7 6 7-6' : 'm3 11 9-8 9 8v9H5v-9Z' }}"/></svg></span>{{ item.label }}</a>
       @if(item.children && item.children.length)
         <div class="mobile-submenu">
           @each(child in item.children)
