@@ -1,0 +1,54 @@
+@layout()
+  <section class="mx-auto max-w-6xl px-6 py-12">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-800">Administração</p>
+        <h1 class="mt-2 text-3xl font-bold">Usuários</h1>
+        <p class="mt-2 text-slate-600">Gerencie quem pode acessar e editar o portal.</p>
+      </div>
+      <a href="/admin/users/create" class="admin-action admin-action--primary">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Novo usuário
+      </a>
+    </div>
+
+    @if(flashMessages.has('error'))
+      <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">{{ flashMessages.get('error') }}</div>
+    @end
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table class="min-w-full text-left text-sm">
+        <thead class="bg-slate-50 text-slate-600">
+          <tr><th class="px-4 py-3">Nome</th><th class="px-4 py-3">E-mail</th><th class="px-4 py-3">Perfil</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Ações</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @each(user in users)
+            <tr>
+              <td class="px-4 py-4 font-semibold">{{ user.fullName ?? 'Sem nome' }}</td>
+              <td class="px-4 py-4">{{ user.email }}</td>
+              <td class="px-4 py-4">{{ user.role === 'admin' ? 'Administrador' : 'Editor' }}</td>
+              <td class="px-4 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ user.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600' }}">{{ user.isActive ? 'Ativo' : 'Inativo' }}</span></td>
+              <td class="px-4 py-4 text-right">
+                <div class="admin-actions admin-actions--end">
+                  <a href="/admin/users/{{ user.id }}/edit" class="admin-action admin-action--edit" title="Editar usuário">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+                    Editar
+                  </a>
+                  <form method="POST" action="/admin/users/{{ user.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este usuário?')">
+                    {{ csrfField() }}
+                    <button type="submit" class="admin-action admin-action--delete" title="Excluir usuário">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                      Excluir
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          @else
+            <tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Nenhum usuário cadastrado.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </section>
+@end

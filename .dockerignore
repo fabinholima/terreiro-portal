@@ -1,0 +1,15 @@
+node_modules
+build
+.git
+.github
+.env
+.env.*
+!.env.example
+!.env.production.example
+npm-debug.log*
+public/uploads/gallery/*
+!public/uploads/gallery/.gitkeep
+public/uploads/news/*
+!public/uploads/news/.gitkeep
+public/uploads/documents/*
+!public/uploads/documents/.gitkeep

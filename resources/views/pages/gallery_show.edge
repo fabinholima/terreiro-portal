@@ -1,0 +1,76 @@
+@layout()
+  <section class="gallery-hero gallery-hero--album">
+    <div class="site-container">
+      <a href="/galeria" class="gallery-back">← Todos os álbuns</a>
+      <p class="eyebrow">Memórias da casa</p>
+      <h1>{{ album.title }}</h1>
+      @if(album.description)
+        <p class="gallery-description">{{ album.description }}</p>
+      @end
+      <div class="gallery-album-meta">
+        <span>{{ album.eventDate ? album.eventDate.toFormat('dd/LL/yyyy') : 'Memória da casa' }}</span>
+        <span aria-hidden="true">·</span>
+        <span>{{ album.photos.length }} {{ album.photos.length === 1 ? 'fotografia' : 'fotografias' }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" x-data="galleryViewer">
+    <div class="site-container">
+      <div class="gallery-toolbar"><span>Um olhar sobre nossos encontros</span><span class="gallery-toolbar__hint"><span x-text="favoriteCount"></span> favoritas · Toque nas fotos para ampliar ↗</span></div>
+      <div class="gallery-photo-grid">
+        @each(photo in album.photos)
+          <figure class="gallery-photo" data-gallery-photo data-src="{{ photo.path }}" data-alt="{{ photo.altText ?? album.title }}" data-caption="{{ photo.caption ?? '' }}" data-credit="{{ photo.credit ?? '' }}">
+            <button type="button" class="gallery-photo__button" @click="open($el)" aria-label="Ampliar foto: {{ photo.altText ?? album.title }}">
+              <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" loading="lazy" decoding="async" draggable="false">
+              <span class="gallery-photo__zoom" aria-hidden="true">↗</span>
+            </button>
+            <button type="button" class="gallery-photo__favorite" :class="isFavorite('{{ photo.path }}') ? 'is-favorite' : ''" @click.stop="toggleFavorite('{{ photo.path }}')" :aria-label="isFavorite('{{ photo.path }}') ? 'Remover dos favoritos' : 'Adicionar aos favoritos'" :aria-pressed="isFavorite('{{ photo.path }}')">☆<span aria-hidden="true">★</span></button>
+            @if(photo.caption || photo.credit)
+              <figcaption class="gallery-photo__caption">
+                @if(photo.caption)
+                  <span>{{ photo.caption }}</span>
+                @end
+                @if(photo.credit)
+                  <small>Foto: {{ photo.credit }}</small>
+                @end
+              </figcaption>
+            @end
+          </figure>
+        @else
+          <div class="gallery-empty">As memórias deste álbum estarão aqui em breve.</div>
+        @end
+      </div>
+      <section id="comments" class="gallery-comments" aria-labelledby="comments-title">
+        <div class="gallery-comments__heading"><div><p class="eyebrow">Participação</p><h2 id="comments-title">Comentários</h2></div><span>{{ album.comments.length }} {{ album.comments.length === 1 ? 'comentário' : 'comentários' }}</span></div>
+        @if(album.comments.length)
+          <div class="gallery-comments__list">
+            @each(comment in album.comments)
+              <article class="gallery-comment"><div class="gallery-comment__meta"><strong>{{ comment.name }}</strong><time datetime="{{ comment.createdAt.toISO() }}">{{ comment.createdAt.toFormat('dd/LL/yyyy') }}</time></div><p>{{ comment.body }}</p></article>
+            @end
+          </div>
+        @else
+          <p class="gallery-comments__empty">Seja o primeiro a deixar uma mensagem.</p>
+        @end
+        <form class="gallery-comment-form" method="POST" action="/galeria/{{ album.slug }}/comentarios">
+          <h3>Deixe seu comentário</h3><p class="gallery-comment-form__hint">Nome e e-mail são obrigatórios. O e-mail não será exibido.</p>
+          <div class="gallery-comment-form__grid"><label>Nome<input name="name" required maxlength="120" autocomplete="name"></label><label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label></div>
+          <label class="gallery-comment-form__honeypot" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
+          <label>Comentário<textarea name="body" required maxlength="2000" rows="4"></textarea></label><button type="submit">Publicar comentário</button>
+        </form>
+      </section>
+
+      <a href="/galeria" class="gallery-end-link">← Explorar outros álbuns</a>
+    </div>
+
+    <dialog class="gallery-lightbox" x-ref="viewer" aria-label="Visualizador de fotografias" @cancel.prevent="close()" @click.self="close()" @keydown.arrow-left.prevent="previous()" @keydown.arrow-right.prevent="next()" @touchstart.passive="touchX = $event.changedTouches[0].clientX" @touchend.passive="swipe($event)">
+      <div class="gallery-lightbox__top"><span>Memórias da casa</span><button class="gallery-lightbox__close" type="button" @click="close()" aria-label="Fechar imagem" autofocus>×</button></div>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" x-show="photos.length > 1" type="button" @click="previous()" aria-label="Foto anterior">←</button>
+      <figure class="gallery-lightbox__content">
+        <img :src="current.src || ''" :alt="current.alt || ''" decoding="async">
+        <figcaption><p x-text="current.caption"></p><small x-show="current.credit" x-text="'Foto: ' + current.credit"></small><span class="gallery-lightbox__counter" aria-live="polite" x-text="counter"></span></figcaption>
+      </figure>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--next" x-show="photos.length > 1" type="button" @click="next()" aria-label="Próxima foto">→</button>
+    </dialog>
+  </section>
+@end

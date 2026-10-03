@@ -4,6 +4,28 @@
  */
 
 export const controllers = {
+  admin: {
+    Albums: () => import('#controllers/admin/albums_controller'),
+    Dashboard: () => import('#controllers/admin/dashboard_controller'),
+    Documents: () => import('#controllers/admin/documents_controller'),
+    Events: () => import('#controllers/admin/events_controller'),
+    InstitutionalPages: () => import('#controllers/admin/institutional_pages_controller'),
+    Menus: () => import('#controllers/admin/menus_controller'),
+    Posts: () => import('#controllers/admin/posts_controller'),
+    SiteSettings: () => import('#controllers/admin/site_settings_controller'),
+    SocialActions: () => import('#controllers/admin/social_actions_controller'),
+    Users: () => import('#controllers/admin/users_controller'),
+  },
+  Documents: () => import('#controllers/documents_controller'),
+  Events: () => import('#controllers/events_controller'),
+  Gallery: () => import('#controllers/gallery_controller'),
+  Health: () => import('#controllers/health_controller'),
+  Home: () => import('#controllers/home_controller'),
+  Logo: () => import('#controllers/logo_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  Pages: () => import('#controllers/pages_controller'),
+  Posts: () => import('#controllers/posts_controller'),
+  Seo: () => import('#controllers/seo_controller'),
   Session: () => import('#controllers/session_controller'),
+  SocialActions: () => import('#controllers/social_actions_controller'),
 }

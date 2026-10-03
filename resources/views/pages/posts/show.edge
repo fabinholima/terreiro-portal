@@ -1,0 +1,56 @@
+@layout()
+  <article class="news-article">
+    <header class="news-article__header">
+      <div class="site-container news-article__header-inner">
+        <a href="/noticias" class="article__back">← Todas as notícias</a>
+        <p class="eyebrow">Notícias</p>
+        <h1>{{ post.title }}</h1>
+        @if(post.summary)
+          <p class="news-article__lead">{{ post.summary }}</p>
+        @end
+        <p class="news-article__meta">{{ post.publishedAt ? post.publishedAt.toFormat('dd/LL/yyyy · HH:mm') : '' }}</p>
+      </div>
+    </header>
+
+    <div class="site-container news-article__content">
+      @if(post.featuredImagePath)
+        <figure class="news-article__featured" style="max-width:{{ post.featuredImageWidth ?? 980 }}px;">
+          <img
+            src="{{ post.featuredImagePath }}"
+            alt="{{ post.title }}"
+            style="width:100%;{{ post.featuredImageHeight ? 'height:' + post.featuredImageHeight + 'px;' : 'height:auto;' }}max-height:none;object-fit:{{ post.featuredImageFit ?? 'contain' }};"
+          >
+        </figure>
+      @end
+
+      <div class="news-article__body rich-content">{{{ post.body ?? '' }}}</div>
+
+      @if(imageEntries && imageEntries.length)
+        <section class="news-article__images" x-data="lightbox">
+          <div class="news-article__section-title">
+            <p class="eyebrow">Imagens</p>
+            <h2>Fotos e figuras</h2>
+          </div>
+
+          <div class="news-article__image-list news-article__image-list--{{ post.imageDisplaySize ?? 'large' }}">
+            @each(image in imageEntries)
+              <figure class="news-article__image" style="{{ image.width ? 'max-width:' + image.width + 'px;' : '' }}">
+                <img
+                  src="{{ image.path }}"
+                  alt="Imagem relacionada à notícia {{ post.title }}"
+                  style="width:100%;{{ image.height ? 'height:' + image.height + 'px;' : 'height:auto;' }}max-height:none;object-fit:contain;"
+                  @click="open('{{ image.path }}')"
+                >
+              </figure>
+            @end
+          </div>
+
+          <div class="lightbox" x-cloak x-show="image" @keydown.escape.window="close()" @click.self="close()">
+            <button type="button" @click="close()" aria-label="Fechar imagem">×</button>
+            <img :src="image" alt="Visualização ampliada">
+          </div>
+        </section>
+      @end
+    </div>
+  </article>
+@end

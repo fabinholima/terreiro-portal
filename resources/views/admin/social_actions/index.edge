@@ -1,0 +1,75 @@
+@layout()
+  <div class="mx-auto max-w-6xl px-6 py-10">
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-emerald-700">Administração</p>
+        <h1 class="text-3xl font-bold text-zinc-900">Ações sociais</h1>
+        <p class="mt-2 text-slate-600">Gerencie campanhas, arrecadações e iniciativas comunitárias.</p>
+      </div>
+      <a href="/admin/social-actions/create" class="admin-action admin-action--primary">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Nova ação
+      </a>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+      <table class="min-w-full divide-y divide-zinc-200">
+        <thead class="bg-zinc-50">
+          <tr><th class="px-5 py-3 text-left">Ação</th><th class="px-5 py-3 text-left">Situação</th><th class="px-5 py-3 text-left">Progresso</th><th class="px-5 py-3 text-right">Ações</th></tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-100">
+          @each(action in actions)
+            <tr>
+              <td class="px-5 py-4">
+                <div style="display:flex;align-items:center;gap:12px">
+                  @if(action.imagePath)
+                    <img src="{{ action.imagePath }}" alt="{{ action.title }}" style="width:64px;height:48px;object-fit:cover;border-radius:8px;border:1px solid #e3e9e5">
+                  @end
+                  <div><strong>{{ action.title }}</strong><div class="text-sm text-zinc-500">{{ action.unit ?? 'Sem unidade definida' }}</div></div>
+                </div>
+              </td>
+              <td class="px-5 py-4">
+                @if(action.status === 'planned')
+                  Planejada
+                @elseif(action.status === 'active')
+                  Em andamento
+                @elseif(action.status === 'completed')
+                  Concluída
+                @elseif(action.status === 'permanent')
+                  Permanente
+                @else
+                  Cancelada
+                @end
+              </td>
+              <td class="px-5 py-4">
+                @if(action.progressPercent !== null)
+                  <div class="w-48 rounded-full bg-zinc-200"><div class="h-2 rounded-full bg-emerald-700" style="width: {{ action.progressPercent }}%"></div></div>
+                  <div class="mt-1 text-sm text-zinc-600">{{ action.currentValue }} de {{ action.goal }} {{ action.unit ?? '' }} ({{ action.progressPercent }}%)</div>
+                @else
+                  <span class="text-sm text-zinc-500">Sem meta numérica</span>
+                @end
+              </td>
+              <td class="px-5 py-4 text-right">
+                <div class="admin-actions admin-actions--end">
+                  <a href="/admin/social-actions/{{ action.id }}/edit" class="admin-action admin-action--edit" title="Editar ação social">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 10-10a2.8 2.8 0 0 0-4-4l-10 10L4 20Z"/></svg>
+                    Editar
+                  </a>
+                  <form method="POST" action="/admin/social-actions/{{ action.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir esta ação social?')">
+                    {{ csrfField() }}
+                    <button class="admin-action admin-action--delete" type="submit" title="Excluir ação social">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+                      Excluir
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          @else
+            <tr><td colspan="4" class="px-5 py-10 text-center text-zinc-500">Nenhuma ação social cadastrada.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </div>
+@end

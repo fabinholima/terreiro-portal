@@ -1,0 +1,76 @@
+@layout()
+  <header class="admin-page-head">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Visão geral do conteúdo, das próximas atividades e dos principais módulos do portal.</p>
+    </div>
+    <a class="admin-btn" href="/" target="_blank" rel="noopener">Abrir site público ↗</a>
+  </header>
+
+  <section class="admin-metrics" aria-label="Indicadores">
+    <a class="admin-metric" href="/admin/events">
+      <div class="admin-metric__top"><span>Eventos</span><span class="admin-metric__icon">◷</span></div>
+      <strong>{{ counters.events }}</strong>
+      <span>Itens cadastrados</span>
+    </a>
+    <a class="admin-metric" href="/admin/posts">
+      <div class="admin-metric__top"><span>Notícias</span><span class="admin-metric__icon">▤</span></div>
+      <strong>{{ counters.posts }}</strong>
+      <span>Conteúdos</span>
+    </a>
+    <a class="admin-metric" href="/admin/albums">
+      <div class="admin-metric__top"><span>Álbuns</span><span class="admin-metric__icon">▧</span></div>
+      <strong>{{ counters.albums }}</strong>
+      <span>Galerias</span>
+    </a>
+    <a class="admin-metric" href="/admin/social-actions">
+      <div class="admin-metric__top"><span>Ações sociais</span><span class="admin-metric__icon">♡</span></div>
+      <strong>{{ counters.actions }}</strong>
+      <span>Projetos</span>
+    </a>
+    <a class="admin-metric" href="/admin/documents">
+      <div class="admin-metric__top"><span>Documentos</span><span class="admin-metric__icon">▥</span></div>
+      <strong>{{ counters.documents }}</strong>
+      <span>Arquivos públicos</span>
+    </a>
+  </section>
+
+  <div class="admin-grid">
+    <section class="admin-panel">
+      <div class="admin-panel__head">
+        <h2>Próximos eventos</h2>
+        <a class="admin-btn" href="/admin/events">Ver agenda</a>
+      </div>
+
+      @each(event in upcomingEvents)
+        <div class="admin-list-item">
+          <div>
+            <strong>{{ event.title }}</strong>
+            <small>{{ event.startsAt.toFormat('dd/LL/yyyy HH:mm') }}{{ event.location ? ' · ' + event.location : '' }}</small>
+          </div>
+          <a class="admin-btn" href="/admin/events/{{ event.id }}/edit">Editar</a>
+        </div>
+      @else
+        <p style="color:var(--admin-muted)">Nenhum evento futuro cadastrado.</p>
+      @end
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel__head">
+        <h2>Ações rápidas</h2>
+      </div>
+      <div class="admin-quick">
+        <a href="/admin/events/create"><span>Novo evento</span><span>→</span></a>
+        <a href="/admin/posts/create"><span>Nova notícia</span><span>→</span></a>
+        <a href="/admin/albums/create"><span>Novo álbum</span><span>→</span></a>
+        <a href="/admin/social-actions/create"><span>Nova ação social</span><span>→</span></a>
+        <a href="/admin/documents/create"><span>Novo documento</span><span>→</span></a>
+        <a href="/admin/institutional-pages"><span>Páginas institucionais</span><span>→</span></a>
+        @if(auth.user?.role === 'admin')
+          <a href="/admin/site-settings"><span>Configurações do site</span><span>→</span></a>
+          <a href="/admin/users"><span>Gerenciar usuários</span><span>→</span></a>
+        @end
+      </div>
+    </section>
+  </div>
+@end

@@ -1,0 +1,60 @@
+@layout()
+  <header class="admin-page-head">
+    <div>
+      <h1>Agenda</h1>
+      <p>Gerencie os eventos, giras, reuniões e atividades públicas do Terreiro.</p>
+    </div>
+    <a class="admin-btn admin-btn--primary admin-action" href="/admin/events/create">
+      <svg class="admin-action__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Novo evento</span>
+    </a>
+  </header>
+
+  <section class="admin-panel">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Data</th><th>Evento</th><th>Status</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          @each(event in events)
+            <tr>
+              <td>{{ event.startsAt.toFormat('dd/LL/yyyy · HH:mm') }}</td>
+              <td><strong>{{ event.title }}</strong></td>
+              <td>
+                @if(event.status === 'scheduled')
+                  <span class="admin-status admin-status--draft">Agendado</span>
+                @elseif(event.status === 'confirmed')
+                  <span class="admin-status admin-status--published">Confirmado</span>
+                @elseif(event.status === 'postponed')
+                  <span class="admin-status admin-status--draft">Adiado</span>
+                @elseif(event.status === 'cancelled')
+                  <span class="admin-status admin-status--archived">Cancelado</span>
+                @else
+                  <span class="admin-status admin-status--published">Concluído</span>
+                @end
+              </td>
+              <td>
+                <div class="admin-actions">
+                  <a class="admin-action admin-action--edit" href="/admin/events/{{ event.id }}/edit">
+                    <svg class="admin-action__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>
+                    <span>Editar</span>
+                  </a>
+                  <form method="POST" action="/admin/events/{{ event.id }}/delete" class="admin-action-form" onsubmit="return confirm('Excluir este evento?')">
+                    {{ csrfField() }}
+                    <button class="admin-action admin-action--delete" type="submit">
+                      <svg class="admin-action__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></svg>
+                      <span>Excluir</span>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          @else
+            <tr><td colspan="4">Nenhum evento cadastrado.</td></tr>
+          @end
+        </tbody>
+      </table>
+    </div>
+  </section>
+@end

@@ -66,9 +66,9 @@
     "@adonisjs/static": "^2.0.1",
     "@adonisjs/vite": "^5.1.1",
     "@vinejs/vine": "^4.4.0",
-    "better-sqlite3": "^12.10.0",
     "edge.js": "^6.5.1",
     "luxon": "^3.7.2",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
@@ -79,7 +79,6 @@
   },
   "allowScripts": {
     "@swc/core": true,
-    "better-sqlite3": true,
     "esbuild": true,
     "fsevents": true
   },
