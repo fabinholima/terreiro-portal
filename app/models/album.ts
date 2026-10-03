@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Photo from '#models/photo'
+import GalleryComment from '#models/gallery_comment'
 
 export default class Album extends BaseModel {
   @column({ isPrimary: true }) declare id: number
@@ -14,4 +15,5 @@ export default class Album extends BaseModel {
   @column.dateTime({ autoCreate: true }) declare createdAt: DateTime
   @column.dateTime({ autoCreate: true, autoUpdate: true }) declare updatedAt: DateTime | null
   @hasMany(() => Photo) declare photos: HasMany<typeof Photo>
+  @hasMany(() => GalleryComment) declare comments: HasMany<typeof GalleryComment>
 }

@@ -41,6 +41,24 @@
           <div class="gallery-empty">As memórias deste álbum estarão aqui em breve.</div>
         @end
       </div>
+      <section id="comments" class="gallery-comments" aria-labelledby="comments-title">
+        <div class="gallery-comments__heading"><div><p class="eyebrow">Participação</p><h2 id="comments-title">Comentários</h2></div><span>{{ album.comments.length }} {{ album.comments.length === 1 ? 'comentário' : 'comentários' }}</span></div>
+        @if(album.comments.length)
+          <div class="gallery-comments__list">
+            @each(comment in album.comments)
+              <article class="gallery-comment"><div class="gallery-comment__meta"><strong>{{ comment.name }}</strong><time datetime="{{ comment.createdAt.toISO() }}">{{ comment.createdAt.toFormat('dd/LL/yyyy') }}</time></div><p>{{ comment.body }}</p></article>
+            @end
+          </div>
+        @else
+          <p class="gallery-comments__empty">Seja o primeiro a deixar uma mensagem.</p>
+        @end
+        <form class="gallery-comment-form" method="POST" action="/galeria/{{ album.slug }}/comentarios">
+          <h3>Deixe seu comentário</h3><p class="gallery-comment-form__hint">Nome e e-mail são obrigatórios. O e-mail não será exibido.</p>
+          <div class="gallery-comment-form__grid"><label>Nome<input name="name" required maxlength="120" autocomplete="name"></label><label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label></div>
+          <label>Comentário<textarea name="body" required maxlength="2000" rows="4"></textarea></label><button type="submit">Publicar comentário</button>
+        </form>
+      </section>
+
       <a href="/galeria" class="gallery-end-link">← Explorar outros álbuns</a>
     </div>
 
