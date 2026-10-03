@@ -91,7 +91,7 @@ document.querySelectorAll('[data-contact-form]').forEach((form) => {
     submit.disabled = true;
     if (status) status.textContent = 'Enviando mensagem…';
     const csrf = form.querySelector('input[name="_csrf"]')?.value;
-    fetch(form.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', ...(csrf ? { 'x-csrf-token': csrf } : {}) }, body: JSON.stringify(Object.fromEntries(data)) })
+    fetch(form.dataset.endpoint, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', ...(csrf ? { 'x-csrf-token': csrf } : {}) }, body: JSON.stringify(Object.fromEntries(data)) })
       .then(async (response) => { const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.message || 'Não foi possível enviar agora.'); return payload; })
       .then((payload) => { if (status) status.textContent = payload.message || 'Mensagem enviada com sucesso.'; form.reset(); })
       .catch((error) => { if (status) status.textContent = error.message; })
