@@ -1,7 +1,7 @@
 FROM node:26-bookworm-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --ignore-scripts
 
 FROM deps AS build
 WORKDIR /app
