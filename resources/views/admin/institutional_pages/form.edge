@@ -34,9 +34,9 @@
               <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
               <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
               <span class="institutional-editor__separator"></span>
-              <button type="button" onclick="institutionalCommand('justifyLeft')" title="Alinhar à esquerda">左</button>
-              <button type="button" onclick="institutionalCommand('justifyCenter')" title="Centralizar">≡</button>
-              <button type="button" onclick="institutionalCommand('justifyRight')" title="Alinhar à direita">右</button>
+              <button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
+              <button type="button" onclick="institutionalAlignImage('center')" title="Imagem centralizada">Img ↔</button>
+              <button type="button" onclick="institutionalAlignImage('right')" title="Imagem à direita">Img →</button>
               <button type="button" onclick="institutionalInsertImage()" title="Inserir imagem">🖼</button>
               <span class="institutional-editor__separator"></span>
               <button type="button" onclick="institutionalCreateLink()">🔗</button>
@@ -80,9 +80,9 @@
               <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
               <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
               <span class="institutional-editor__separator"></span>
-              <button type="button" onclick="institutionalCommand('justifyLeft')" title="Alinhar à esquerda">左</button>
-              <button type="button" onclick="institutionalCommand('justifyCenter')" title="Centralizar">≡</button>
-              <button type="button" onclick="institutionalCommand('justifyRight')" title="Alinhar à direita">右</button>
+              <button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
+              <button type="button" onclick="institutionalAlignImage('center')" title="Imagem centralizada">Img ↔</button>
+              <button type="button" onclick="institutionalAlignImage('right')" title="Imagem à direita">Img →</button>
               <button type="button" onclick="institutionalInsertImage()" title="Inserir imagem">🖼</button>
               <span class="institutional-editor__separator"></span>
               <button type="button" onclick="institutionalCreateLink()">🔗</button>
@@ -107,6 +107,7 @@
     function institutionalBlock(t){institutionalEditor().focus();document.execCommand('formatBlock',false,t)}
     function institutionalCreateLink(){const u=window.prompt('Informe o endereço do link');if(u){institutionalEditor().focus();document.execCommand('createLink',false,u)}}
     function institutionalInsertImage(){const u=window.prompt('Cole a URL da imagem');if(u&&/^https?:\/\//i.test(u)){institutionalEditor().focus();document.execCommand('insertImage',false,u)}}
+    function institutionalAlignImage(position){const selection=window.getSelection();const candidates=[selection?.anchorNode,selection?.focusNode,document.activeElement];const image=candidates.map((node)=>node?.nodeType===1?node:node?.parentElement).map((node)=>node?.closest?.('img')).find(Boolean);if(!image){window.alert('Selecione uma imagem antes de escolher o alinhamento.');return}image.style.display='block';image.style.marginLeft=position==='left'?'0':'auto';image.style.marginRight=position==='right'?'0':'auto'}
     function syncInstitutionalEditor(){document.getElementById('institutional-body').value=institutionalEditor().innerHTML}
     function suggestSlug(value){const slug=document.getElementById('page-slug');if(!slug||slug.dataset.edited==='true')return;slug.value=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
     document.addEventListener('DOMContentLoaded',()=>{const slug=document.getElementById('page-slug');if(slug)slug.addEventListener('input',()=>slug.dataset.edited='true');const editor=institutionalEditor();if(editor)editor.addEventListener('paste',(event)=>{const image=[...(event.clipboardData?.items||[])].find(item=>item.type.startsWith('image/'));if(!image)return;event.preventDefault();const reader=new FileReader();reader.onload=()=>{editor.focus();document.execCommand('insertImage',false,String(reader.result))};reader.readAsDataURL(image.getAsFile())})})
