@@ -13,7 +13,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /app/build ./build
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev --ignore-scripts RUN npm ci --omit=dev && npm cache clean --forceRUN npm ci --omit=dev && npm cache clean --force npm cache clean --force
 RUN mkdir -p /app/build/public/uploads/gallery /app/build/public/uploads/news /app/build/public/uploads/documents \
   && chown -R node:node /app
 USER node
