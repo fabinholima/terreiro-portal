@@ -22,7 +22,7 @@ export default class GalleryController {
     if (!name?.trim() || !email?.trim() || !body?.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
       return response.badRequest({ message: 'Informe nome, e-mail válido e comentário.' })
     }
-    await GalleryComment.create({ albumId: album.id, name: name.trim(), email: email.trim().toLowerCase(), body: body.trim(), isApproved: true })
+    await GalleryComment.create({ albumId: album.id, name: name.trim(), email: email.trim().toLowerCase(), body: body.trim(), isApproved: false })
     return response.redirect(`/galeria/${album.slug}#comments`)
   }
 

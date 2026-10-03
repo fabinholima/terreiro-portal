@@ -89,6 +89,9 @@ router.group(()=>{
   router.post('/admin/albums/:id/photos/publish-all',[AlbumsController,'publishAllPhotos']).as('admin.albums.photos.publish_all')
   router.post('/admin/albums/:id/photos/:photoId',[AlbumsController,'updatePhoto']).as('admin.albums.photos.update')
   router.post('/admin/albums/:id/photos/:photoId/delete',[AlbumsController,'deletePhoto']).as('admin.albums.photos.destroy')
+  router.post('/admin/albums/:id/comments/:commentId/approve',[AlbumsController,'approveComment']).as('admin.albums.comments.approve')
+  router.post('/admin/albums/:id/comments/:commentId/reject',[AlbumsController,'rejectComment']).as('admin.albums.comments.reject')
+  router.post('/admin/albums/:id/comments/:commentId/delete',[AlbumsController,'deleteComment']).as('admin.albums.comments.destroy')
   router.post('/admin/albums/:id/delete',[AlbumsController,'destroy']).as('admin.albums.destroy')
 
   router.get('/admin/social-actions',[AdminSocialActionsController,'index']).as('admin.social_actions.index')

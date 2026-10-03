@@ -4,6 +4,7 @@ import Album from '#models/album'
 import Photo from '#models/photo'
 import { albumValidator } from '#validators/album'
 import app from '@adonisjs/core/services/app'
+import GalleryComment from '#models/gallery_comment'
 
 export default class AlbumsController {
   async index({ view }: HttpContext) {
@@ -33,6 +34,7 @@ export default class AlbumsController {
     const album = await Album.query()
       .where('id', params.id)
       .preload('photos', (query) => query.orderBy('position'))
+      .preload('comments', (query) => query.orderBy('created_at', 'desc'))
       .firstOrFail()
 
     return view.render('admin/albums/form', { album })
@@ -85,6 +87,27 @@ export default class AlbumsController {
     const albumId = photo.albumId
     await photo.delete()
     return response.redirect(`/admin/albums/${albumId}/edit`)
+  }
+
+  async approveComment({ params, response }: HttpContext) {
+    const comment = await GalleryComment.findOrFail(params.commentId)
+    comment.isApproved = true
+    await comment.save()
+    return response.redirect(`/admin/albums/${comment.albumId}/edit#comments`)
+  }
+
+  async rejectComment({ params, response }: HttpContext) {
+    const comment = await GalleryComment.findOrFail(params.commentId)
+    comment.isApproved = false
+    await comment.save()
+    return response.redirect(`/admin/albums/${comment.albumId}/edit#comments`)
+  }
+
+  async deleteComment({ params, response }: HttpContext) {
+    const comment = await GalleryComment.findOrFail(params.commentId)
+    const albumId = comment.albumId
+    await comment.delete()
+    return response.redirect(`/admin/albums/${albumId}/edit#comments`)
   }
 
   async destroy({ params, response }: HttpContext) {
