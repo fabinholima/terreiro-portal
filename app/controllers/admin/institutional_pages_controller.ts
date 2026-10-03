@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import InstitutionalPage from '#models/institutional_page'
 import { institutionalPageValidator } from '#validators/institutional_page'
+import app from '@adonisjs/core/services/app'
 
 const protectedSlugs = new Set(['o-terreiro', 'nossa-historia', 'umbanda', 'contato'])
 
@@ -88,6 +89,14 @@ export default class InstitutionalPagesController {
 
     session.flash('success','Página atualizada com sucesso.')
     return response.redirect('/admin/institutional-pages')
+  }
+
+  async uploadImage({ request, response }: HttpContext) {
+    const image = request.file('image', { size: '8mb', extnames: ['jpg', 'jpeg', 'png', 'webp', 'gif'] })
+    if (!image || !image.isValid) return response.badRequest({ message: 'Selecione uma imagem válida de até 8 MB.' })
+    const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}-${image.clientName.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+    await image.move(app.makePath('public/uploads/institutional'), { name: safeName })
+    return response.json({ url: `/uploads/institutional/${safeName}` })
   }
 
   async destroy({ params, response, session }: HttpContext) {

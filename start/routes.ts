@@ -69,6 +69,7 @@ router.group(()=>{
   router.get('/admin/institutional-pages',[InstitutionalPagesController,'index']).as('admin.institutional_pages.index')
   router.get('/admin/institutional-pages/create',[InstitutionalPagesController,'create']).as('admin.institutional_pages.create')
   router.post('/admin/institutional-pages',[InstitutionalPagesController,'store']).as('admin.institutional_pages.store')
+  router.post('/admin/institutional-pages/upload-image',[InstitutionalPagesController,'uploadImage']).as('admin.institutional_pages.upload_image')
   router.get('/admin/institutional-pages/:id/edit',[InstitutionalPagesController,'edit']).as('admin.institutional_pages.edit')
   router.post('/admin/institutional-pages/:id',[InstitutionalPagesController,'update']).as('admin.institutional_pages.update')
   router.post('/admin/institutional-pages/:id/delete',[InstitutionalPagesController,'destroy']).as('admin.institutional_pages.destroy')

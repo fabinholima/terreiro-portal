@@ -34,17 +34,17 @@
               <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
               <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
               <span class="institutional-editor__separator"></span>
-              <button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
+              <button type="button" onclick="institutionalCommand('justifyLeft')" title="Texto à esquerda">Texto ←</button><button type="button" onclick="institutionalCommand('justifyCenter')" title="Texto centralizado">Texto ↔</button><button type="button" onclick="institutionalCommand('justifyRight')" title="Texto à direita">Texto →</button><button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
               <button type="button" onclick="institutionalAlignImage('center')" title="Imagem centralizada">Img ↔</button>
               <button type="button" onclick="institutionalAlignImage('right')" title="Imagem à direita">Img →</button>
-              <button type="button" onclick="institutionalInsertImage()" title="Inserir imagem">🖼</button>
+              <button type="button" onclick="institutionalChooseImage()" title="Enviar imagem">🖼 Upload</button>
               <span class="institutional-editor__separator"></span>
               <button type="button" onclick="institutionalCreateLink()">🔗</button>
               <button type="button" onclick="institutionalCommand('removeFormat')">Tx</button>
             </div>
             <div id="institutional-rich-editor" class="institutional-editor__content" contenteditable="true">{{{ page.body }}}</div>
           </div>
-          <textarea id="institutional-body" class="hidden" name="body" required>{{ page.body }}</textarea>
+          <input id="institutional-image-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden"><textarea id="institutional-body" class="hidden" name="body" required>{{ page.body }}</textarea>
         </div>
 
         <label class="flex items-center gap-3"><input class="w-auto" type="checkbox" name="isPublic" value="true" @if(page.isPublic) checked @end><span>Disponível publicamente</span></label>
@@ -80,17 +80,17 @@
               <button type="button" onclick="institutionalCommand('insertOrderedList')">1. Lista</button>
               <button type="button" onclick="institutionalBlock('blockquote')">❝</button>
               <span class="institutional-editor__separator"></span>
-              <button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
+              <button type="button" onclick="institutionalCommand('justifyLeft')" title="Texto à esquerda">Texto ←</button><button type="button" onclick="institutionalCommand('justifyCenter')" title="Texto centralizado">Texto ↔</button><button type="button" onclick="institutionalCommand('justifyRight')" title="Texto à direita">Texto →</button><button type="button" onclick="institutionalAlignImage('left')" title="Imagem à esquerda">Img ←</button>
               <button type="button" onclick="institutionalAlignImage('center')" title="Imagem centralizada">Img ↔</button>
               <button type="button" onclick="institutionalAlignImage('right')" title="Imagem à direita">Img →</button>
-              <button type="button" onclick="institutionalInsertImage()" title="Inserir imagem">🖼</button>
+              <button type="button" onclick="institutionalChooseImage()" title="Enviar imagem">🖼 Upload</button>
               <span class="institutional-editor__separator"></span>
               <button type="button" onclick="institutionalCreateLink()">🔗</button>
               <button type="button" onclick="institutionalCommand('removeFormat')">Tx</button>
             </div>
             <div id="institutional-rich-editor" class="institutional-editor__content" contenteditable="true"><p>Digite o conteúdo da página.</p></div>
           </div>
-          <textarea id="institutional-body" class="hidden" name="body" required>Digite o conteúdo da página.</textarea>
+          <input id="institutional-image-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden"><textarea id="institutional-body" class="hidden" name="body" required>Digite o conteúdo da página.</textarea>
         </div>
 
         <label class="flex items-center gap-3"><input class="w-auto" type="checkbox" name="isPublic" value="true" checked><span>Publicar a página imediatamente</span></label>
@@ -106,10 +106,11 @@
     function institutionalCommand(c){institutionalEditor().focus();document.execCommand(c,false,null)}
     function institutionalBlock(t){institutionalEditor().focus();document.execCommand('formatBlock',false,t)}
     function institutionalCreateLink(){const u=window.prompt('Informe o endereço do link');if(u){institutionalEditor().focus();document.execCommand('createLink',false,u)}}
-    function institutionalInsertImage(){const u=window.prompt('Cole a URL da imagem');if(u&&/^https?:\/\//i.test(u)){institutionalEditor().focus();document.execCommand('insertImage',false,u)}}
+    function institutionalChooseImage(){document.getElementById('institutional-image-input')?.click()}
+    async function institutionalUploadImage(file){const form=document.querySelector('form');const token=form?.querySelector('input[name=_csrf]')?.value;const body=new FormData();body.append('image',file);if(token)body.append('_csrf',token);const result=await fetch('/admin/institutional-pages/upload-image',{method:'POST',body});if(!result.ok)throw new Error('Falha no upload');return (await result.json()).url}
     function institutionalAlignImage(position){const selection=window.getSelection();const candidates=[selection?.anchorNode,selection?.focusNode,document.activeElement];const image=candidates.map((node)=>node?.nodeType===1?node:node?.parentElement).map((node)=>node?.closest?.('img')).find(Boolean);if(!image){window.alert('Selecione uma imagem antes de escolher o alinhamento.');return}image.style.display='block';image.style.marginLeft=position==='left'?'0':'auto';image.style.marginRight=position==='right'?'0':'auto'}
     function syncInstitutionalEditor(){document.getElementById('institutional-body').value=institutionalEditor().innerHTML}
     function suggestSlug(value){const slug=document.getElementById('page-slug');if(!slug||slug.dataset.edited==='true')return;slug.value=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
-    document.addEventListener('DOMContentLoaded',()=>{const slug=document.getElementById('page-slug');if(slug)slug.addEventListener('input',()=>slug.dataset.edited='true');const editor=institutionalEditor();if(editor)editor.addEventListener('paste',(event)=>{const image=[...(event.clipboardData?.items||[])].find(item=>item.type.startsWith('image/'));if(!image)return;event.preventDefault();const reader=new FileReader();reader.onload=()=>{editor.focus();document.execCommand('insertImage',false,String(reader.result))};reader.readAsDataURL(image.getAsFile())})})
+    document.addEventListener('DOMContentLoaded',()=>{const slug=document.getElementById('page-slug');if(slug)slug.addEventListener('input',()=>slug.dataset.edited='true');const editor=institutionalEditor();const input=document.getElementById('institutional-image-input');if(input)input.addEventListener('change',async()=>{const file=input.files?.[0];if(!file)return;try{const url=await institutionalUploadImage(file);editor.focus();document.execCommand('insertImage',false,url)}catch{window.alert('Não foi possível enviar a imagem.')}});if(editor)editor.addEventListener('paste',(event)=>{const image=[...(event.clipboardData?.items||[])].find(item=>item.type.startsWith('image/'));if(!image)return;event.preventDefault();institutionalUploadImage(image.getAsFile()).then((url)=>{editor.focus();document.execCommand('insertImage',false,url)}).catch(()=>window.alert('Não foi possível enviar a imagem.'))})})
   </script>
 @end
