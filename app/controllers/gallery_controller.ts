@@ -18,8 +18,9 @@ export default class GalleryController {
 
   async comment({ params, request, response }: HttpContext) {
     const album = await Album.query().where('slug', params.slug).where('is_public', true).firstOrFail()
-    const { name, email, body } = request.only(['name', 'email', 'body'])
-    if (!name?.trim() || !email?.trim() || !body?.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
+    const { name, email, body, website } = request.only(['name', 'email', 'body', 'website'])
+    if (website?.trim()) return response.redirect(`/galeria/${album.slug}#comments`)
+    if (!name?.trim() || !email?.trim() || !body?.trim() || body.trim().length > 2000 || !/^\S+@\S+\.\S+$/.test(email)) {
       return response.badRequest({ message: 'Informe nome, e-mail válido e comentário.' })
     }
     await GalleryComment.create({ albumId: album.id, name: name.trim(), email: email.trim().toLowerCase(), body: body.trim(), isApproved: false })

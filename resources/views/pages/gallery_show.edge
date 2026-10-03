@@ -55,6 +55,7 @@
         <form class="gallery-comment-form" method="POST" action="/galeria/{{ album.slug }}/comentarios">
           <h3>Deixe seu comentário</h3><p class="gallery-comment-form__hint">Nome e e-mail são obrigatórios. O e-mail não será exibido.</p>
           <div class="gallery-comment-form__grid"><label>Nome<input name="name" required maxlength="120" autocomplete="name"></label><label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label></div>
+          <label class="gallery-comment-form__honeypot" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
           <label>Comentário<textarea name="body" required maxlength="2000" rows="4"></textarea></label><button type="submit">Publicar comentário</button>
         </form>
       </section>
