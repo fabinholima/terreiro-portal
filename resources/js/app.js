@@ -47,6 +47,17 @@ Alpine.data('galleryViewer', () => ({
     this.touchX = null;
   },
 }))
+if (document.querySelector('.gallery-photo-grid')) {
+  document.addEventListener('contextmenu', (event) => {
+    if (event.target.closest('.gallery-photo, .gallery-lightbox')) event.preventDefault();
+  });
+  document.addEventListener('dragstart', (event) => {
+    if (event.target.closest('.gallery-photo, .gallery-lightbox')) event.preventDefault();
+  });
+  document.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && ['s', 'u'].includes(event.key.toLowerCase())) event.preventDefault();
+  });
+}
 const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
 document.querySelectorAll('[data-nav-link]').forEach((link) => {
   const href = link.getAttribute('href')?.replace(/\/$/, '') || '/';

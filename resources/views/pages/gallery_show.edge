@@ -22,7 +22,7 @@
         @each(photo in album.photos)
           <figure class="gallery-photo" data-gallery-photo data-src="{{ photo.path }}" data-alt="{{ photo.altText ?? album.title }}" data-caption="{{ photo.caption ?? '' }}" data-credit="{{ photo.credit ?? '' }}">
             <button type="button" class="gallery-photo__button" @click="open($el)" aria-label="Ampliar foto: {{ photo.altText ?? album.title }}">
-              <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" loading="lazy">
+              <img src="{{ photo.path }}" alt="{{ photo.altText ?? album.title }}" loading="lazy" draggable="false">
               <span class="gallery-photo__zoom" aria-hidden="true">↗</span>
             </button>
             <button type="button" class="gallery-photo__favorite" :class="isFavorite('{{ photo.path }}') ? 'is-favorite' : ''" @click.stop="toggleFavorite('{{ photo.path }}')" :aria-label="isFavorite('{{ photo.path }}') ? 'Remover dos favoritos' : 'Adicionar aos favoritos'" :aria-pressed="isFavorite('{{ photo.path }}')">☆<span aria-hidden="true">★</span></button>
