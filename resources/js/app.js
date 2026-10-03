@@ -1,3 +1,4 @@
+import '../css/admin.css'
 import '../css/admin-actions.css'
 import '../css/agenda.css'
 import '../css/social-contact.css'
