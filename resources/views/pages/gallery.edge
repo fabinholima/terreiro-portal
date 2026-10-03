@@ -35,6 +35,22 @@
           <div class="gallery-empty">Nenhum álbum público disponível.</div>
         @end
       </div>
+
+      @if(pagination.lastPage > 1)
+        <nav class="gallery-pagination" aria-label="Paginação de memórias">
+          @if(pagination.currentPage > 1)
+            <a class="gallery-pagination__link" href="/galeria?page={{ pagination.currentPage - 1 }}" rel="prev" aria-label="Página anterior">← Anterior</a>
+          @else
+            <span class="gallery-pagination__link gallery-pagination__link--disabled">← Anterior</span>
+          @end
+          <span class="gallery-pagination__status">Página {{ pagination.currentPage }} de {{ pagination.lastPage }}</span>
+          @if(pagination.currentPage < pagination.lastPage)
+            <a class="gallery-pagination__link" href="/galeria?page={{ pagination.currentPage + 1 }}" rel="next" aria-label="Próxima página">Próxima →</a>
+          @else
+            <span class="gallery-pagination__link gallery-pagination__link--disabled">Próxima →</span>
+          @end
+        </nav>
+      @end
     </div>
   </section>
 @end
