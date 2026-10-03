@@ -88,6 +88,7 @@
 
             @if(siteSettings.email)
               <form id="contact-form" class="contact-form" data-contact-form data-endpoint="/contato/mensagem" hidden>
+                {{ csrfField() }}
                 <div class="contact-form__heading">
                   <div>
                     <p class="eyebrow">Mensagem rápida</p>
